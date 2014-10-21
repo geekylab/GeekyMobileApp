@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>My App</title>
+
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css">
+    <link rel="stylesheet" href="styles/app.css"/>
+
+    <script src="lib/onsen/js/angular/angular.js"></script>
+    <script src="lib/onsen/js/onsenui.js"></script>
+
+    <script src="cordova.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        angular.module('app', ['onsen']);
+
+        angular.module('app').controller('AppController', function ($scope, $http) {
+
+            $scope.items = [];
+
+            $scope.doSomething = function () {
+                setTimeout(function () {
+                    myNavigator.pushPage('page2.html', {animation: 'slide'})
+                }, 100);
+            };
+
+            $scope.refresh = function () {
+                $http.get('http://192.168.111.103/api/item').
+                        success(function (json) {
+                            $scope.items = json;
+                        }).
+                        error(function (data, status, headers, config) {
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                            alert(status);
+                        });
+            };
+
+            $scope.refresh();
+
+        });
+    </script>
+
+    <style>
+        .item {
+            padding: 10px;
+            line-height: 1;
+        }
+
+        .item-thum {
+            background-color: #ccc;
+            width: 50px;
+            height: 50px;
+            border-radius: 100%;
+            -webkit-border-radius: 100%;
+        }
+
+        .item-title {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .item-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.3;
+            margin: 4px 0 0 0;
+            padding: 0 30px 0 0;
+        }
+
+        .item-label {
+            font-size: 12px;
+            color: #999;
+            margin-right: 5px;
+            float: right;
+        }
+    </style>
+
+</head>
+
+<body ng-controller="AppController">
+
+<ons-navigator title="Navigator" var="myNavigator">
+    <ons-page>
+
+        <ons-toolbar>
+            <div class="center">Toolbars</div>
+            <div class="right">
+                <ons-toolbar-button>
+                    <ons-icon icon="fa-refresh" style="font-size: 32px; width: 1em" ng-click="refresh()">
+                </ons-toolbar-button>
+            </div>
+        </ons-toolbar>
+
+        <ons-list style="margin: -1px 0">
+            <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="doSomething()">
+                <ons-row>
+                    <ons-col width="60px">
+                        <img ng-src="http://192.168.111.103{{image.path}}" ng-show="image.image_type == 2"
+                             ng-repeat="image in item.images" class="item-thum"/>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title">{{item.name}}</span>
+                            <span class="item-label">{{item.price| currency : "R$ "}}</span>
+                        </header>
+                        <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                            eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+    </ons-page>
+</ons-navigator>
+
+<ons-template id="page2.html">
+    <ons-page>
+        <ons-toolbar>
+            <div class="left" style="line-height: 44px">
+                Left
+            </div>
+            <div class="center">Title</div>
+            <div class="right" style="line-height: 44px">
+                Right
+            </div>
+        </ons-toolbar>
+
+        <div style="text-align: center">
+            <br/>
+            <ons-button modifier="light" onclick="myNavigator.popPage()">
+                Pop Page
+            </ons-button>
+        </div>
+    </ons-page>
+</ons-template>
+
+
+</body>
+</html>
