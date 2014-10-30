@@ -13,39 +13,12 @@
 
     <script src="lib/onsen/js/angular/angular.js"></script>
     <script src="lib/onsen/js/onsenui.js"></script>
+    <script src="lib/angular-resource/angular-resource.min.js"></script>
+
 
     <script src="cordova.js"></script>
     <script src="js/app.js"></script>
 
-    <script>
-        angular.module('app', ['onsen']);
-
-        angular.module('app').controller('AppController', function ($scope, $http) {
-
-            $scope.items = [];
-
-            $scope.doSomething = function () {
-                setTimeout(function () {
-                    myNavigator.pushPage('page2.html', {animation: 'slide'})
-                }, 100);
-            };
-
-            $scope.refresh = function () {
-                $http.get('http://192.168.111.103/api/item').
-                        success(function (json) {
-                            $scope.items = json;
-                        }).
-                        error(function (data, status, headers, config) {
-                            // called asynchronously if an error occurs
-                            // or server returns response with an error status.
-                            alert(status);
-                        });
-            };
-
-            $scope.refresh();
-
-        });
-    </script>
 
     <style>
         .item {
@@ -93,22 +66,21 @@
             <div class="center">Toolbars</div>
             <div class="right">
                 <ons-toolbar-button>
-                    <ons-icon icon="fa-refresh" style="font-size: 32px; width: 1em" ng-click="refresh()">
+                    <ons-icon icon="fa-refresh" style="font-size: 32px; width: 1em" ng-click="findStoreByGPS()">
                 </ons-toolbar-button>
             </div>
         </ons-toolbar>
 
+        <div ng-show="isLoading">Loading...</div>
+
         <ons-list style="margin: -1px 0">
-            <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="doSomething()">
+            <ons-list-item modifier="chevron" class="item" ng-repeat="store in nearStores" ng-click="doSomething()">
                 <ons-row>
                     <ons-col width="60px">
-                        <img ng-src="http://192.168.111.103{{image.path}}" ng-show="image.image_type == 2"
-                             ng-repeat="image in item.images" class="item-thum"/>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title">{{item.name}}</span>
-                            <span class="item-label">{{item.price| currency : "R$ "}}</span>
+                            <span class="item-title">{{store.store_name}}</span>
                         </header>
                         <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                             eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>

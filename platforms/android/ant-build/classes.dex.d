@@ -1,4 +1,18 @@
 /home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes.dex : \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekmenu/CordovaApp.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekmenu/R$string.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekmenu/R$xml.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekmenu/R.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekmenu/BuildConfig.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekmenu/R$drawable.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekmenu/R$attr.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekymenu/CordovaApp.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekymenu/R$string.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekymenu/R$xml.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekymenu/R.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekymenu/BuildConfig.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekymenu/R$drawable.class \
+/home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/net/geekylab/geekymenu/R$attr.class \
 /home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/io/cordova/hellocordova/CordovaApp.class \
 /home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/io/cordova/hellocordova/R$string.class \
 /home/johna/src/GeekyMenu/mobile/platforms/android/ant-build/classes/io/cordova/hellocordova/R$xml.class \
