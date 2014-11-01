@@ -1,0 +1,7 @@
+{
+    "name": "Mobile GeekyMeny",
+    "version": "0.0.1",
+    "dependencies": {
+        "angular-resource": "~1.2.0"
+    }
+}
