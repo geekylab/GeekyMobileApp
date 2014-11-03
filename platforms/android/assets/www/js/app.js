@@ -5,23 +5,20 @@ angular.module('app').controller('AppController', function ($scope, $http) {
     $scope.nearStores = [];
     $scope.isLoading = false;
 
-    console.log(navigator.language);
-
-    console.log(navigator.geolocation);
-
-
     $scope.findStoreByGPS = function () {
         $scope.isLoading = true;
         $scope.nearStores = [];
-        navigator.geolocation.getCurrentPosition(function (position) {
-            $http.get(hostname + '/open-api/store/near/' + position.coords.longitude + '/' + position.coords.latitude)
-                .success(function (data) {
-                    $scope.nearStores = data;
-                    $scope.isLoading = false;
-                });
-        }, function (error) {
-            alert(error);
-        });
+        if (navigator && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                $http.get(hostname + '/open-api/store/near/' + position.coords.longitude + '/' + position.coords.latitude)
+                    .success(function (data) {
+                        $scope.nearStores = data;
+                        $scope.isLoading = false;
+                    });
+            }, function (error) {
+                alert(error);
+            });
+        }
     };
 
     $scope.findStoreByGPS();
