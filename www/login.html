@@ -1,6 +1,12 @@
 <ons-page ng-controller="LoginController">
 
-    <div class="log-in-screen" ng-hide="isLoggedIn">
+    <ons-modal var="modal">
+        <ons-icon icon="ion-loading-c" spin="true"></ons-icon>
+        <br><br>
+        Loading....
+    </ons-modal>
+
+    <div class="log-in-screen" ng-show="!isLoggedIn && !loadingFlg">
         <ons-toolbar>
             <div ng-hide="isLoggedIn">
                 <div class="center">Log In</div>
@@ -16,13 +22,7 @@
         </ons-toolbar>
 
         <div class="login-form">
-
-            <input type="email" class="text-input--underbar" placeholder="Email" value="">
-            <input type="password" class="text-input--underbar" placeholder="Password" value="">
-            <br><br>
-            <ons-button modifier="large" class="login-button">Log In</ons-button>
-            <br>
-            <ons-button modifier="large" class="login-button facebook-color" ng-click="doSomething()">
+            <ons-button modifier="large" class="login-button facebook-color" ng-click="doLogin()">
                 <ons-icon icon="fa-facebook"></ons-icon>
                 Log in with Facebook
             </ons-button>
@@ -31,15 +31,17 @@
         </div>
     </div>
 
-    <div class="settings-screen" ng-show="isLoggedIn">
+    <div class="settings-screen" ng-show="isLoggedIn && !loadingFlg">
         <ons-row class="profile-wrapper">
             <ons-col width="60px" class="profile-image-wrapper">
-                <div class="profile-image"></div>
+                <div class="profile-image">
+                    <img ng-src="{{user.imageUrl}}">
+                </div>
             </ons-col>
 
             <ons-col>
-                <div class="profile-name">Foobar</div>
-                <div class="profile-email">foobar@example.com</div>
+                <div class="profile-name">{{user.name}}</div>
+                <div class="profile-email">{{user.email}}</div>
             </ons-col>
 
         </ons-row>
@@ -73,7 +75,7 @@
         <br>
 
         <ons-list modifier="inset" class="settings-list">
-            <ons-list-item modifier="tappable">
+            <ons-list-item modifier="tappable" ng-click="doLogout()">
                 <ons-icon icon="ion-log-out" style="opacity: 0.8"></ons-icon>
                 Sign out
             </ons-list-item>

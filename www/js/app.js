@@ -22,75 +22,59 @@ angular.module('app').controller('AppController', function ($scope, $http) {
 
     $scope.findStoreByGPS();
 
+    $scope.$on('fblogin', function (name, response) {
+        console.log("AppController event");
+        console.log(response);
+        $scope.isLogin = true;
+    });
+}).controller('LoginController', function ($scope, $http, MyUser) {
 
-    //$scope.doSomething = function () {
-    //    setTimeout(function () {
-    //        myNavigator.pushPage('page2.html', {animation: 'slide'})
-    //    }, 100);
-    //};
-    //
-    //$scope.refresh = function () {
-    //    $http.get('http://192.168.111.103/api/item').
-    //        success(function (json) {
-    //            $scope.items = json;
-    //        }).
-    //        error(function (data, status, headers, config) {
-    //            // called asynchronously if an error occurs
-    //            // or server returns response with an error status.
-    //            alert(status);
-    //        });
-    //};
-    //
-    //$scope.refresh();
-
-}).controller('LoginController', function ($scope, $http) {
-
-    $scope.nome = "tets";
+    $scope.loadingFlg = false;
     $scope.isLoggedIn = false;
+    $scope.user = MyUser.user();
 
-    $scope.doSomething = function () {
+    if ($scope.user) {
+        MyUser.isLogin()
+            .then(function (isLoggedIn) {
+                $scope.isLoggedIn = isLoggedIn;
+            }, function (err) {
+                //error
+                console.log(err);
+            }, function () {
+                $scope.loadingFlg = true;
+                $scope.modal.show();
+            }).finally(function () {
+                $scope.loadingFlg = false;
+                $scope.modal.hide();
+            });
+    }
 
-        if (!window.cordova) {
-            var appId = prompt("Enter FB Application ID", "");
-            facebookConnectPlugin.browserInit(appId);
-        }
-
-        facebookConnectPlugin.login(["email", "user_friends"],
-            function (response) {
-                console.log(response);
-                $scope.nome = "success";
+    $scope.doLogin = function () {
+        MyUser.login()
+            .then(function (response) {
                 $scope.isLoggedIn = true;
-
-                $http.post(hostname + '/open-api/auth/facebook/token', {access_token: response.authResponse.accessToken}).
-                    success(function () {
-                        alert('johna');
-                    });
-
-
-                //facebookConnectPlugin.api("me", ["user_friends"],
-                //    function (response) {
-                //        console.log(response)
-                //    },
-                //    function (response) {
-                //        console.log(response)
-                //    });
-
-            },
-            function (response) {
-                $scope.nome = "falied";
-                console.log(response);
+                $scope.user = response;
+            }, function (err) {
+                $scope.isLoggedIn = false;
+                console.log(err);
+            }, function () {
+                $scope.loadingFlg = true;
+                $scope.modal.show();
+            }).finally(function () {
+                $scope.loadingFlg = false;
+                $scope.modal.hide();
             });
 
     };
 
-
-    $scope.testRequest = function () {
-        $http.get(hostname + '/open-api/store/near/1234/1234')
-            .success(function (data) {
-                $scope.nearStores = data;
-                $scope.isLoading = false;
+    $scope.doLogout = function () {
+        MyUser.logout()
+            .then(function (response) {
+                $scope.isLoggedIn = false;
+            }, function () {
+                alert('error');
             });
-    }
+    };
 
 }).controller('StoreController', function ($scope) {
     $scope.storeInfo = {
@@ -108,7 +92,99 @@ angular.module('app').controller('AppController', function ($scope, $http) {
         phone: '1'
     };
 
-}).factory('Login', function ($resource) {
+}).factory('MyUser', function ($rootScope, $q, $http, $timeout) {
+    var storeUserKey = 'currentUser';
+
+    var fbPlugin = facebookConnectPlugin;
+    var currentUser = JSON.parse(window.localStorage.getItem(storeUserKey));
+
+    var isLogin = false;
+    if (currentUser && currentUser._id != undefined)
+        isLogin = true;
+
+    return {
+        login: function () {
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.notify('In progress')
+            }, 0);
+            facebookConnectPlugin.login(["email"],
+                function (response) {
+                    $http.post(hostname + '/open-api/auth/facebook/token', {access_token: response.authResponse.accessToken}).
+                        success(function (user) {
+                            isLogin = true;
+                            currentUser = user;
+                            facebookConnectPlugin.api("/me/picture?redirect=0&type=small&width=60", ["basic_info"],
+                                function (res) {
+                                    currentUser.imageUrl = res.data.url;
+                                    window.localStorage.setItem(storeUserKey, JSON.stringify(currentUser));
+                                    $rootScope.$broadcast('fblogin', currentUser);
+                                    deferred.resolve(currentUser);
+                                }, function () {
+                                    console.log('error');
+                                    deferred.reject('error');
+                                }
+                            );
+                        }).error(function (err) {
+                            deferred.reject(err);
+                        });
+                }, function (response) {
+                    deferred.reject(response);
+                });
+            return deferred.promise;
+        }, api: function (path) {
+            var deferred = $q.defer();
+            facebookConnectPlugin.api(path, ["basic_info"],
+                function (response) {
+                    deferred.resolve(response);
+                },
+                function (response) {
+                    deferred.reject(response);
+                });
+            return deferred.promise;
+        }, logout: function () {
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.notify('In progress')
+            }, 0);
+            this.isLogin()
+                .then(function (res) {
+                    if (res) {
+                        facebookConnectPlugin.logout(
+                            function (response) {
+                                console.log('fb_logout');
+                                isLogin = false;
+                                currentUser = {};
+                                $rootScope.$broadcast('fblogout');
+                                window.localStorage.removeItem(storeUserKey);
+                                deferred.resolve(response);
+                            },
+                            function (response) {
+                                isLogin = false;
+                                console.log('fb_logout error');
+                                console.log(response);
+                                deferred.reject(response);
+                            });
+                    }
+                });
+            return deferred.promise;
+        },
+        isLogin: function () {
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.notify('In progress')
+            }, 0);
+            facebookConnectPlugin.getLoginStatus(function (data) {
+                deferred.resolve(data.status == "connected");
+            }, function (response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        },
+        user: function () {
+            return currentUser;
+        }
+    }
 
 
 }).factory('Store', function ($resource) {
