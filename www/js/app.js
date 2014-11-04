@@ -46,9 +46,9 @@ angular.module('app').controller('AppController', function($scope, $http) {
 }).controller('LoginController', function ($scope, $http) {
 
     $scope.nome = "tets";
+    $scope.isLoggedIn = false;
 
     $scope.doSomething = function () {
-        console.log('doSomething');
 
         if (!window.cordova) {
             var appId = prompt("Enter FB Application ID", "");
@@ -67,6 +67,7 @@ angular.module('app').controller('AppController', function($scope, $http) {
             function (response) {
                 console.log(response);
                 $scope.nome = "success";
+                $scope.isLoggedIn = true;
 
                 facebookConnectPlugin.api("me", ["user_friends"],
                     function (response) {
