@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>GeekyMenu</title>
+
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css">
+    <link rel="stylesheet" href="lib/onsen/css/ionicons/css/ionicons.css">
+    <link rel="stylesheet" href="styles/app.css"/>
+    <link rel="stylesheet" href="styles/onsen-templates-css.css"/>
+    <link rel="stylesheet" href="styles/login-page.css"/>
+
+    <script src="lib/onsen/js/angular/angular.js"></script>
+    <script src="lib/onsen/js/onsenui.js"></script>
+    <script src="lib/angular-resource/angular-resource.min.js"></script>
+
+    <script src="cordova.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<body ng-controller="AppController">
+<!--<body ng-controller="StoreController">-->
+<!--<body>-->
+
+<ons-page>
+    <ons-toolbar>
+        <div class="center">Log In</div>
+        <div class="left">
+
+            <ons-toolbar-button page="index.html">
+                <ons-icon icon="fa-arrow-left"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+
+    <div class="login-form">
+
+        <input type="email" class="text-input--underbar" placeholder="Email" value="">
+        <input type="password" class="text-input--underbar" placeholder="Password" value="">
+        <br><br>
+        <ons-button modifier="large" class="login-button">Log In</ons-button>
+        <br>
+        <ons-button modifier="large" class="login-button facebook-color">
+            <ons-icon icon="fa-facebook"></ons-icon>
+            Log in with Facebook
+        </ons-button>
+        <br><br>
+        <ons-button modifier="quiet" class="forgot-password">Forgot password?</ons-button>
+    </div>
+
+</ons-page>
+
+</body>
+</html>

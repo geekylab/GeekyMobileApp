@@ -1,7 +1,6 @@
 var hostname = 'http://192.168.111.102';
 angular.module('app', ['onsen', 'ngResource']);
 angular.module('app').controller('AppController', function($scope, $http) {
-
     $scope.nearStores = [];
     $scope.isLoading = false;
 
@@ -86,11 +85,6 @@ angular.module('app').controller('AppController', function($scope, $http) {
     };
 
 }).controller('StoreController', function($scope) {
-
-    console.log('entrou no Store Controller');
-
-    $scope.nome = 'Teste Controller';
-
     $scope.storeInfo = {
         id: '1',
         name: 'Awesome Restaurant',
