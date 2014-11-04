@@ -23,6 +23,7 @@ angular.module('app').controller('AppController', function($scope, $http) {
 
     $scope.findStoreByGPS();
 
+
     //$scope.doSomething = function () {
     //    setTimeout(function () {
     //        myNavigator.pushPage('page2.html', {animation: 'slide'})
@@ -42,6 +43,47 @@ angular.module('app').controller('AppController', function($scope, $http) {
     //};
     //
     //$scope.refresh();
+
+}).controller('LoginController', function ($scope, $http) {
+
+    $scope.nome = "tets";
+
+    $scope.doSomething = function () {
+        console.log('doSomething');
+
+        if (!window.cordova) {
+            var appId = prompt("Enter FB Application ID", "");
+            facebookConnectPlugin.browserInit(appId);
+        }
+
+        //facebookConnectPlugin.api("me/?fields=id,email", ["public_profile"],
+        //    function (response) {
+        //        console.log(response)
+        //    },
+        //    function (response) {
+        //        console.log(response)
+        //    });
+
+        facebookConnectPlugin.login(["email", "user_friends"],
+            function (response) {
+                console.log(response);
+                $scope.nome = "success";
+
+                facebookConnectPlugin.api("me", ["user_friends"],
+                    function (response) {
+                        console.log(response)
+                    },
+                    function (response) {
+                        console.log(response)
+                    });
+
+            },
+            function (response) {
+                $scope.nome = "falied";
+                console.log(response);
+            });
+
+    };
 
 }).controller('StoreController', function($scope) {
 
