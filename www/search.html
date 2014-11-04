@@ -1,0 +1,131 @@
+<ons-navigator>
+    <ons-page ng-controller="SearchController">
+        <ons-toolbar>
+            <div class="center">Search</div>
+        </ons-toolbar>
+
+        <!-- BEGIN SEARCH FORM -->
+        <div class="search-form">
+            <ons-list>
+                <ons-list-header>Location</ons-list-header>
+                <ons-list-item ng-hide="useGpsFlag">
+                    <input type="text" value="" placeholder="Region" class="text-input advanced-search-text">
+                </ons-list-item>
+
+                <ons-list-item ng-hide="useGpsFlag">
+                    <input type="text" value="" placeholder="Name" class="text-input advanced-search-text">
+                </ons-list-item>
+
+                <ons-list-item modifier="tappable">
+                    <label class="checkbox checkbox--list-item">
+                        <input type="checkbox" ng-model="useGpsFlag">
+
+                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                        Nearby
+                    </label>
+                </ons-list-item>
+            </ons-list>
+
+            <ons-list>
+                <ons-list-header>Filter</ons-list-header>
+                <ons-list-item modifier="tappable">
+                    <label class="checkbox checkbox--list-item">
+                        <input type="checkbox">
+
+                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                        Kids Space
+                    </label>
+                </ons-list-item>
+
+                <ons-list-item modifier="tappable">
+                    <label class="checkbox checkbox--list-item">
+                        <input type="checkbox">
+
+                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                        Smoking Area
+                    </label>
+                </ons-list-item>
+
+                <ons-list-item modifier="tappable">
+                    <label class="checkbox checkbox--list-item">
+                        <input type="checkbox">
+
+                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                        Non-smoking area
+                    </label>
+                </ons-list-item>
+
+                <ons-list-item modifier="tappable">
+                    <label class="checkbox checkbox--list-item">
+                        <input type="checkbox">
+
+                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                        NFC Payments
+                    </label>
+                </ons-list-item>
+
+                <ons-list-item modifier="tappable">
+                    <label class="checkbox checkbox--list-item">
+                        <input type="checkbox">
+
+                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                        Garage
+                    </label>
+                </ons-list-item>
+            </ons-list>
+
+            <div style="text-align: center; margin-top: 10px;">
+                <ons-button modifier="large" ng-click="searchStores()">
+                    <ons-icon icon="fa-search"></ons-icon>
+                    Search
+                </ons-button>
+            </div>
+        </div>
+        <!-- END SEARCH FORM -->
+    </ons-page>
+</ons-navigator>
+
+<!--<ons-template id="search-results.html">-->
+    <!--<ons-navigator var="app.navi">-->
+        <!--<ons-page ng-controller="SearchController">-->
+            <!--<ons-toolbar>-->
+                <!--<div class="left">-->
+                    <!--<ons-toolbar-button ng-click="app.navi.popPage('search.html');">-->
+                        <!--<ons-icon icon="fa-arrow-left" style="font-size: 28px;"-->
+                                  <!--fixed-width="false"></ons-icon>-->
+                    <!--</ons-toolbar-button>-->
+                <!--</div>-->
+                <!--<div class="center">Search Results</div>-->
+            <!--</ons-toolbar>-->
+
+            <!--<ons-list>-->
+                <!--<ons-list-item-->
+                        <!--modifier="chevron"-->
+                        <!--class="list-item-container"-->
+                        <!--ng-repeat="store in foundStores"-->
+                        <!--ng-click="showStoreDetails($index)">-->
+                    <!--<ons-row>-->
+                        <!--<ons-col width="95px">-->
+                            <!--<img src="images/sample_store_1.jpg" class="thumbnail">-->
+                        <!--</ons-col>-->
+                        <!--<ons-col>-->
+                            <!--<div class="name">-->
+                                <!--{{store.name}}-->
+                            <!--</div>-->
+                            <!--<div class="desc">-->
+                                <!--Eiffel Tower is the symbol of Paris and named by Gustave Eiffel.-->
+                            <!--</div>-->
+                            <!--<div class="features">-->
+                                <!--<div class="feature"-->
+                                     <!--ng-repeat="(name, status) in store.features"-->
+                                     <!--ng-class="getFeatureClass(status)">-->
+                                    <!--{{name}}-->
+                                <!--</div>-->
+                        <!--</ons-col>-->
+                        <!--<ons-col width="40px"></ons-col>-->
+                    <!--</ons-row>-->
+                <!--</ons-list-item>-->
+            <!--</ons-list>-->
+        <!--</ons-page>-->
+    <!--</ons-navigator>-->
+<!--</ons-template>-->

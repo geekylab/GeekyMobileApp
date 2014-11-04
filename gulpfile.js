@@ -63,8 +63,8 @@ gulp.task('serve', ['build', 'browser-sync'], function() {
 
   gulp.watch(
     [__dirname + '/www/*.js', __dirname + '/www/js/**/*.js'],
-    {debounceDelay: 400},
-    ['jshint']
+    {debounceDelay: 400}
+    //['jshint']
   );
 
   gulp.watch(

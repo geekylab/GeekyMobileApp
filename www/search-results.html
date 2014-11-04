@@ -1,0 +1,37 @@
+<ons-page ng-controller="SearchController">
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">Search Results</div>
+    </ons-toolbar>
+
+    <ons-list>
+        <ons-list-item
+                modifier="chevron"
+                class="list-item-container store-list-item"
+                ng-repeat="store in searchResults"
+                ng-click="showStoreDetails($index)">
+            <ons-row>
+                <ons-col width="95px">
+                    <img src="images/sample_store_1.jpg" class="thumbnail">
+                </ons-col>
+                <ons-col>
+                    <div class="name">
+                        {{store.name}}
+                    </div>
+                    <div class="desc">
+                        Eiffel Tower is the symbol of Paris and named by Gustave Eiffel.
+                    </div>
+                    <div class="features">
+                        <div class="feature"
+                             ng-repeat="(name, status) in store.features"
+                             ng-class="getFeatureClass(status)">
+                            {{name}}
+                        </div>
+                </ons-col>
+                <ons-col width="40px"></ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+</ons-page>

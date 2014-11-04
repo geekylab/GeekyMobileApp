@@ -1,20 +1,20 @@
-var hostname = 'http://192.168.111.103';
+var hostname = 'http://192.168.111.102';
 angular.module('app', ['onsen', 'ngResource']);
-angular.module('app').controller('AppController', function ($scope, $http) {
+angular.module('app').controller('AppController', function($scope, $http) {
     $scope.nearStores = [];
     $scope.isLoading = false;
 
-    $scope.findStoreByGPS = function () {
+    $scope.findStoreByGPS = function() {
         $scope.isLoading = true;
         $scope.nearStores = [];
         if (navigator && navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
+            navigator.geolocation.getCurrentPosition(function(position) {
                 $http.get(hostname + '/open-api/store/near/' + position.coords.longitude + '/' + position.coords.latitude)
-                    .success(function (data) {
+                    .success(function(data) {
                         $scope.nearStores = data;
                         $scope.isLoading = false;
                     });
-            }, function (error) {
+            }, function(error) {
                 alert(error);
             });
         }
@@ -76,20 +76,90 @@ angular.module('app').controller('AppController', function ($scope, $http) {
             });
     };
 
-}).controller('StoreController', function ($scope) {
-    $scope.storeInfo = {
-        id: '1',
-        name: 'Awesome Restaurant',
-        desc: 'Meat specialties',
-        open_days: 'everyday',
-        open_time: 'From 10am to 10pm',
-        rating: 3.7,
-        address: 'Av. Pres. Wilson, 2131 - Santos/SP',
-        location: {
-            lat: '-23.9691553',
-            long: '-46.3750582'
+}).controller('StoreController', function($scope) {
+    //$scope.storeInfo = {
+    //    id: '1',
+    //    name: 'Awesome Restaurant',
+    //    desc: 'Meat specialties',
+    //    open_days: 'everyday',
+    //    open_time: 'From 10am to 10pm',
+    //    public_rating: 3.7,
+    //    my_rating: 3.7,
+    //    address: 'Av. Pres. Wilson, 2131 - Santos/SP',
+    //    location: {
+    //        lat: '-23.9691553',
+    //        long: '-46.3750582'
+    //    },
+    //    phone: '1'
+    //};
+    $scope.rateStore = function() {
+
+    };
+
+}).controller('SearchController', function($scope) {
+    $scope.searchResults = [
+        {
+            _id: '1',
+            name: 'Awesome Restaurant',
+            desc: 'Meat specialties',
+            open_days: 'everyday',
+            open_time: 'From 10am to 10pm',
+            public_rating: 3.7,
+            my_rating: 3.7,
+            address: 'Av. Pres. Wilson, 2131 - Santos/SP',
+            location: {
+                lat: '-23.9691553',
+                long: '-46.3750582'
+            },
+            features: {
+                'kids_space': true,
+                'parking': true,
+                'smoke': true,
+                'non_smoke': true
+            },
+            phone: '1'
         },
-        phone: '1'
+        {
+            _id: '2',
+            name: 'Awesome Restaurant 2',
+            desc: 'Meat specialties',
+            open_days: 'everyday',
+            open_time: 'From 10am to 10pm',
+            public_rating: 3.7,
+            my_rating: 3.7,
+            address: 'Av. Pres. Wilson, 2131 - Santos/SP',
+            location: {
+                lat: '-23.9691553',
+                long: '-46.3750582'
+            },
+            features: {
+                'kids_space': true,
+                'parking': false,
+                'smoke': true,
+                'non_smoke': false
+            },
+            phone: '1'
+        }
+    ];
+
+    $scope.showStoreDetails = function(index) {
+        var selectedItem = $scope.searchResults[index];
+        $scope.ons.navigator.pushPage('store.html', {storeInfo: selectedItem});
+    };
+    $scope.searchStores = function() {
+        //var selectedItem = $scope.searchResults[index];
+        //$scope.ons.navigator.pushPage();
+        $scope.ons.navigator.pushPage('search-results.html');
+    };
+    $scope.getFeatureClass = function(status) {
+        return {
+            'feature-active': status,
+            'feature-inactive': !status
+        }
+    };
+
+    $scope.rateStore = function() {
+
     };
 
 }).factory('MyUser', function ($rootScope, $q, $http, $timeout) {
@@ -186,8 +256,7 @@ angular.module('app').controller('AppController', function ($scope, $http) {
         }
     }
 
-
-}).factory('Store', function ($resource) {
+}).factory('Store', function($resource) {
     return $resource(hostname + '/open-api/store/:id/:lang/:longitude/:latitude', {
         id: '@_id'
     }, {

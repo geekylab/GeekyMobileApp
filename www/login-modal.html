@@ -1,0 +1,22 @@
+<ons-page ng-controller="StoreController">
+
+    <ons-modal var="modal" id="login-modal">
+            <h3>
+                You must log in to perform this action!
+            </h3>
+
+            <div class="login-form">
+                <input type="email" class="text-input--underbar" placeholder="Email" value="">
+                <input type="password" class="text-input--underbar" placeholder="Password" value="">
+                <br><br>
+                <ons-button modifier="large" class="login-button">Log In</ons-button>
+                <br>
+                <ons-button modifier="large" class="login-button facebook-color" ng-click="doSomething()">
+                    <ons-icon icon="fa-facebook"></ons-icon>
+                    Log in with Facebook
+                </ons-button>
+                <br><br>
+                <ons-button modifier="quiet" class="forgot-password">Forgot password?</ons-button>
+            </div>
+    </ons-modal>
+</ons-page>
