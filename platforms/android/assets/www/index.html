@@ -5,113 +5,353 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <title>My App</title>
+    <title>GeekyMenu</title>
 
     <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
     <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css">
+    <link rel="stylesheet" href="lib/onsen/css/ionicons/css/ionicons.css">
     <link rel="stylesheet" href="styles/app.css"/>
+    <link rel="stylesheet" href="styles/onsen-templates-css.css"/>
+    <link rel="stylesheet" href="styles/store-page.css"/>
 
     <script src="lib/onsen/js/angular/angular.js"></script>
     <script src="lib/onsen/js/onsenui.js"></script>
     <script src="lib/angular-resource/angular-resource.min.js"></script>
 
-
     <script src="cordova.js"></script>
     <script src="js/app.js"></script>
-
-
-    <style>
-        .item {
-            padding: 10px;
-            line-height: 1;
-        }
-
-        .item-thum {
-            background-color: #ccc;
-            width: 50px;
-            height: 50px;
-            border-radius: 100%;
-            -webkit-border-radius: 100%;
-        }
-
-        .item-title {
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .item-desc {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.3;
-            margin: 4px 0 0 0;
-            padding: 0 30px 0 0;
-        }
-
-        .item-label {
-            font-size: 12px;
-            color: #999;
-            margin-right: 5px;
-            float: right;
-        }
-    </style>
-
 </head>
 
 <body ng-controller="AppController">
+<!--<body ng-controller="StoreController">-->
+<!--<body>-->
 
-<ons-navigator title="Navigator" var="myNavigator">
+<ons-tabbar>
+    <ons-tabbar-item active="true" page="home.html">
+        <div class="tab">
+            <ons-icon icon="fa-home" class="tab-icon"></ons-icon>
+            <div class="tab-label">Home</div>
+        </div>
+    </ons-tabbar-item>
+
+    <ons-tabbar-item page="advanced_search.html">
+        <div class="tab">
+            <ons-icon icon="fa-search" class="tab-icon"></ons-icon>
+            <div class="tab-label">Advanced Search</div>
+        </div>
+    </ons-tabbar-item>
+
+    <ons-tabbar-item page="settings.html">
+        <div class="tab">
+            <ons-icon icon="fa-gear" class="tab-icon"></ons-icon>
+            <div class="tab-label">Settings</div>
+        </div>
+    </ons-tabbar-item>
+
+    <ons-tabbar-item page="store-page.html">
+        <div class="tab">
+            <ons-icon icon="fa-map-marker" class="tab-icon"></ons-icon>
+            <div class="tab-label">Store</div>
+        </div>
+    </ons-tabbar-item>
+</ons-tabbar>
+
+<ons-template id="home.html">
     <ons-page>
-
         <ons-toolbar>
-            <div class="center">Toolbars</div>
-            <div class="right">
-                <ons-toolbar-button>
-                    <ons-icon icon="fa-refresh" style="font-size: 32px; width: 1em" ng-click="findStoreByGPS()">
-                </ons-toolbar-button>
-            </div>
+            <div class="center">GeekyMenu</div>
         </ons-toolbar>
-
-        <div ng-show="isLoading">Loading...</div>
-
-        <ons-list style="margin: -1px 0">
-            <ons-list-item modifier="chevron" class="item" ng-repeat="store in nearStores" ng-click="doSomething()">
-                <ons-row>
-                    <ons-col width="60px">
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title">{{store.store_name}}</span>
-                        </header>
-                        <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-        </ons-list>
-    </ons-page>
-</ons-navigator>
-
-<ons-template id="page2.html">
-    <ons-page>
-        <ons-toolbar>
-            <div class="left" style="line-height: 44px">
-                Left
-            </div>
-            <div class="center">Title</div>
-            <div class="right" style="line-height: 44px">
-                Right
-            </div>
-        </ons-toolbar>
-
-        <div style="text-align: center">
-            <br/>
-            <ons-button modifier="light" onclick="myNavigator.popPage()">
-                Pop Page
-            </ons-button>
+        <div class="search-background">
+            <input type="search" value="" placeholder="Search" class="search-input">
         </div>
     </ons-page>
 </ons-template>
 
+<ons-template id="advanced_search.html">
+    <ons-page>
+        <ons-toolbar>
+            <div class="center">Search</div>
+        </ons-toolbar>
 
+        <ons-list>
+            <ons-list-header>Location</ons-list-header>
+            <ons-list-item ng-hide="useGpsFlag">
+                <input type="text" value="" placeholder="Region" class="text-input advanced-search-text">
+            </ons-list-item>
+
+            <ons-list-item ng-hide="useGpsFlag">
+                <input type="text" value="" placeholder="Name" class="text-input advanced-search-text">
+            </ons-list-item>
+
+            <ons-list-item modifier="tappable">
+                <label class="checkbox checkbox--list-item">
+                    <input type="checkbox" ng-model="useGpsFlag">
+
+                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                    Nearby
+                </label>
+            </ons-list-item>
+        </ons-list>
+
+        <ons-list>
+            <ons-list-header>Filter</ons-list-header>
+            <ons-list-item modifier="tappable">
+                <label class="checkbox checkbox--list-item">
+                    <input type="checkbox">
+
+                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                    Kids Space
+                </label>
+            </ons-list-item>
+
+            <ons-list-item modifier="tappable">
+                <label class="checkbox checkbox--list-item">
+                    <input type="checkbox">
+
+                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                    Smoking Area
+                </label>
+            </ons-list-item>
+
+            <ons-list-item modifier="tappable">
+                <label class="checkbox checkbox--list-item">
+                    <input type="checkbox">
+
+                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                    Non-smoking area
+                </label>
+            </ons-list-item>
+
+            <ons-list-item modifier="tappable">
+                <label class="checkbox checkbox--list-item">
+                    <input type="checkbox">
+
+                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                    NFC Payments
+                </label>
+            </ons-list-item>
+
+            <ons-list-item modifier="tappable">
+                <label class="checkbox checkbox--list-item">
+                    <input type="checkbox">
+
+                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                    Garage
+                </label>
+            </ons-list-item>
+        </ons-list>
+
+        <div style="text-align: center; margin-top: 10px;">
+            <ons-button modifier="large">
+                <ons-icon icon="fa-search"></ons-icon>
+                Search
+            </ons-button>
+        </div>
+
+    </ons-page>
+</ons-template>
+
+<ons-template id="results.html">
+    <ons-navigator>
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="doSomething()">
+                        <ons-icon icon="ion-compose"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">Home</div>
+                <div class="right"></div>
+            </ons-toolbar>
+
+            <ons-list style="margin: -1px 0">
+                <ons-list-item modifier="chevron" class="item" ng-repeat="i in [1,2,3,4,5]" ng-click="doSomething()">
+                    <ons-row>
+                        <ons-col width="60px">
+                            <div class="item-thum"></div>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span class="item-title">Rorem Ipsum</span>
+                                <span class="item-label">5h</span>
+                            </header>
+                            <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+        </ons-page>
+    </ons-navigator>
+</ons-template>
+
+<ons-template id="settings.html">
+    <ons-page>
+        <ons-toolbar>
+            <div class="center">Settings</div>
+        </ons-toolbar>
+
+        <ons-row class="profile-wrapper">
+            <ons-col width="60px" class="profile-image-wrapper">
+                <div class="profile-image"></div>
+            </ons-col>
+
+            <ons-col>
+                <div class="profile-name">Foobar</div>
+                <div class="profile-email">foobar@example.com</div>
+            </ons-col>
+
+        </ons-row>
+
+        <div class="settings-header">Share</div>
+
+        <ons-list modifier="inset" class="settings-list">
+            <ons-list-item>
+                Twitter
+                <ons-switch modifier="list-item"></ons-switch>
+            </ons-list-item>
+
+            <ons-list-item>
+                Facebook
+                <ons-switch modifier="list-item" checked></ons-switch>
+            </ons-list-item>
+        </ons-list>
+
+        <div class="settings-header">Others</div>
+
+        <ons-list modifier="inset" class="settings-list">
+            <ons-list-item modifier="chevron" ng-click="doSomething()">
+                Terms of Service
+            </ons-list-item>
+
+            <ons-list-item modifier="chevron" ng-click="doSomething()">
+                Privacy Policy
+            </ons-list-item>
+        </ons-list>
+
+        <br>
+
+        <ons-list modifier="inset" class="settings-list">
+            <ons-list-item modifier="tappable">
+                <ons-icon icon="ion-log-out" style="opacity: 0.8"></ons-icon>
+                Sign out
+            </ons-list-item>
+        </ons-list>
+
+        <br>
+
+    </ons-page>
+</ons-template>
+
+<ons-template id="store-page.html">
+    <ons-page>
+        <!-- BEGIN STORE CONTROLLER -->
+        <div ng-controller="StoreController">
+            <ons-toolbar modifier="transparent">
+                <!--<div class="right">-->
+                <!--<ons-toolbar-button>-->
+                <!--<ons-icon icon="ion-ios7-chatboxes" style="color: white"></ons-icon>-->
+                <!--</ons-toolbar-button>-->
+                <!--</div>-->
+                <div class="left">
+                    <ons-toolbar-button>
+                        <ons-icon icon="fa-arrow-left" style="color: white; font-size: 28px;"
+                                  fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <div class="details-content">
+                <div class="card">
+                    <div class="card-background-dark">
+                        <div class="card-name">{{storeInfo.name}}</div>
+                        <div class="card-desc">{{storeInfo.desc}}
+                            <br>Opens {{storeInfo.open_days}}
+                            <br>{{storeInfo.open_time}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rating">
+                    <div class="rating-num">
+                        <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                        <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                        <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                        <ons-icon icon="fa-star-o" fixed-width="false"></ons-icon>
+                        <!--<ons-icon icon="fa-star" fixed-width="false"></ons-icon>-->
+                        <!--<ons-icon icon="fa-star" fixed-width="false"></ons-icon>-->
+                        <ons-icon icon="fa-star-o" fixed-width="false"></ons-icon>
+                    </div>
+                </div>
+
+                <ons-list style="border-top: none">
+                    <ons-list-item style="line-height: 1; padding: 0;">
+                        <ons-row class="action">
+
+                            <ons-col class="action-col">
+                                <div class="action-icon">
+                                    <ons-icon icon="fa-star-half-full"></ons-icon>
+                                </div>
+                                <div class="action-label">Rate</div>
+                            </ons-col>
+
+                            <ons-col class="action-col">
+                                <div class="action-icon">
+                                    <ons-icon icon="fa-heart"></ons-icon>
+                                </div>
+                                <div class="action-label">Love</div>
+                            </ons-col>
+
+                            <ons-col class="action-col">
+                                <div class="action-icon">
+                                    <ons-icon icon="fa-share-alt"></ons-icon>
+                                </div>
+                                <div class="action-label">Share</div>
+                            </ons-col>
+
+                            <ons-col class="action-col">
+                                <div class="action-icon">
+                                    <ons-icon icon="fa-check-square-o"></ons-icon>
+                                </div>
+                                <div class="action-label">Check In</div>
+                            </ons-col>
+
+                        </ons-row>
+                    </ons-list-item>
+                </ons-list>
+
+                <ons-list style="margin-top: 12px;">
+                    <ons-list-item modifier="chevron">
+                        <div class="prop-desc">
+                            <ons-icon icon="fa-map-marker"></ons-icon>
+                            {{storeInfo.address}}
+                        </div>
+                    </ons-list-item>
+
+                    <ons-list-item>
+                        <div class="prop-desc">
+                            <ons-icon icon="fa-phone"></ons-icon>
+                            {{storeInfo.phone}}
+                        </div>
+                    </ons-list-item>
+
+                    <ons-list-item modifier="chevron">
+                        <div class="prop-desc">
+                            <ons-icon icon="fa-book"></ons-icon>
+                            Store Photos and Menu
+                        </div>
+                    </ons-list-item>
+
+                    <ons-list-item modifier="chevron">
+                        <div class="prop-desc">
+                            <ons-icon icon="fa-clock-o"></ons-icon>
+                            Make a Reservation
+                        </div>
+                    </ons-list-item>
+                </ons-list>
+
+            </div>
+        </div><!-- END CONTROLLER DIV -->
+    </ons-page>
+</ons-template>
 </body>
 </html>
