@@ -1,20 +1,20 @@
-var hostname = 'http://192.168.111.102';
+var hostname = 'http://192.168.111.103';
 angular.module('app', ['onsen', 'ngResource']);
-angular.module('app').controller('AppController', function($scope, $http) {
+angular.module('app').controller('AppController', function ($scope, $http) {
     $scope.nearStores = [];
     $scope.isLoading = false;
 
-    $scope.findStoreByGPS = function() {
+    $scope.findStoreByGPS = function () {
         $scope.isLoading = true;
         $scope.nearStores = [];
         if (navigator && navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
+            navigator.geolocation.getCurrentPosition(function (position) {
                 $http.get(hostname + '/open-api/store/near/' + position.coords.longitude + '/' + position.coords.latitude)
-                    .success(function(data) {
+                    .success(function (data) {
                         $scope.nearStores = data;
                         $scope.isLoading = false;
                     });
-            }, function(error) {
+            }, function (error) {
                 alert(error);
             });
         }
@@ -55,27 +55,25 @@ angular.module('app').controller('AppController', function($scope, $http) {
             facebookConnectPlugin.browserInit(appId);
         }
 
-        //facebookConnectPlugin.api("me/?fields=id,email", ["public_profile"],
-        //    function (response) {
-        //        console.log(response)
-        //    },
-        //    function (response) {
-        //        console.log(response)
-        //    });
-
         facebookConnectPlugin.login(["email", "user_friends"],
             function (response) {
                 console.log(response);
                 $scope.nome = "success";
                 $scope.isLoggedIn = true;
 
-                facebookConnectPlugin.api("me", ["user_friends"],
-                    function (response) {
-                        console.log(response)
-                    },
-                    function (response) {
-                        console.log(response)
+                $http.post(hostname + '/open-api/auth/facebook/token', {access_token: response.authResponse.accessToken}).
+                    success(function () {
+                        alert('johna');
                     });
+
+
+                //facebookConnectPlugin.api("me", ["user_friends"],
+                //    function (response) {
+                //        console.log(response)
+                //    },
+                //    function (response) {
+                //        console.log(response)
+                //    });
 
             },
             function (response) {
@@ -85,7 +83,16 @@ angular.module('app').controller('AppController', function($scope, $http) {
 
     };
 
-}).controller('StoreController', function($scope) {
+
+    $scope.testRequest = function () {
+        $http.get(hostname + '/open-api/store/near/1234/1234')
+            .success(function (data) {
+                $scope.nearStores = data;
+                $scope.isLoading = false;
+            });
+    }
+
+}).controller('StoreController', function ($scope) {
     $scope.storeInfo = {
         id: '1',
         name: 'Awesome Restaurant',
@@ -101,7 +108,10 @@ angular.module('app').controller('AppController', function($scope, $http) {
         phone: '1'
     };
 
-}).factory('Store', function($resource) {
+}).factory('Login', function ($resource) {
+
+
+}).factory('Store', function ($resource) {
     return $resource(hostname + '/open-api/store/:id/:lang/:longitude/:latitude', {
         id: '@_id'
     }, {
