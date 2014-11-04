@@ -36,9 +36,9 @@
             </div>
             <div class="center">Title</div>
 
-            <div class="right">
-                <span class="toolbar-button--outline navigation-bar__line-height" ng-click=""> <ons-icon
-                        icon="fa-user"></ons-icon> Login</span>
+            <div class="right" ng-controller="LoginController">
+                <span class="toolbar-button--outline navigation-bar__line-height" ng-click="doSomething()"> <ons-icon
+                        icon="fa-user"></ons-icon> {{nome}}</span>
             </div>
         </ons-toolbar>
 

@@ -23,12 +23,6 @@ angular.module('app').controller('AppController', function ($scope, $http) {
 
     $scope.findStoreByGPS();
 
-
-    //$scope.doSomething = function () {
-    //    setTimeout(function () {
-    //        myNavigator.pushPage('page2.html', {animation: 'slide'})
-    //    }, 100);
-    //};
     //
     //$scope.refresh = function () {
     //    $http.get('http://192.168.111.103/api/item').
@@ -43,6 +37,47 @@ angular.module('app').controller('AppController', function ($scope, $http) {
     //};
     //
     //$scope.refresh();
+
+}).controller('LoginController', function ($scope, $http) {
+
+    $scope.nome = "tets";
+
+    $scope.doSomething = function () {
+        console.log('doSomething');
+
+        if (!window.cordova) {
+            var appId = prompt("Enter FB Application ID", "");
+            facebookConnectPlugin.browserInit(appId);
+        }
+
+        //facebookConnectPlugin.api("me/?fields=id,email", ["public_profile"],
+        //    function (response) {
+        //        console.log(response)
+        //    },
+        //    function (response) {
+        //        console.log(response)
+        //    });
+
+        facebookConnectPlugin.login(["email", "user_friends"],
+            function (response) {
+                console.log(response);
+                $scope.nome = "success";
+
+                facebookConnectPlugin.api("me", ["user_friends"],
+                    function (response) {
+                        console.log(response)
+                    },
+                    function (response) {
+                        console.log(response)
+                    });
+
+            },
+            function (response) {
+                $scope.nome = "falied";
+                console.log(response);
+            });
+
+    };
 
 }).factory('Store', function ($resource) {
     return $resource(hostname + '/open-api/store/:id/:lang/:longitude/:latitude', {
