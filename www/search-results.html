@@ -1,4 +1,4 @@
-<ons-page ng-controller="SearchController">
+<ons-page ng-controller="SearchResultsController">
     <ons-toolbar>
         <div class="left">
             <ons-back-button>Back</ons-back-button>
@@ -14,20 +14,20 @@
                 ng-click="showStoreDetails(store._id)">
             <ons-row>
                 <ons-col width="95px">
-                    <img src="images/sample_store_1.jpg" class="thumbnail">
+                    <img ng-src="{{getImageUrl(store)}}" class="thumbnail">
                 </ons-col>
                 <ons-col>
                     <div class="name">
-                        {{store.name}}
+                        {{store.store_name[userSettings.defaultLang]}}{{userSettings.defaultLang}}
                     </div>
                     <div class="desc">
                         Eiffel Tower is the symbol of Paris and named by Gustave Eiffel.
                     </div>
                     <div class="features">
                         <div class="feature"
-                             ng-repeat="(name, status) in store.features"
-                             ng-class="getFeatureClass(status)">
-                            {{name}}
+                             ng-repeat="feature in userSettings.features"
+                             ng-class="getFeatureClass(feature, store.opts)">
+                            {{feature}}
                         </div>
                     </div>
                 </ons-col>
