@@ -121,8 +121,8 @@ angular.module('app').controller('AppController', function($scope, $http) {
             features: {
                 'kids_space': true,
                 'parking': true,
-                'smoke': true,
-                'non_smoke': true
+                'smoking': true,
+                'non_smoking': true
             },
             phone: '1'
         }
