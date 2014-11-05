@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="styles/app.css"/>
     <link rel="stylesheet" href="styles/onsen-templates-css.css"/>
     <link rel="stylesheet" href="styles/store-page.css"/>
+    <link rel="stylesheet" href="styles/store-menu.css"/>
     <link rel="stylesheet" href="styles/login-page.css"/>
     <link rel="stylesheet" href="styles/search-page.css"/>
 
@@ -25,30 +26,29 @@
 </head>
 
 <body ng-controller="AppController">
-
 <ons-tabbar>
-    <ons-tabbar-item active="true" page="home.html">
+    <ons-tabbar-item active="true" page="homeTemplate.html">
         <div class="tab">
             <ons-icon icon="fa-home" class="tab-icon"></ons-icon>
             <div class="tab-label">Home</div>
         </div>
     </ons-tabbar-item>
 
-    <ons-tabbar-item page="search.html">
+    <ons-tabbar-item page="searchTemplate.html">
         <div class="tab">
             <ons-icon icon="fa-search" class="tab-icon"></ons-icon>
             <div class="tab-label">Advanced Search</div>
         </div>
     </ons-tabbar-item>
 
-    <ons-tabbar-item page="store.html">
+    <ons-tabbar-item page="storeTemplate.html">
         <div class="tab">
             <ons-icon icon="fa-heart" class="tab-icon"></ons-icon>
             <div class="tab-label">Favorites</div>
         </div>
     </ons-tabbar-item>
 
-    <ons-tabbar-item page="login.html">
+    <ons-tabbar-item page="loginTemplate.html">
         <div class="tab">
             <ons-icon icon="fa-gear" class="tab-icon"></ons-icon>
             <div class="tab-label">Settings</div>
@@ -56,49 +56,21 @@
     </ons-tabbar-item>
 </ons-tabbar>
 
-<ons-template id="home.html">
-    <ons-page>
-        <ons-toolbar>
-            <div class="center">GeekyMenu</div>
-        </ons-toolbar>
-        <div class="search-background">
-            <input type="search" value="" placeholder="Search" class="search-input">
-        </div>
-    </ons-page>
+
+<ons-template id="homeTemplate.html">
+    <ons-navigator var="homeNavigator" page="home.html"></ons-navigator>
 </ons-template>
 
-<ons-template id="results.html">
-    <ons-navigator>
-        <ons-page>
-            <ons-toolbar>
-                <div class="left">
-                    <ons-toolbar-button ng-click="doSomething()">
-                        <ons-icon icon="ion-compose"></ons-icon>
-                    </ons-toolbar-button>
-                </div>
-                <div class="center">Home</div>
-                <div class="right"></div>
-            </ons-toolbar>
+<ons-template id="searchTemplate.html">
+    <ons-navigator var="searchNavigator" page="search.html"></ons-navigator>
+</ons-template>
 
-            <ons-list style="margin: -1px 0">
-                <ons-list-item modifier="chevron" class="item" ng-repeat="i in [1,2,3,4,5]" ng-click="doSomething()">
-                    <ons-row>
-                        <ons-col width="60px">
-                            <div class="item-thum"></div>
-                        </ons-col>
-                        <ons-col>
-                            <header>
-                                <span class="item-title">Rorem Ipsum</span>
-                                <span class="item-label">5h</span>
-                            </header>
-                            <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        </ons-col>
-                    </ons-row>
-                </ons-list-item>
-            </ons-list>
-        </ons-page>
-    </ons-navigator>
+<ons-template id="storeTemplate.html">
+    <ons-navigator var="storeNavigator" page="store.html"></ons-navigator>
+</ons-template>
+
+<ons-template id="loginTemplate.html">
+    <ons-navigator var="loginNavigator" page="login.html"></ons-navigator>
 </ons-template>
 
 </body>

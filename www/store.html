@@ -1,4 +1,4 @@
-<ons-page ng-controller="StoreController">
+<ons-page ng-controller="SearchController">
     <ons-toolbar modifier="transparent">
         <div class="left">
             <ons-back-button>Back</ons-back-button>
@@ -77,7 +77,7 @@
                 </div>
             </ons-list-item>
 
-            <ons-list-item modifier="chevron">
+            <ons-list-item modifier="chevron" ng-click="showStoreMenu()">
                 <div class="prop-desc">
                     <ons-icon icon="fa-book"></ons-icon>
                     Store Photos and Menu
