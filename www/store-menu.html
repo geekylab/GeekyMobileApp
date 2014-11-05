@@ -1,0 +1,70 @@
+<ons-page ng-controller="StoreController">
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+
+        <div class="center">Menu</div>
+
+        <div class="right">
+            <ons-toolbar-button ng-click="toggleSearch()">
+                <ons-icon icon="fa-search"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+    <div class="search-background">
+        <input type="search" value="" placeholder="Search" class="search-input">
+    </div>
+
+    <ons-row>
+        <ons-col class="padding-10">
+            <ons-button modifier="large" class="padding-10">
+                <ons-icon icon="fa-cutlery" class="big-button-icon"></ons-icon>
+                <br>
+                Food
+            </ons-button>
+        </ons-col>
+        <ons-col class="padding-10">
+            <ons-button modifier="large" class="padding-10">
+                <ons-icon icon="fa-glass" class="big-button-icon"></ons-icon>
+                <br>
+                Beverage
+            </ons-button>
+        </ons-col>
+    </ons-row>
+
+    <ons-list>
+        <ons-list-header>Top Dishes</ons-list-header>
+        <ons-list-item>
+            <ons-list-item
+                    class="list-item-container store-list-item"
+                    ng-repeat="item in storeTopItems()"
+                    ng-click="showItemDetail(item._id)">
+                <ons-row>
+                    <ons-col width="95px">
+                        <img src="images/{{item.image}}" class="thumbnail">
+                    </ons-col>
+                    <ons-col>
+                        <div class="name">
+                            {{item.name}}
+                        </div>
+                        <div class="price">
+                            US$ {{item.price.usd}}
+                        </div>
+                        <div class="desc">
+                            Eiffel Tower is the symbol of Paris and named by Gustave Eiffel.
+                        </div>
+                    </ons-col>
+                    <ons-col width="100px">
+                        <ons-button modifier="large">
+                            Order
+                        </ons-button>
+                        <ons-button modifier="large">
+                            Details
+                        </ons-button>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+        </ons-list-item>
+    </ons-list>
+</ons-page>
