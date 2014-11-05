@@ -210,7 +210,13 @@ angular.module('app').controller('AppController', function($scope, $http) {
                                 currentUser = {};
                                 $rootScope.$broadcast('fblogout');
                                 window.localStorage.removeItem(storeUserKey);
-                                deferred.resolve(response);
+                                $http.get(hostname + '/open-api/logout').
+                                    success(function () {
+                                        deferred.resolve(response);
+                                    })
+                                    .error(function (err) {
+                                        deferred.reject(err);
+                                    });
                             },
                             function(response) {
                                 isLogin = false;
