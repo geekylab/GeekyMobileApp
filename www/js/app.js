@@ -22,12 +22,12 @@ angular.module('app').controller('AppController', function($scope, $http) {
 
     $scope.findStoreByGPS();
 
-    $scope.$on('fblogin', function (name, response) {
+    $scope.$on('fblogin', function(name, response) {
         console.log("AppController event");
         console.log(response);
         $scope.isLogin = true;
     });
-}).controller('LoginController', function ($scope, $http, MyUser) {
+}).controller('LoginController', function($scope, $http, MyUser) {
 
     $scope.loadingFlg = false;
     $scope.isLoggedIn = false;
@@ -35,63 +35,70 @@ angular.module('app').controller('AppController', function($scope, $http) {
 
     if ($scope.user) {
         MyUser.isLogin()
-            .then(function (isLoggedIn) {
+            .then(function(isLoggedIn) {
                 $scope.isLoggedIn = isLoggedIn;
-            }, function (err) {
+            }, function(err) {
                 //error
                 console.log(err);
-            }, function () {
+            }, function() {
                 $scope.loadingFlg = true;
                 $scope.modal.show();
-            }).finally(function () {
+            }).finally(function() {
                 $scope.loadingFlg = false;
                 $scope.modal.hide();
             });
     }
 
-    $scope.doLogin = function () {
+    $scope.doLogin = function() {
         MyUser.login()
-            .then(function (response) {
+            .then(function(response) {
                 $scope.isLoggedIn = true;
                 $scope.user = response;
-            }, function (err) {
+            }, function(err) {
                 $scope.isLoggedIn = false;
                 console.log(err);
-            }, function () {
+            }, function() {
                 $scope.loadingFlg = true;
                 $scope.modal.show();
-            }).finally(function () {
+            }).finally(function() {
                 $scope.loadingFlg = false;
                 $scope.modal.hide();
             });
 
     };
 
-    $scope.doLogout = function () {
+    $scope.doLogout = function() {
         MyUser.logout()
-            .then(function (response) {
+            .then(function(response) {
                 $scope.isLoggedIn = false;
-            }, function () {
+            }, function() {
                 alert('error');
             });
     };
 
 }).controller('StoreController', function($scope) {
-    //$scope.storeInfo = {
-    //    id: '1',
-    //    name: 'Awesome Restaurant',
-    //    desc: 'Meat specialties',
-    //    open_days: 'everyday',
-    //    open_time: 'From 10am to 10pm',
-    //    public_rating: 3.7,
-    //    my_rating: 3.7,
-    //    address: 'Av. Pres. Wilson, 2131 - Santos/SP',
-    //    location: {
-    //        lat: '-23.9691553',
-    //        long: '-46.3750582'
-    //    },
-    //    phone: '1'
-    //};
+    $scope.storeInfo = {
+        _id: '1',
+        name: 'Awesome Restaurant',
+        desc: 'Meat specialties',
+        open_days: 'everyday',
+        open_time: 'From 10am to 10pm',
+        public_rating: 3.7,
+        my_rating: 5,
+        address: 'Av. Pres. Wilson, 2131 - Santos/SP',
+        location: {
+            lat: '-23.9691553',
+            long: '-46.3750582'
+        },
+        features: {
+            'kids_space': true,
+            'parking': true,
+            'smoke': true,
+            'non_smoke': true
+        },
+        phone: '1'
+    };
+
     $scope.rateStore = function() {
 
     };
@@ -105,7 +112,7 @@ angular.module('app').controller('AppController', function($scope, $http) {
             open_days: 'everyday',
             open_time: 'From 10am to 10pm',
             public_rating: 3.7,
-            my_rating: 3.7,
+            my_rating: 5,
             address: 'Av. Pres. Wilson, 2131 - Santos/SP',
             location: {
                 lat: '-23.9691553',
@@ -118,39 +125,19 @@ angular.module('app').controller('AppController', function($scope, $http) {
                 'non_smoke': true
             },
             phone: '1'
-        },
-        {
-            _id: '2',
-            name: 'Awesome Restaurant 2',
-            desc: 'Meat specialties',
-            open_days: 'everyday',
-            open_time: 'From 10am to 10pm',
-            public_rating: 3.7,
-            my_rating: 3.7,
-            address: 'Av. Pres. Wilson, 2131 - Santos/SP',
-            location: {
-                lat: '-23.9691553',
-                long: '-46.3750582'
-            },
-            features: {
-                'kids_space': true,
-                'parking': false,
-                'smoke': true,
-                'non_smoke': false
-            },
-            phone: '1'
         }
     ];
 
-    $scope.showStoreDetails = function(index) {
-        var selectedItem = $scope.searchResults[index];
-        $scope.ons.navigator.pushPage('store.html', {storeInfo: selectedItem});
+    $scope.showStoreDetails = function(storeId) {
+        $scope.ons.navigator.pushPage('store.html', {storeId: storeId});
     };
-    $scope.searchStores = function() {
-        //var selectedItem = $scope.searchResults[index];
-        //$scope.ons.navigator.pushPage();
+
+    $scope.searchStores = function(searchFilter) {
+        console.log(searchFilter);
+
         $scope.ons.navigator.pushPage('search-results.html');
     };
+
     $scope.getFeatureClass = function(status) {
         return {
             'feature-active': status,
@@ -158,11 +145,7 @@ angular.module('app').controller('AppController', function($scope, $http) {
         }
     };
 
-    $scope.rateStore = function() {
-
-    };
-
-}).factory('MyUser', function ($rootScope, $q, $http, $timeout) {
+}).factory('MyUser', function($rootScope, $q, $http, $timeout) {
     var storeUserKey = 'currentUser';
 
     var fbPlugin = facebookConnectPlugin;
@@ -173,55 +156,55 @@ angular.module('app').controller('AppController', function($scope, $http) {
         isLogin = true;
 
     return {
-        login: function () {
+        login: function() {
             var deferred = $q.defer();
-            $timeout(function () {
+            $timeout(function() {
                 deferred.notify('In progress')
             }, 0);
             facebookConnectPlugin.login(["email"],
-                function (response) {
+                function(response) {
                     $http.post(hostname + '/open-api/auth/facebook/token', {access_token: response.authResponse.accessToken}).
-                        success(function (user) {
+                        success(function(user) {
                             isLogin = true;
                             currentUser = user;
                             facebookConnectPlugin.api("/me/picture?redirect=0&type=small&width=60", ["basic_info"],
-                                function (res) {
+                                function(res) {
                                     currentUser.imageUrl = res.data.url;
                                     window.localStorage.setItem(storeUserKey, JSON.stringify(currentUser));
                                     $rootScope.$broadcast('fblogin', currentUser);
                                     deferred.resolve(currentUser);
-                                }, function () {
+                                }, function() {
                                     console.log('error');
                                     deferred.reject('error');
                                 }
                             );
-                        }).error(function (err) {
+                        }).error(function(err) {
                             deferred.reject(err);
                         });
-                }, function (response) {
+                }, function(response) {
                     deferred.reject(response);
                 });
             return deferred.promise;
-        }, api: function (path) {
+        }, api: function(path) {
             var deferred = $q.defer();
             facebookConnectPlugin.api(path, ["basic_info"],
-                function (response) {
+                function(response) {
                     deferred.resolve(response);
                 },
-                function (response) {
+                function(response) {
                     deferred.reject(response);
                 });
             return deferred.promise;
-        }, logout: function () {
+        }, logout: function() {
             var deferred = $q.defer();
-            $timeout(function () {
+            $timeout(function() {
                 deferred.notify('In progress')
             }, 0);
             this.isLogin()
-                .then(function (res) {
+                .then(function(res) {
                     if (res) {
                         facebookConnectPlugin.logout(
-                            function (response) {
+                            function(response) {
                                 console.log('fb_logout');
                                 isLogin = false;
                                 currentUser = {};
@@ -229,7 +212,7 @@ angular.module('app').controller('AppController', function($scope, $http) {
                                 window.localStorage.removeItem(storeUserKey);
                                 deferred.resolve(response);
                             },
-                            function (response) {
+                            function(response) {
                                 isLogin = false;
                                 console.log('fb_logout error');
                                 console.log(response);
@@ -239,19 +222,19 @@ angular.module('app').controller('AppController', function($scope, $http) {
                 });
             return deferred.promise;
         },
-        isLogin: function () {
+        isLogin: function() {
             var deferred = $q.defer();
-            $timeout(function () {
+            $timeout(function() {
                 deferred.notify('In progress')
             }, 0);
-            facebookConnectPlugin.getLoginStatus(function (data) {
+            facebookConnectPlugin.getLoginStatus(function(data) {
                 deferred.resolve(data.status == "connected");
-            }, function (response) {
+            }, function(response) {
                 deferred.reject(response);
             });
             return deferred.promise;
         },
-        user: function () {
+        user: function() {
             return currentUser;
         }
     }

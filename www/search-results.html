@@ -11,7 +11,7 @@
                 modifier="chevron"
                 class="list-item-container store-list-item"
                 ng-repeat="store in searchResults"
-                ng-click="showStoreDetails($index)">
+                ng-click="showStoreDetails(store._id)">
             <ons-row>
                 <ons-col width="95px">
                     <img src="images/sample_store_1.jpg" class="thumbnail">

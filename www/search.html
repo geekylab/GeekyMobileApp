@@ -8,17 +8,17 @@
         <div class="search-form">
             <ons-list>
                 <ons-list-header>Location</ons-list-header>
-                <ons-list-item ng-hide="useGpsFlag">
-                    <input type="text" value="" placeholder="Region" class="text-input advanced-search-text">
+                <ons-list-item ng-hide="searchFilter.useGpsFlag">
+                    <input type="text" value="" placeholder="Region" class="text-input advanced-search-text" ng-model="searchFilter.region_name">
                 </ons-list-item>
 
-                <ons-list-item ng-hide="useGpsFlag">
-                    <input type="text" value="" placeholder="Name" class="text-input advanced-search-text">
+                <ons-list-item ng-hide="searchFilter.useGpsFlag">
+                    <input type="text" value="" placeholder="Name" class="text-input advanced-search-text" ng-model="searchFilter.store_name">
                 </ons-list-item>
 
                 <ons-list-item modifier="tappable">
                     <label class="checkbox checkbox--list-item">
-                        <input type="checkbox" ng-model="useGpsFlag">
+                        <input type="checkbox" ng-model="searchFilter.useGpsFlag">
 
                         <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                         Nearby
@@ -30,7 +30,7 @@
                 <ons-list-header>Filter</ons-list-header>
                 <ons-list-item modifier="tappable">
                     <label class="checkbox checkbox--list-item">
-                        <input type="checkbox">
+                        <input type="checkbox" ng-model="searchFilter.features.kids_space">
 
                         <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                         Kids Space
@@ -39,7 +39,7 @@
 
                 <ons-list-item modifier="tappable">
                     <label class="checkbox checkbox--list-item">
-                        <input type="checkbox">
+                        <input type="checkbox" ng-model="searchFilter.features.smoking">
 
                         <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                         Smoking Area
@@ -48,7 +48,7 @@
 
                 <ons-list-item modifier="tappable">
                     <label class="checkbox checkbox--list-item">
-                        <input type="checkbox">
+                        <input type="checkbox" ng-model="searchFilter.features.non_smoking">
 
                         <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                         Non-smoking area
@@ -57,25 +57,16 @@
 
                 <ons-list-item modifier="tappable">
                     <label class="checkbox checkbox--list-item">
-                        <input type="checkbox">
+                        <input type="checkbox" ng-model="searchFilter.features.parking">
 
                         <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
-                        NFC Payments
-                    </label>
-                </ons-list-item>
-
-                <ons-list-item modifier="tappable">
-                    <label class="checkbox checkbox--list-item">
-                        <input type="checkbox">
-
-                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
-                        Garage
+                        Parking
                     </label>
                 </ons-list-item>
             </ons-list>
 
             <div style="text-align: center; margin-top: 10px;">
-                <ons-button modifier="large" ng-click="searchStores()">
+                <ons-button modifier="large" ng-click="searchStores(searchFilter)">
                     <ons-icon icon="fa-search"></ons-icon>
                     Search
                 </ons-button>
