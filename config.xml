@@ -3,9 +3,9 @@
         xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Geeky menu</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        Revolution of digital menu.
     </description>
-    <author email="johnathan@geekylab.net" href="http://cordova.io">
+    <author email="johnathan@geekylab.net" href="http://geekylab.net">
         Geeky Lab Team
     </author>
     <content src="index.html"/>

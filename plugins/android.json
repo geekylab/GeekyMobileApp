@@ -31,6 +31,10 @@
                         {
                             "xml": "<access origin=\"https://*.akamaihd.net\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Globalization\"><param name=\"android-package\" value=\"org.apache.cordova.globalization.Globalization\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -69,6 +73,9 @@
         "com.phonegap.plugins.facebookconnect": {
             "APP_ID": "789530537752364",
             "APP_NAME": "GeekyMenu",
+            "PACKAGE_NAME": "net.geekylab.geekymenu"
+        },
+        "org.apache.cordova.globalization": {
             "PACKAGE_NAME": "net.geekylab.geekymenu"
         }
     },

@@ -9,11 +9,14 @@
     <access origin="https://api.facebook.com" />
     <access origin="https://*.fbcdn.net" />
     <access origin="https://*.akamaihd.net" />
+    <feature name="Globalization">
+        <param name="android-package" value="org.apache.cordova.globalization.Globalization" />
+    </feature>
     <name>Geeky menu</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        Revolution of digital menu.
     </description>
-    <author email="johnathan@geekylab.net" href="http://cordova.io">
+    <author email="johnathan@geekylab.net" href="http://geekylab.net">
         Geeky Lab Team
     </author>
     <content src="index.html" />

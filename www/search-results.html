@@ -17,12 +17,8 @@
                     <img ng-src="{{getImageUrl(store)}}" class="thumbnail">
                 </ons-col>
                 <ons-col>
-                    <div class="name">
-                        {{store.store_name[userSettings.defaultLang]}}{{userSettings.defaultLang}}
-                    </div>
-                    <div class="desc">
-                        Eiffel Tower is the symbol of Paris and named by Gustave Eiffel.
-                    </div>
+                    <div class="name" geeky-gettext="{{store.store_name}}"></div>
+                    <div class="desc" geeky-gettext="{{store.desc}}"></div>
                     <div class="features">
                         <div class="feature"
                              ng-repeat="feature in userSettings.features"

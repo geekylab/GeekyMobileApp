@@ -69,8 +69,8 @@ gulp.task('serve', ['build', 'browser-sync'], function() {
 
   gulp.watch(
     [__dirname + '/www/**/*.*'],
-    {debounceDelay: 400},
-    ['prepare-cordova']
+    {debounceDelay: 400}
+//    ['prepare-cordova']
   );
 });
 
