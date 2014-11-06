@@ -110,6 +110,18 @@
             console.log($scope.storeInfo);
         });
 
+        //var intRating = parseInt($scope.storeInfo.public_rating);
+        //$scope.ratingFull = [];
+        //for (i = 0; i < intRating; i++) {
+        //    $scope.ratingFull[i] = i;
+        //}
+        //
+        //$scope.ratingHalf = 0;
+        //if ($scope.storeInfo.public_rating % 2 > 0) {
+        //    $scope.ratingHalf = 1;
+        //}
+        //$scope.ratingEmpty = new Array(5 - (intRating + $scope.ratingHalf));
+
         //$scope.storeInfo = {
         //    _id: '1',
         //    store_name: {"br":"McDonald's Sao vicente","us":"McDonald's Sao vicente","jp":"マクドナルド サンビセンテ"},

@@ -43,3 +43,14 @@
 span.small {
     font-size: 12px;
 }
+
+.flat {
+    border-radius: 0 !important;
+}
+
+div.navigation-bar.modal-navigation-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0 !important;
+}

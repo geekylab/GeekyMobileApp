@@ -12,6 +12,12 @@
     <feature name="Globalization">
         <param name="android-package" value="org.apache.cordova.globalization.Globalization" />
     </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+    </feature>
+    <feature name="NetworkStatus">
+        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
+    </feature>
     <name>Geeky menu</name>
     <description>
         Revolution of digital menu.
@@ -19,6 +25,7 @@
     <author email="johnathan@geekylab.net" href="http://geekylab.net">
         Geeky Lab Team
     </author>
+    <preference name="SplashScreen" value="screen" />
     <content src="index.html" />
     <access origin="*" />
 </widget>

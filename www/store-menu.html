@@ -97,11 +97,13 @@
 
     <!-- ORDER MODAL -->
     <ons-modal var="orderModal" class="order-modal" align="top">
-        <ons-toolbar ng-click="orderModal.hide()" class="toolbar-modal-button">
+        <div class="navigation-bar modal-navigation-bar" ng-click="orderModal.hide()" class="toolbar-modal-button">
             <div class="center">
-                <ons-icon icon="ion-close-round" style="color: #FFF;"></ons-icon>
+                <ons-button modifier="large">
+                    <ons-icon icon="ion-close-round" style="color: #FFF;"></ons-icon>
+                </ons-button>
             </div>
-        </ons-toolbar>
+        </div>
         <!--<ons-icon icon="ion-loading-c" spin="true"></ons-icon>-->
         <div class="modal-body">
             <!-- PRICE CONTAINER -->
