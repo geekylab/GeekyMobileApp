@@ -97,44 +97,47 @@ angular.module('app').controller('AppController', function ($scope, $http) {
         },
         phone: '1'
     };
-
-    $scope.storeTopItems = function () {
-        return [
-            {
-                _id: 1,
-                type: 1,
-                name: 'Feijoada do Johna',
-                price: {
-                    brl: 25.00,
-                    yen: 1000.00,
-                    usd: 10.00
-                },
-                image: 'feijoada_johna.jpg'
+    $scope.storeTopItems = [
+        {
+            _id: 1,
+            type: 1,
+            name: 'Feijoada do Johna',
+            desc: 'Feijoada do Johna',
+            price: {
+                brl: 25.00,
+                yen: 1000.00,
+                usd: 10.00
             },
-            {
-                _id: 2,
-                type: 1,
-                name: 'Carbonara do Johna',
-                price: {
-                    brl: 50.00,
-                    yen: 2500.00,
-                    usd: 25.00
-                },
-                image: 'carbonara_johna.jpg'
+            image: 'feijoada_johna.jpg',
+            serve: 4
+        },
+        {
+            _id: 2,
+            type: 1,
+            name: 'Carbonara do Johna',
+            desc: 'Carbonara do Johna',
+            price: {
+                brl: 50.00,
+                yen: 2500.00,
+                usd: 25.00
             },
-            {
-                _id: 3,
-                type: 2,
-                name: 'Cerveja Kirin Ichiban',
-                price: {
-                    brl: 10.00,
-                    yen: 400.00,
-                    usd: 4.00
-                },
-                image: 'cerveja_kirin.jpg'
-            }
-        ];
-    };
+            image: 'carbonara_johna.jpg',
+            serve: 2
+        },
+        {
+            _id: 3,
+            type: 2,
+            name: 'Cerveja Kirin Ichiban',
+            desc: 'Cerveja Kirin Ichiban',
+            price: {
+                brl: 10.00,
+                yen: 400.00,
+                usd: 4.00
+            },
+            image: 'cerveja_kirin.jpg',
+            serve: 1
+        }
+    ];
 
     $scope.showItemDetail = function (itemId) {
 
@@ -147,6 +150,25 @@ angular.module('app').controller('AppController', function ($scope, $http) {
     $scope.searchBox = false;
     $scope.toggleSearch = function () {
         $scope.searchBox = !$scope.searchBox;
+    };
+
+    $scope.orderedItem = null;
+    $scope.showOrderModal = function (item) {
+        $scope.orderedItem = item;
+        $scope.orderModal.show();
+    };
+
+    $scope.itemQuant = 1;
+    $scope.addItem = function () {
+        $scope.itemQuant++;
+        $scope.$apply();
+    };
+
+    $scope.removeItem = function () {
+        if ($scope.itemQuant > 0) {
+            $scope.itemQuant--;
+            $scope.$apply();
+        }
     }
 
 }).controller('SearchResultsController', function ($scope, SearchService, UserSettings) {

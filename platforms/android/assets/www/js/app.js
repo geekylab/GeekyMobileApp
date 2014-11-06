@@ -1,4 +1,4 @@
-var hostname = 'http://192.168.111.102';
+var hostname = 'http://192.168.111.103';
 angular.module('app', ['onsen', 'ngResource']);
 angular.module('app').controller('AppController', function ($scope, $http) {
     $scope.nearStores = [];
@@ -20,7 +20,6 @@ angular.module('app').controller('AppController', function ($scope, $http) {
         }
     };
 
-    $scope.findStoreByGPS();
 
     $scope.$on('fblogin', function (name, response) {
         console.log("AppController event");
@@ -98,44 +97,47 @@ angular.module('app').controller('AppController', function ($scope, $http) {
         },
         phone: '1'
     };
-
-    $scope.storeTopItems = function () {
-        return [
-            {
-                _id: 1,
-                type: 1,
-                name: 'Feijoada do Johna',
-                price: {
-                    brl: 25.00,
-                    yen: 1000.00,
-                    usd: 10.00
-                },
-                image: 'feijoada_johna.jpg'
+    $scope.storeTopItems = [
+        {
+            _id: 1,
+            type: 1,
+            name: 'Feijoada do Johna',
+            desc: 'Feijoada do Johna',
+            price: {
+                brl: 25.00,
+                yen: 1000.00,
+                usd: 10.00
             },
-            {
-                _id: 2,
-                type: 1,
-                name: 'Carbonara do Johna',
-                price: {
-                    brl: 50.00,
-                    yen: 2500.00,
-                    usd: 25.00
-                },
-                image: 'carbonara_johna.jpg'
+            image: 'feijoada_johna.jpg',
+            serve: 4
+        },
+        {
+            _id: 2,
+            type: 1,
+            name: 'Carbonara do Johna',
+            desc: 'Carbonara do Johna',
+            price: {
+                brl: 50.00,
+                yen: 2500.00,
+                usd: 25.00
             },
-            {
-                _id: 3,
-                type: 2,
-                name: 'Cerveja Kirin Ichiban',
-                price: {
-                    brl: 10.00,
-                    yen: 400.00,
-                    usd: 4.00
-                },
-                image: 'cerveja_kirin.jpg'
-            }
-        ];
-    };
+            image: 'carbonara_johna.jpg',
+            serve: 2
+        },
+        {
+            _id: 3,
+            type: 2,
+            name: 'Cerveja Kirin Ichiban',
+            desc: 'Cerveja Kirin Ichiban',
+            price: {
+                brl: 10.00,
+                yen: 400.00,
+                usd: 4.00
+            },
+            image: 'cerveja_kirin.jpg',
+            serve: 1
+        }
+    ];
 
     $scope.showItemDetail = function (itemId) {
 
@@ -148,49 +150,114 @@ angular.module('app').controller('AppController', function ($scope, $http) {
     $scope.searchBox = false;
     $scope.toggleSearch = function () {
         $scope.searchBox = !$scope.searchBox;
+    };
+
+    $scope.orderedItem = null;
+    $scope.showOrderModal = function (item) {
+        $scope.orderedItem = item;
+        $scope.orderModal.show();
+    };
+
+    $scope.itemQuant = 1;
+    $scope.addItem = function () {
+        $scope.itemQuant++;
+        $scope.$apply();
+    };
+
+    $scope.removeItem = function () {
+        if ($scope.itemQuant > 0) {
+            $scope.itemQuant--;
+            $scope.$apply();
+        }
     }
 
-}).controller('SearchController', function ($scope) {
-    $scope.searchResults = [
-        {
-            _id: '1',
-            name: 'Awesome Restaurant',
-            desc: 'Meat specialties',
-            open_days: 'everyday',
-            open_time: 'From 10am to 10pm',
-            public_rating: 3.7,
-            my_rating: 5,
-            address: 'Av. Pres. Wilson, 2131 - Santos/SP',
-            location: {
-                lat: '-23.9691553',
-                long: '-46.3750582'
-            },
-            features: {
-                'kids_space': true,
-                'parking': true,
-                'smoking': true,
-                'non_smoking': true
-            },
-            phone: '1'
+}).controller('SearchResultsController', function ($scope, SearchService, UserSettings) {
+
+    $scope.searchResults = SearchService.getResult();
+    $scope.searchFilter = SearchService.getFilter();
+    $scope.userSettings = UserSettings;
+
+
+    $scope.getImageUrl = function (store) {
+        return $scope.userSettings.apiHostname + store.images[0].path;
+    };
+
+    $scope.getFeatureClass = function (feature, targetOpts) {
+        var idx = targetOpts.indexOf(feature);
+
+        return {
+            'feature-active': idx != -1,
+            'feature-inactive': idx == -1
         }
-    ];
-    $scope.searchStores = function (searchFilter) {
-        $scope.searchNavigator.pushPage('search-results.html');
     };
 
     $scope.showStoreDetails = function (storeId) {
         $scope.searchNavigator.pushPage('store.html');
     };
 
-    $scope.showStoreMenu = function (searchFilter) {
-        $scope.searchNavigator.pushPage('store-menu.html');
+
+}).controller('SearchController', function ($scope, $http, SearchService, UserSettings) {
+
+    $scope.isSearching = false;
+    $scope.userSettings = UserSettings;
+    $scope.searchFilter = {
+        store_name: 'store_name',
+        region_name: 'test',
+        features: []
     };
 
-    $scope.getFeatureClass = function (status) {
-        return {
-            'feature-active': status,
-            'feature-inactive': !status
+    //    [
+    //    {
+    //        _id: '1',
+    //        name: 'Awesome Restaurant',
+    //        desc: 'Meat specialties',
+    //        open_days: 'everyday',
+    //        open_time: 'From 10am to 10pm',
+    //        public_rating: 3.7,
+    //        my_rating: 5,
+    //        address: 'Av. Pres. Wilson, 2131 - Santos/SP',
+    //        location: {
+    //            lat: '-23.9691553',
+    //            long: '-46.3750582'
+    //        },
+    //        features: {
+    //            'kids_space': true,
+    //            'parking': true,
+    //            'smoking': true,
+    //            'non_smoking': true
+    //        },
+    //        phone: '1'
+    //    }
+    //];
+
+    $scope.searchStores = function () {
+        $scope.isSearching = true;
+        SearchService.setFilter($scope.searchFilter);
+        $http.post(hostname + '/open-api/store/search', $scope.searchFilter)
+            .success(function (result) {
+                $scope.isSearching = false;
+                $scope.searchResults = result;
+                SearchService.setResult(result);
+                $scope.searchNavigator.pushPage('search-results.html');
+            }).error(function () {
+                alert('error');
+            });
+
+//        $scope.searchNavigator.pushPage('search-results.html');
+    };
+
+    $scope.featuresToggleCheck = function (feature) {
+        var idx = $scope.searchFilter.features.indexOf(feature);
+        if (angular.equals(idx, -1)) {
+            $scope.searchFilter.features.push(feature);
         }
+        else {
+            $scope.searchFilter.features.splice(idx, 1);
+        }
+    };
+
+    $scope.showStoreMenu = function (searchFilter) {
+        $scope.searchNavigator.pushPage('store-menu.html');
     };
 
 }).factory('MyUser', function ($rootScope, $q, $http, $timeout) {
@@ -258,7 +325,13 @@ angular.module('app').controller('AppController', function ($scope, $http) {
                                 currentUser = {};
                                 $rootScope.$broadcast('fblogout');
                                 window.localStorage.removeItem(storeUserKey);
-                                deferred.resolve(response);
+                                $http.get(hostname + '/open-api/logout').
+                                    success(function () {
+                                        deferred.resolve(response);
+                                    })
+                                    .error(function (err) {
+                                        deferred.reject(err);
+                                    });
                             },
                             function (response) {
                                 isLogin = false;
@@ -287,6 +360,35 @@ angular.module('app').controller('AppController', function ($scope, $http) {
         }
     }
 
+}).factory('SearchService', function () {
+    var result = [];
+    var filter = {};
+    return {
+        setResult: function (res) {
+            result = res;
+        },
+        getResult: function () {
+            return result;
+        },
+        setFilter: function (f) {
+            filter = f;
+        },
+        getFilter: function () {
+            return filter;
+        }
+    }
+}).factory('UserSettings', function () {
+    return {
+        defaultLang: 'us',
+        apiHostname: hostname,
+        features: [
+            'parking',
+            'wifi',
+            'live_show',
+            'kids_space',
+            'non_smoking'
+        ]
+    }
 }).factory('Store', function ($resource) {
     return $resource(hostname + '/open-api/store/:id/:lang/:longitude/:latitude', {
         id: '@_id'
