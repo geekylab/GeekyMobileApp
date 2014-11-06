@@ -8,6 +8,7 @@
     <author email="johnathan@geekylab.net" href="http://geekylab.net">
         Geeky Lab Team
     </author>
+    <preference name="SplashScreen" value="screen"/>
     <content src="index.html"/>
     <access origin="*"/>
 </widget>

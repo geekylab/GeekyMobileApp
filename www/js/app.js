@@ -2,20 +2,28 @@
     var hostname = 'http://192.168.111.103';
     var app = angular.module('app', ['onsen', 'ngResource']);
 
-    document.addEventListener('deviceready', function () {
+
+    if (window.cordova) {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    } else {
+        document.addEventListener("DOMContentLoaded", onDeviceReady, false);
+    }
+
+    function onDeviceReady() {
         angular.bootstrap(document, ['app']);
-    }, false);
+        if (navigator && navigator.splashscreen)
+            navigator.splashscreen.hide();
+    }
 
 
     app.controller('AppController', function ($scope, $http) {
         $scope.nearStores = [];
         $scope.isLoading = false;
 
-        navigator.globalization.getPreferredLanguage(
-            function (language) {alert('language: ' + language.value + '\n');},
-            function () {alert('Error getting language\n');}
-        );
-
+        //navigator.globalization.getPreferredLanguage(
+        //    function (language) {alert('language: ' + language.value + '\n');},
+        //    function () {alert('Error getting language\n');}
+        //);
 
 
         $scope.findStoreByGPS = function () {
@@ -34,10 +42,10 @@
             }
         };
 
-        console.log(navigator.globalization);
-        setTimeout(function () {
-            console.log(navigator.globalization);
-        }, 1000);
+        //console.log(navigator.globalization);
+        //setTimeout(function () {
+        //    console.log(navigator.globalization);
+        //}, 1000);
 
         $scope.$on('fblogin', function (name, response) {
             console.log("AppController event");
@@ -170,29 +178,29 @@
         $scope.toggleSearch = function () {
             $scope.searchBox = !$scope.searchBox;
         }
-    $scope.searchBox = false;
-    $scope.toggleSearch = function () {
-        $scope.searchBox = !$scope.searchBox;
-    };
+        $scope.searchBox = false;
+        $scope.toggleSearch = function () {
+            $scope.searchBox = !$scope.searchBox;
+        };
 
-    $scope.orderedItem = null;
-    $scope.showOrderModal = function (item) {
-        $scope.orderedItem = item;
-        $scope.orderModal.show();
-    };
+        $scope.orderedItem = null;
+        $scope.showOrderModal = function (item) {
+            $scope.orderedItem = item;
+            $scope.orderModal.show();
+        };
 
-    $scope.itemQuant = 1;
-    $scope.addItem = function () {
-        $scope.itemQuant++;
-        $scope.$apply();
-    };
-
-    $scope.removeItem = function () {
-        if ($scope.itemQuant > 0) {
-            $scope.itemQuant--;
+        $scope.itemQuant = 1;
+        $scope.addItem = function () {
+            $scope.itemQuant++;
             $scope.$apply();
+        };
+
+        $scope.removeItem = function () {
+            if ($scope.itemQuant > 0) {
+                $scope.itemQuant--;
+                $scope.$apply();
+            }
         }
-    }
 
     }).controller('SearchResultsController', function ($scope, SearchService, UserSettings) {
 

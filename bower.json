@@ -1,7 +1,8 @@
 {
-    "name": "Mobile GeekyMeny",
-    "version": "0.0.1",
-    "dependencies": {
-        "angular-resource": "~1.2.0"
-    }
+  "name": "Mobile GeekyMeny",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular-resource": "~1.2.0",
+    "ngCordova": "~0.1.7-alpha"
+  }
 }
