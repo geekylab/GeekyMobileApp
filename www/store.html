@@ -5,12 +5,13 @@
         </div>
     </ons-toolbar>
     <div class="details-content">
-        <div class="card">
+        <div class="card" geeky-background-image="{{storeInfo.images}}">
             <div class="card-background-dark">
-                <div class="card-name">{{storeInfo.name}}</div>
-                <div class="card-desc">{{storeInfo.desc}}
-                    <br>Opens {{storeInfo.open_days}}
-                    <br>{{storeInfo.open_time}}
+                <div class="card-name" geeky-gettext="{{storeInfo.store_name}}"></div>
+                <div class="card-desc" geeky-gettext="{{storeInfo.desc}}"></div>
+                <div class="card-desc">
+                    <br>{{storeInfo.opening_hour.start}} - {{storeInfo.opening_hour.end}}
+                    <span ng-show="storeInfo.opening_hour.last_order">({{storeInfo.opening_hour.last_order}})</span>
                 </div>
             </div>
         </div>
@@ -63,10 +64,12 @@
 
         <!-- BEGIN INFO LIST -->
         <ons-list style="margin-top: 12px;">
-            <ons-list-item modifier="chevron">
+            <ons-list-item modifier="chevron" ng-click="openMap(storeInfo.location)">
                 <div class="prop-desc">
                     <ons-icon icon="fa-map-marker"></ons-icon>
-                    {{storeInfo.address}}
+                    {{storeInfo.zip_code}}
+                    {{storeInfo.address}} {{storeInfo.address2}} {{storeInfo.city}} {{storeInfo.state}}
+                    {{storeInfo.country}}
                 </div>
             </ons-list-item>
 

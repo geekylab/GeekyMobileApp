@@ -101,28 +101,36 @@
                 });
         };
 
-    }).controller('StoreController', function ($scope) {
-        $scope.storeInfo = {
-            _id: '1',
-            name: 'Awesome Restaurant',
-            desc: 'Meat specialties',
-            open_days: 'everyday',
-            open_time: 'From 10am to 10pm',
-            public_rating: 3.7,
-            my_rating: 5,
-            address: 'Av. Pres. Wilson, 2131 - Santos/SP',
-            location: {
-                lat: '-23.9691553',
-                long: '-46.3750582'
-            },
-            features: {
-                'kids_space': true,
-                'parking': true,
-                'smoke': true,
-                'non_smoke': true
-            },
-            phone: '1'
-        };
+    }).controller('StoreController', function ($scope, Data, Store) {
+        var storeId = Data.getData('storeId');
+        $scope.storeInfo = {};
+
+        Store.get({id: storeId}, function (data) {
+            $scope.storeInfo = data;
+            console.log($scope.storeInfo);
+        });
+
+        //$scope.storeInfo = {
+        //    _id: '1',
+        //    store_name: {"br":"McDonald's Sao vicente","us":"McDonald's Sao vicente","jp":"マクドナルド サンビセンテ"},
+        //    desc: 'Meat specialties',
+        //    open_days: 'everyday',
+        //    open_time: 'From 10am to 10pm',
+        //    public_rating: 3.7,
+        //    my_rating: 5,
+        //    address: 'Av. Pres. Wilson, 2131 - Santos/SP',
+        //    location: {
+        //        lat: '-23.9691553',
+        //        long: '-46.3750582'
+        //    },
+        //    features: {
+        //        'kids_space': true,
+        //        'parking': true,
+        //        'smoke': true,
+        //        'non_smoke': true
+        //    },
+        //    phone: '1'
+        //};
 
         $scope.storeTopItems = [
             {
@@ -170,6 +178,10 @@
 
         };
 
+        $scope.openMap = function (location) {
+            window.open("http://maps.apple.com/maps?ll=" + location[0] + ',' + location[1], '_system');
+        };
+
         $scope.showStoreMenu = function () {
             $scope.searchNavigator.pushPage('store-menu.html');
         };
@@ -177,7 +189,8 @@
         $scope.searchBox = false;
         $scope.toggleSearch = function () {
             $scope.searchBox = !$scope.searchBox;
-        }
+        };
+
         $scope.searchBox = false;
         $scope.toggleSearch = function () {
             $scope.searchBox = !$scope.searchBox;
@@ -202,7 +215,7 @@
             }
         }
 
-    }).controller('SearchResultsController', function ($scope, SearchService, UserSettings) {
+    }).controller('SearchResultsController', function ($scope, SearchService, UserSettings, Data) {
 
         $scope.searchResults = SearchService.getResult();
         $scope.searchFilter = SearchService.getFilter();
@@ -223,7 +236,8 @@
         };
 
         $scope.showStoreDetails = function (storeId) {
-            $scope.searchNavigator.pushPage('store.html');
+            Data.setData('storeId', storeId);
+            $scope.searchNavigator.pushPage('store.html#' + storeId);
         };
 
 
@@ -395,7 +409,20 @@
     /**
      * factories
      */
-
+        .factory('Data', function () {
+            var data = {};
+            return {
+                setData: function (key, val) {
+                    data[key] = val;
+                },
+                getData: function (key) {
+                    if (data[key] != undefined) {
+                        return data[key];
+                    }
+                    return null;
+                }
+            }
+        })
         .factory('SearchService', function () {
             var result = [];
             var filter = {};
@@ -433,7 +460,7 @@
                 update: {
                     method: 'PUT',
                     params: {
-                        id: "@_id"
+                        id: "@id"
                     }
                 },
                 near: {
@@ -449,27 +476,53 @@
     /**
      * directives
      */
-
-        .directive('geekyGettext', function (UserSettings) {
+        .directive('geekyBackgroundImage', function (UserSettings) {
             return {
-                scope: {
-                    color: '@geekyGettext'
-                },
                 restrict: 'A',
+                scope: {
+                    geekyBackgroundImage: '@'
+                },
                 link: function (scope, element, attrs) {
-                    var defaultLang = UserSettings.defaultLang;
-                    var systemDefaultLang = UserSettings.systemDefaultLang;
-                    console.log(attrs);
-                    if (attrs.geekyGettext != undefined && attrs.geekyGettext != '') {
-                        var data = attrs.geekyGettext;
-                        data = angular.fromJson(data);
-                        console.log(data);
-                        if (data[defaultLang] != undefined) {
-                            element.text(data[defaultLang]);
-                        } else {
-                            element.text(data[systemDefaultLang]);
+                    var unwatch = scope.$watch('geekyBackgroundImage', function (v) {
+                        if (v != '') {
+                            var data = angular.fromJson(v);
+                            if (data.length > 0) {
+                                var url = UserSettings.apiHostname;
+                                var str = 'url(' + url + data[0].path + ')';
+                                element.css('background-image', str);
+                            }
+                            console.log(data);
                         }
+                    });
+                }
+            }
+        })
+        .directive('geekyGettext', function (UserSettings) {
+
+            var setTextElement = function (scope, element, attrs) {
+                var defaultLang = UserSettings.defaultLang;
+                var systemDefaultLang = UserSettings.systemDefaultLang;
+                if (attrs.geekyGettext != undefined && attrs.geekyGettext != '') {
+                    var data = attrs.geekyGettext;
+                    data = angular.fromJson(data);
+                    if (data[defaultLang] != undefined) {
+                        element.text(data[defaultLang]);
+                    } else {
+                        element.text(data[systemDefaultLang]);
                     }
+                }
+            };
+
+            return {
+                restrict: 'A',
+                scope: {            // scopeにオブジェクトを指定すると、分離スコープの作成.
+                    geekyGettext: '@' // '='は双方向バインディング
+                },
+                transclude: true,
+                link: function (scope, element, attrs) {
+                    var unwatch = scope.$watch('geekyGettext', function (v) {
+                        setTextElement(scope, element, attrs)
+                    });
                 }
             };
         });
