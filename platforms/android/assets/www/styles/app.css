@@ -39,3 +39,7 @@
 .big-button-icon {
     font-size: 40px !important;
 }
+
+span.small {
+    font-size: 12px;
+}
