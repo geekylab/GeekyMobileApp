@@ -48,7 +48,6 @@
             $scope.isLogin = true;
         });
     }).controller('LoginController', function ($scope, $http, MyUser) {
-
         $scope.loadingFlg = false;
         $scope.isLoggedIn = false;
         $scope.user = MyUser.user();
@@ -68,6 +67,7 @@
                     $scope.modal.hide();
                 });
         }
+        ;
 
         $scope.doLogin = function () {
             MyUser.login()
@@ -96,14 +96,58 @@
                 });
         };
 
+    }).controller('StoreItemController', function ($scope, Data) {
+        $scope.ingredients = [
+            {
+                _id: 3,
+                name: 'Arroz'
+            },
+            {
+                _id: 4,
+                name: 'Feijão preto'
+            },
+            {
+                _id: 5,
+                name: 'Cebola'
+            },
+            {
+                _id: 6,
+                name: 'Carnes'
+            },
+            {
+                _id: 7,
+                name: 'Farofa'
+            },
+            {
+                _id: 8,
+                name: 'Laranja'
+            }
+        ];
+
+        $scope.orderedItem = Data.getData('item');
+        $scope.storeInfo = Data.getData('storeInfo');
+
     }).controller('StoreController', function ($scope, Data, Store) {
         var storeId = Data.getData('storeId');
         $scope.storeInfo = {};
 
         Store.get({id: storeId}, function (data) {
             $scope.storeInfo = data;
-            console.log($scope.storeInfo);
         });
+
+        /*
+         * TODO: RATING
+         */
+        //var intRating = parseInt($scope.storeInfo.public_rating);
+        //$scope.ratingFull = [];
+        //for (i = 0; i < intRating; i++) {
+        //    $scope.ratingFull[i] = i;
+        //}
+        //$scope.ratingHalf = 0;
+        //if ($scope.storeInfo.public_rating % 2 > 0) {
+        //    $scope.ratingHalf = 1;
+        //}
+        //$scope.ratingEmpty = new Array(5 - (intRating + $scope.ratingHalf));
 
         //$scope.storeInfo = {
         //    _id: '1',
@@ -169,10 +213,6 @@
             }
         ];
 
-        $scope.showItemDetail = function (itemId) {
-
-        };
-
         $scope.openMap = function (location) {
             window.open("geo:" + location[1] + ',' + location[0], '_system');
         };
@@ -190,20 +230,15 @@
             $scope.searchNavigator.pushPage('store-menu.html');
         };
 
-        $scope.searchBox = false;
-        $scope.toggleSearch = function () {
-            $scope.searchBox = !$scope.searchBox;
+        $scope.showOrderItem = function (item) {
+            Data.setData('storeInfo', $scope.storeInfo);
+            Data.setData('item', item);
+            $scope.searchNavigator.pushPage('store-menu-order.html', {animation: 'fade'});
         };
 
         $scope.searchBox = false;
         $scope.toggleSearch = function () {
             $scope.searchBox = !$scope.searchBox;
-        };
-
-        $scope.orderedItem = null;
-        $scope.showOrderModal = function (item) {
-            $scope.orderedItem = item;
-            $scope.orderModal.show();
         };
 
         $scope.itemQuant = 1;
@@ -220,11 +255,9 @@
         }
 
     }).controller('SearchResultsController', function ($scope, SearchService, UserSettings, Data) {
-
         $scope.searchResults = SearchService.getResult();
         $scope.searchFilter = SearchService.getFilter();
         $scope.userSettings = UserSettings;
-
 
         $scope.getImageUrl = function (store) {
             return $scope.userSettings.apiHostname + store.images[0].path;
@@ -530,4 +563,5 @@
                 }
             };
         });
-})();
+})
+();

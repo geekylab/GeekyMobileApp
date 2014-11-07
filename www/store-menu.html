@@ -51,18 +51,8 @@
                         <div class="name" align="left">
                             {{item.name}}
                         </div>
-                        <!--<div class="name" align="left">-->
-                        <!--US$ {{item.price.usd}}-->
-                        <!--</div>-->
                         <div class="desc" align="left">
                             {{item.desc}}
-                        </div>
-                        <div class="features" align="left">
-                            <div class="feature"
-                                 ng-repeat="(name, status) in store.features"
-                                 ng-class="getFeatureClass(status)">
-                                {{name}}
-                            </div>
                         </div>
                         <div class="desc" align="bottom">
                             <div class="feature feature-inactive">
@@ -84,7 +74,7 @@
                         </div>
                     </ons-col>
                     <ons-col width="80px">
-                        <ons-button modifier="large" ng-click="showOrderModal(item)">
+                        <ons-button modifier="large" ng-click="showOrderItem(item)">
                             <div>Order</div>
                             <span class="small">US$ {{item.price.usd}}</span>
                         </ons-button>
@@ -96,52 +86,87 @@
     <!-- END FOOD LIST -->
 
     <!-- ORDER MODAL -->
-    <ons-modal var="orderModal" class="order-modal" align="top">
-        <ons-toolbar ng-click="orderModal.hide()" class="toolbar-modal-button">
-            <div class="center">
-                <ons-icon icon="ion-close-round" style="color: #FFF;"></ons-icon>
+    <ons-modal var="orderModal" class="order-modal" align="top" geeky-background-image="{{item.image}}">
+        <div class="card-background-dark">
+            <div class="navigation-bar modal-navigation-bar" ng-click="orderModal.hide()" class="toolbar-modal-button">
+                <div class="center">
+                    <ons-button modifier="large">
+                        <ons-icon icon="ion-close-round" style="color: #FFF;"></ons-icon>
+                    </ons-button>
+                </div>
             </div>
-        </ons-toolbar>
-        <!--<ons-icon icon="ion-loading-c" spin="true"></ons-icon>-->
-        <div class="modal-body">
-            <!-- PRICE CONTAINER -->
-            <ons-row class="modal-row-container order-item-total" align="center">
-                <ons-col>
-                    <i class="ion-social-usd"></i>
-                    {{orderedItem.price.usd * itemQuant}}
-                </ons-col>
-            </ons-row>
-            <!-- END PRICE CONTAINER -->
+            <!--<ons-icon icon="ion-loading-c" spin="true"></ons-icon>-->
+            <div class="modal-body">
+                <ons-scroller>
 
-            <ons-row class="modal-row-container">
-                <ons-col width="15%">
-                    <ons-button modifier="large" class="remove-quantity" ng-click="removeItem()">
-                        <ons-icon icon="ion-minus-round"></ons-icon>
-                    </ons-button>
-                </ons-col>
-                <ons-col>
-                    <input type="number" min="0" inputmode="numeric" pattern="[0,9]*" ng-model="itemQuant"
-                           class="text-input item-quantity" value="{{itemQuant}}">
-                </ons-col>
-                <ons-col width="15%">
-                    <ons-button modifier="large" class="add-quantity" ng-click="addItem()">
-                        <ons-icon icon="ion-plus-round"></ons-icon>
-                    </ons-button>
-                </ons-col>
+                    <!-- PRICE CONTAINER -->
+                    <ons-row class="modal-row-container order-item-total" align="center">
+                        <ons-col>
+                            <i class="ion-social-usd"></i>
+                            {{orderedItem.price.usd * itemQuant}}
+                        </ons-col>
+                    </ons-row>
+                    <!-- END PRICE CONTAINER -->
 
-                <ons-col width="8%"></ons-col>
+                    <ons-row class="modal-row-container">
+                        <ons-col width="15%">
+                            <ons-button modifier="large" class="remove-quantity" ng-click="removeItem()">
+                                <ons-icon icon="ion-minus-round"></ons-icon>
+                            </ons-button>
+                        </ons-col>
+                        <ons-col>
+                            <input type="number" min="0" inputmode="numeric" pattern="[0,9]*" ng-model="itemQuant"
+                                   class="text-input item-quantity" value="{{itemQuant}}">
+                        </ons-col>
+                        <ons-col width="15%">
+                            <ons-button modifier="large" class="add-quantity" ng-click="addItem()">
+                                <ons-icon icon="ion-plus-round"></ons-icon>
+                            </ons-button>
+                        </ons-col>
 
-                <ons-col width="35%">
-                    <ons-button modifier="large" class="order-button">
-                        Order
-                    </ons-button>
-                </ons-col>
-            </ons-row>
-            <ons-row class="item-description">
+                        <ons-col width="8%"></ons-col>
 
-            </ons-row>
+                        <ons-col width="35%">
+                            <ons-button modifier="large" class="order-button">
+                                Order
+                            </ons-button>
+                        </ons-col>
+                    </ons-row>
+                    <div class="item-description">
+                        <h3>{{orderedItem.name}}</h3>
+                        <!--<p>{{orderedItem.desc}}</p>-->
+                        <p>
+                            A feijoada do johna é feita com muito amor e carinho pelos melhores chefs de nosso
+                            restaurante.
+                            Todos os clientes, sem exceção, adoram a feijoada do Johna!
+                            Experimente, cada porção serve 4 pessoas!
+                        </p>
+                        <!--<ul class="item-ingredients">-->
+                        <!--<li ng-repeat="ingredient in orderedItem.ingredients">{{ingredient.name}}</li>-->
+                        <!--</ul>-->
+
+                        <ons-list class="light-list">
+                            <ons-list-header style="color: #FFF; font-weight: 600;">
+                                Ingredients
+                            </ons-list-header>
+                            <ons-list-item modifier="tappable" ng-repeat="ingredient in ingredients">
+                                <label class="checkbox checkbox--list-item">
+                                    <input type="checkbox"
+                                           ng-click="toggleIngredient(ingredient)"
+                                           checked="checked">
+
+                                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                                    {{ingredient.name}}
+                                </label>
+                            </ons-list-item>
+                        </ons-list>
+
+                    </div>
+
+                </ons-scroller>
+            </div>
         </div>
-
+        <!-- END DARK BACKGROUND -->
     </ons-modal>
     <!-- END ORDER MODAL -->
 </ons-page>

@@ -18,12 +18,6 @@
     <feature name="NetworkStatus">
         <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
     </feature>
-    <feature name="InAppBrowser">
-        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
-    </feature>
-    <feature name="Notification">
-        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
-    </feature>
     <name>Geeky menu</name>
     <description>
         Revolution of digital menu.

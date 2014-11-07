@@ -43,3 +43,48 @@
 span.small {
     font-size: 12px;
 }
+
+.flat {
+    border-radius: 0 !important;
+}
+
+div.navigation-bar.modal-navigation-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0 !important;
+}
+
+ons-row.narrow-row {
+    height: 45px;
+}
+
+div.item-description {
+    text-align: left;
+    max-width: 90%;
+    white-space: normal !important;
+}
+
+div.item-description p, div.item-description h3 {
+    color: #FFF;
+}
+
+ons-list.light-list {
+    background: transparent;
+    border: none;
+    min-width: 100%;
+}
+
+ons-list.light-list ons-list-header {
+    background: transparent;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    padding: 0 !important;
+}
+
+ons-list.light-list ons-list-item {
+    color: #fff;
+    border: none;
+    padding: 0 !important;
+}
