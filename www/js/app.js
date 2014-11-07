@@ -13,18 +13,15 @@
         angular.bootstrap(document, ['app']);
         if (navigator && navigator.splashscreen)
             navigator.splashscreen.hide();
-    }
 
+        console.log('onDeviceReady');
+    }
 
     app.controller('AppController', function ($scope, $http) {
         $scope.nearStores = [];
         $scope.isLoading = false;
 
-        //navigator.globalization.getPreferredLanguage(
-        //    function (language) {alert('language: ' + language.value + '\n');},
-        //    function () {alert('Error getting language\n');}
-        //);
-
+        console.log('AppController');
 
         $scope.findStoreByGPS = function () {
             $scope.isLoading = true;
@@ -48,8 +45,6 @@
         //}, 1000);
 
         $scope.$on('fblogin', function (name, response) {
-            console.log("AppController event");
-            console.log(response);
             $scope.isLogin = true;
         });
     }).controller('LoginController', function ($scope, $http, MyUser) {
@@ -179,10 +174,19 @@
         };
 
         $scope.openMap = function (location) {
-            window.open("http://maps.apple.com/maps?ll=" + location[0] + ',' + location[1], '_system');
+            window.open("geo:" + location[1] + ',' + location[0], '_system');
+        };
+
+        $scope.openDialer = function (tel) {
+            console.log(tel);
+            if (tel)
+                window.open('tel:' + tel, '_system');
+            else
+                console.log('no number');
         };
 
         $scope.showStoreMenu = function () {
+            Data.setData('store', $scope.storeInfo);
             $scope.searchNavigator.pushPage('store-menu.html');
         };
 
