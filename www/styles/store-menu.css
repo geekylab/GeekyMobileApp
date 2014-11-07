@@ -13,8 +13,9 @@
     padding: 10px 0 10px 0 !important;
 }
 
-ons-modal.order-modal {
-    background: rgba(0, 0, 0, 0.85);
+ons-page.order-page {
+    background: url('../images/feijoada_johna.jpg') center no-repeat;
+    background-size: auto 100%;
 }
 
 ons-button.close-modal-button {
@@ -29,7 +30,7 @@ ons-toolbar.toolbar-modal-button:active {
     background: #1284ff;
 }
 
-.order-modal div.modal-body {
+.order-page div.modal-body {
     position: absolute;
     width: 100%;
     padding: 15px;
@@ -80,6 +81,7 @@ ons-row.order-item-total ons-col {
     margin-bottom: 15px;
     font-size: 32px;
 }
+
 ons-row.order-item-total i {
     font-size: 28px;
 }
