@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "gulp": "^3.8.9",
+    "plugman": "^0.22.12",
     "q": "^1.0.1",
     "shelljs": "^0.3.0",
     "which": "^1.0.5"

@@ -1,7 +1,12 @@
 (function () {
-    var hostname = 'http://192.168.111.102';
-    var app = angular.module('app', ['onsen', 'ngResource']);
+    //var hostname = 'http://192.168.111.102';
+    var app = angular.module('geekyMenuMobile', ['onsen', 'ngResource', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
 
+    app.value('HOST_NAME', 'http://192.168.111.102');
+
+    app.run(function (DB) {
+        DB.init();
+    });
 
     if (window.cordova) {
         document.addEventListener("deviceready", onDeviceReady, false);
@@ -10,27 +15,26 @@
     }
 
     function onDeviceReady() {
-        angular.bootstrap(document, ['app']);
+        angular.bootstrap(document, ['geekyMenuMobile']);
         if (navigator && navigator.splashscreen)
             navigator.splashscreen.hide();
 
         console.log('onDeviceReady');
     }
 
-
-    app.controller('AppController', function ($scope, $http) {
+    app.controller('AppController', function ($scope, $http, HOST_NAME) {
         $scope.nearStores = [];
         $scope.isLoading = false;
 
         console.log('AppController');
-
+        console.log(HOST_NAME);
 
         $scope.findStoreByGPS = function () {
             $scope.isLoading = true;
             $scope.nearStores = [];
             if (navigator && navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    $http.get(hostname + '/open-api/store/near/' + position.coords.longitude + '/' + position.coords.latitude)
+                    $http.get('http://192.168.111.102' + '/open-api/store/near/' + position.coords.longitude + '/' + position.coords.latitude)
                         .success(function (data) {
                             $scope.nearStores = data;
                             $scope.isLoading = false;
@@ -51,7 +55,9 @@
             console.log(response);
             $scope.isLogin = true;
         });
-    }).controller('LoginController', function ($scope, $http, MyUser) {
+    });
+
+    app.controller('LoginController', function ($scope, $http, MyUser) {
         $scope.loadingFlg = false;
         $scope.isLoggedIn = false;
         $scope.user = MyUser.user();
@@ -98,504 +104,6 @@
                 });
         };
 
-    }).controller('OrderController', function ($scope, Data) {
-        $scope.storeInfo = Data.getData('storeInfo');
-        $scope.orderedItem = Data.getData('item');
-        $scope.orderedItem.ingredients = [
-            {
-                _id: 3,
-                can_remove: false,
-                name: 'Arroz'
-            },
-            {
-                _id: 4,
-                can_remove: false,
-                name: 'Feijão preto'
-            },
-            {
-                _id: 5,
-                can_remove: true,
-                name: 'Cebola'
-            },
-            {
-                _id: 6,
-                can_remove: true,
-                name: 'Carnes'
-            },
-            {
-                _id: 7,
-                name: 'Farofa'
-            },
-            {
-                _id: 8,
-                name: 'Laranja'
-            }
-        ];
-
-        $scope.orderedItem.quant = 1;
-        $scope.addQuant = function () {
-            $scope.orderedItem.quant++;
-        };
-        $scope.removeQuant = function () {
-            if ($scope.orderedItem.quant > 1) {
-                $scope.orderedItem.quant--;
-            }
-        };
-
-        $scope.order = [];
-        $scope.addToOrder = function (item) {
-            item.quant = $scope.orderedItem.quant;
-            $scope.order.push(item);
-
-            $scope.cartShortcutInfo = {
-                totalItems: 0,
-                totalOrder: 0.0
-            };
-            angular.forEach($scope.order, function (orderItem, key) {
-                $scope.cartShortcutInfo.totalItems += orderItem.quant;
-                $scope.cartShortcutInfo.totalOrder += (orderItem.quant * orderItem.price);
-            });
-
-            console.log($scope.cartShortcutInfo);
-
-            $scope.ons.navigator.popPage('store-menu-order-item.html', {animation: 'fade'});
-        };
-
-        $scope.$apply();
-    }).controller('StoreController', function ($scope, Data, Store) {
-        var storeId = Data.getData('storeId');
-        $scope.storeInfo = {};
-
-        Store.get({id: storeId}, function (data) {
-            $scope.storeInfo = data;
-        });
-
-        /* TODO: RATING */
-        //var intRating = parseInt($scope.storeInfo.public_rating);
-        //$scope.ratingFull = [];
-        //for (i = 0; i < intRating; i++) {
-        //    $scope.ratingFull[i] = i;
-        //}
-        //$scope.ratingHalf = 0;
-        //if ($scope.storeInfo.public_rating % 2 > 0) {
-        //    $scope.ratingHalf = 1;
-        //}
-        //$scope.ratingEmpty = new Array(5 - (intRating + $scope.ratingHalf));
-
-        //$scope.storeInfo = {
-        //    _id: '1',
-        //    store_name: {"br":"McDonald's Sao vicente","us":"McDonald's Sao vicente","jp":"マクドナルド サンビセンテ"},
-        //    desc: 'Meat specialties',
-        //    open_days: 'everyday',
-        //    open_time: 'From 10am to 10pm',
-        //    public_rating: 3.7,
-        //    my_rating: 5,
-        //    address: 'Av. Pres. Wilson, 2131 - Santos/SP',
-        //    location: {
-        //        lat: '-23.9691553',
-        //        long: '-46.3750582'
-        //    },
-        //    features: {
-        //        'kids_space': true,
-        //        'parking': true,
-        //        'smoke': true,
-        //        'non_smoke': true
-        //    },
-        //    phone: '1'
-        //};
-
-        $scope.storeTopItems = [
-            {
-                _id: 1,
-                type: 1,
-                name: 'Feijoada do Johna',
-                desc: 'Feijoada do Johna',
-                price: 25.00,
-                image: 'feijoada_johna.jpg',
-                serve: 4
-            },
-            {
-                _id: 2,
-                type: 1,
-                name: 'Carbonara do Johna',
-                desc: 'Carbonara do Johna',
-                price: 30.00,
-                image: 'carbonara_johna.jpg',
-                serve: 2
-            },
-            {
-                _id: 3,
-                type: 2,
-                name: 'Cerveja Kirin Ichiban',
-                desc: 'Cerveja Kirin Ichiban',
-                price: 10.00,
-                image: 'cerveja_kirin.jpg',
-                serve: 1
-            }
-        ];
-
-        $scope.openMap = function (location) {
-            window.open("geo:" + location[1] + ',' + location[0], '_system');
-        };
-
-        $scope.openDialer = function (tel) {
-            console.log(tel);
-            if (tel)
-                window.open('tel:' + tel, '_system');
-            else
-                console.log('no number');
-        };
-
-        $scope.showStoreMenu = function () {
-            Data.setData('store', $scope.storeInfo);
-            $scope.searchNavigator.pushPage('store-menu.html');
-        };
-
-        $scope.showOrderItem = function (item) {
-            Data.setData('storeInfo', $scope.storeInfo);
-            Data.setData('item', item);
-            $scope.ons.navigator.pushPage('store-menu-order-item.html', {animation: 'fade'});
-
-            //$scope.orderedItem = item;
-            //$scope.orderedItem.ingredients = [
-            //    {
-            //        _id: 3,
-            //        can_remove: false,
-            //        name: 'Arroz'
-            //    },
-            //    {
-            //        _id: 4,
-            //        can_remove: false,
-            //        name: 'Feijão preto'
-            //    },
-            //    {
-            //        _id: 5,
-            //        can_remove: true,
-            //        name: 'Cebola'
-            //    },
-            //    {
-            //        _id: 6,
-            //        can_remove: true,
-            //        name: 'Carnes'
-            //    }
-            //];
-            //$scope.orderModal.getDeviceBackButtonHandler().enable();
-            //$scope.orderModal.show();
-        };
-
-        $scope.searchBox = false;
-        $scope.toggleSearch = function () {
-            $scope.searchBox = !$scope.searchBox;
-        };
-
-    }).controller('SearchResultsController', function ($scope, SearchService, UserSettings, Data) {
-        $scope.searchResults = SearchService.getResult();
-        $scope.searchFilter = SearchService.getFilter();
-        $scope.userSettings = UserSettings;
-
-        $scope.getImageUrl = function (store) {
-            return $scope.userSettings.apiHostname + store.images[0].path;
-        };
-
-        $scope.getFeatureClass = function (feature, targetOpts) {
-            var idx = targetOpts.indexOf(feature);
-
-            return {
-                'feature-active': idx != -1,
-                'feature-inactive': idx == -1
-            }
-        };
-
-        $scope.showStoreDetails = function (storeId) {
-            Data.setData('storeId', storeId);
-            $scope.ons.navigator.pushPage('store.html#' + storeId);
-        };
-
-
-    }).controller('SearchController', function ($scope, $http, SearchService, UserSettings) {
-
-        $scope.isSearching = false;
-        $scope.userSettings = UserSettings;
-        $scope.searchFilter = {
-            store_name: 'store_name',
-            region_name: 'test',
-            features: []
-        };
-
-        //    [
-        //    {
-        //        _id: '1',
-        //        name: 'Awesome Restaurant',
-        //        desc: 'Meat specialties',
-        //        open_days: 'everyday',
-        //        open_time: 'From 10am to 10pm',
-        //        public_rating: 3.7,
-        //        my_rating: 5,
-        //        address: 'Av. Pres. Wilson, 2131 - Santos/SP',
-        //        location: {
-        //            lat: '-23.9691553',
-        //            long: '-46.3750582'
-        //        },
-        //        features: {
-        //            'kids_space': true,
-        //            'parking': true,
-        //            'smoking': true,
-        //            'non_smoking': true
-        //        },
-        //        phone: '1'
-        //    }
-        //];
-
-        $scope.searchStores = function () {
-            $scope.isSearching = true;
-            SearchService.setFilter($scope.searchFilter);
-            $http.post(hostname + '/open-api/store/search', $scope.searchFilter)
-                .success(function (result) {
-                    $scope.isSearching = false;
-                    $scope.searchResults = result;
-                    SearchService.setResult(result);
-                    $scope.ons.navigator.pushPage('search-results.html');
-                }).error(function () {
-                    alert('error');
-                });
-
-//        $scope.ons.navigator.pushPage('search-results.html');
-        };
-
-        $scope.featuresToggleCheck = function (feature) {
-            var idx = $scope.searchFilter.features.indexOf(feature);
-            if (angular.equals(idx, -1)) {
-                $scope.searchFilter.features.push(feature);
-            }
-            else {
-                $scope.searchFilter.features.splice(idx, 1);
-            }
-        };
-
-        $scope.showStoreMenu = function (searchFilter) {
-            $scope.ons.navigator.pushPage('store-menu.html');
-        };
-
-    }).factory('MyUser', function ($rootScope, $q, $http, $timeout) {
-        var storeUserKey = 'currentUser';
-
-        var fbPlugin = facebookConnectPlugin;
-        var currentUser = JSON.parse(window.localStorage.getItem(storeUserKey));
-
-        var isLogin = false;
-        if (currentUser && currentUser._id != undefined)
-            isLogin = true;
-
-        return {
-            login: function () {
-                var deferred = $q.defer();
-                $timeout(function () {
-                    deferred.notify('In progress')
-                }, 0);
-                facebookConnectPlugin.login(["email"],
-                    function (response) {
-                        $http.post(hostname + '/open-api/auth/facebook/token', {access_token: response.authResponse.accessToken}).
-                            success(function (user) {
-                                isLogin = true;
-                                currentUser = user;
-                                facebookConnectPlugin.api("/me/picture?redirect=0&type=small&width=60", ["basic_info"],
-                                    function (res) {
-                                        currentUser.imageUrl = res.data.url;
-                                        window.localStorage.setItem(storeUserKey, JSON.stringify(currentUser));
-                                        $rootScope.$broadcast('fblogin', currentUser);
-                                        deferred.resolve(currentUser);
-                                    }, function () {
-                                        console.log('error');
-                                        deferred.reject('error');
-                                    }
-                                );
-                            }).error(function (err) {
-                                deferred.reject(err);
-                            });
-                    }, function (response) {
-                        deferred.reject(response);
-                    });
-                return deferred.promise;
-            }, api: function (path) {
-                var deferred = $q.defer();
-                facebookConnectPlugin.api(path, ["basic_info"],
-                    function (response) {
-                        deferred.resolve(response);
-                    },
-                    function (response) {
-                        deferred.reject(response);
-                    });
-                return deferred.promise;
-            }, logout: function () {
-                var deferred = $q.defer();
-                $timeout(function () {
-                    deferred.notify('In progress')
-                }, 0);
-                this.isLogin()
-                    .then(function (res) {
-                        if (res) {
-                            facebookConnectPlugin.logout(
-                                function (response) {
-                                    console.log('fb_logout');
-                                    isLogin = false;
-                                    currentUser = {};
-                                    $rootScope.$broadcast('fblogout');
-                                    window.localStorage.removeItem(storeUserKey);
-                                    $http.get(hostname + '/open-api/logout').
-                                        success(function () {
-                                            deferred.resolve(response);
-                                        })
-                                        .error(function (err) {
-                                            deferred.reject(err);
-                                        });
-                                },
-                                function (response) {
-                                    isLogin = false;
-                                    console.log('fb_logout error');
-                                    console.log(response);
-                                    deferred.reject(response);
-                                });
-                        }
-                    });
-                return deferred.promise;
-            },
-            isLogin: function () {
-                var deferred = $q.defer();
-                $timeout(function () {
-                    deferred.notify('In progress')
-                }, 0);
-                facebookConnectPlugin.getLoginStatus(function (data) {
-                    deferred.resolve(data.status == "connected");
-                }, function (response) {
-                    deferred.reject(response);
-                });
-                return deferred.promise;
-            },
-            user: function () {
-                return currentUser;
-            }
-        }
-
-    })
-    /**
-     * factories
-     */
-        .factory('Data', function () {
-            var data = {};
-            return {
-                setData: function (key, val) {
-                    data[key] = val;
-                },
-                getData: function (key) {
-                    if (data[key] != undefined) {
-                        return data[key];
-                    }
-                    return null;
-                }
-            }
-        })
-        .factory('SearchService', function () {
-            var result = [];
-            var filter = {};
-            return {
-                setResult: function (res) {
-                    result = res;
-                },
-                getResult: function () {
-                    return result;
-                },
-                setFilter: function (f) {
-                    filter = f;
-                },
-                getFilter: function () {
-                    return filter;
-                }
-            }
-        }).factory('UserSettings', function () {
-            return {
-                defaultLang: 'us',
-                systemDefaultLang: 'us',
-                apiHostname: hostname,
-                features: [
-                    'parking',
-                    'wifi',
-                    'live_show',
-                    'kids_space',
-                    'non_smoking'
-                ]
-            }
-        }).factory('Store', function ($resource) {
-            return $resource(hostname + '/open-api/store/:id/:lang/:longitude/:latitude', {
-                id: '@_id'
-            }, {
-                update: {
-                    method: 'PUT',
-                    params: {
-                        id: "@id"
-                    }
-                },
-                near: {
-                    method: 'get',
-                    params: {
-                        longitude: "@longitude",
-                        latitude: "@latitude"
-                    }
-                }
-            });
-        })
-
-    /**
-     * directives
-     */
-        .directive('geekyBackgroundImage', function (UserSettings) {
-            return {
-                restrict: 'A',
-                scope: {
-                    geekyBackgroundImage: '@'
-                },
-                link: function (scope, element, attrs) {
-                    var unwatch = scope.$watch('geekyBackgroundImage', function (v) {
-                        if (v != '') {
-                            var data = angular.fromJson(v);
-                            if (data.length > 0) {
-                                var url = UserSettings.apiHostname;
-                                var str = 'url(' + url + data[0].path + ')';
-                                element.css('background-image', str);
-                            }
-                            console.log(data);
-                        }
-                    });
-                }
-            }
-        })
-        .directive('geekyGettext', function (UserSettings) {
-
-            var setTextElement = function (scope, element, attrs) {
-                var defaultLang = UserSettings.defaultLang;
-                var systemDefaultLang = UserSettings.systemDefaultLang;
-                if (attrs.geekyGettext != undefined && attrs.geekyGettext != '') {
-                    var data = attrs.geekyGettext;
-                    data = angular.fromJson(data);
-                    if (data[defaultLang] != undefined) {
-                        element.text(data[defaultLang]);
-                    } else {
-                        element.text(data[systemDefaultLang]);
-                    }
-                }
-            };
-
-            return {
-                restrict: 'A',
-                scope: {            // scopeにオブジェクトを指定すると、分離スコープの作成.
-                    geekyGettext: '@' // '='は双方向バインディング
-                },
-                transclude: true,
-                link: function (scope, element, attrs) {
-                    var unwatch = scope.$watch('geekyGettext', function (v) {
-                        setTextElement(scope, element, attrs)
-                    });
-                }
-            };
-        });
+    });
 })
 ();
