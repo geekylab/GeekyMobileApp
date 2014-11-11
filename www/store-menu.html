@@ -16,6 +16,13 @@
         <input type="search" value="" placeholder="Search" class="search-input">
     </div>
 
+    <!-- CART/HISTORY SHORTCUT -->
+    <ons-row class="cart-shortcut" align="center" ng-click="showCart()">
+        <ons-col>Items: {{cartShortcutInfo.totalItems}}</ons-col>
+        <ons-col>Total: {{cartShortcutInfo.totalOrder}}</ons-col>
+    </ons-row>
+    <!-- END CART/HISTORY SHORTCUT -->
+
     <!-- FILTER BUTTONS -->
     <ons-row>
         <ons-col class="padding-10">
@@ -76,7 +83,7 @@
                     <ons-col width="80px">
                         <ons-button modifier="large" ng-click="showOrderItem(item)">
                             <div>Order</div>
-                            <span class="small">US$ {{item.price.usd}}</span>
+                            <span class="small">US$ {{item.price}}</span>
                         </ons-button>
                     </ons-col>
                 </ons-row>
@@ -86,87 +93,75 @@
     <!-- END FOOD LIST -->
 
     <!-- ORDER MODAL -->
-    <ons-modal var="orderModal" class="order-modal" align="top" geeky-background-image="{{item.image}}">
-        <div class="card-background-dark">
-            <div class="navigation-bar modal-navigation-bar" ng-click="orderModal.hide()" class="toolbar-modal-button">
-                <div class="center">
-                    <ons-button modifier="large">
-                        <ons-icon icon="ion-close-round" style="color: #FFF;"></ons-icon>
-                    </ons-button>
-                </div>
+    <ons-modal var="orderModal" class="order-page" align="top">
+        <ons-toolbar>
+            <div class="center">
+                <ons-button modifier="light" ng-click="orderModal.hide()">
+                    <ons-icon icon="ion-close-round"></ons-icon>
+                </ons-button>
             </div>
-            <!--<ons-icon icon="ion-loading-c" spin="true"></ons-icon>-->
-            <div class="modal-body">
-                <ons-scroller>
+        </ons-toolbar>
 
-                    <!-- PRICE CONTAINER -->
-                    <ons-row class="modal-row-container order-item-total" align="center">
-                        <ons-col>
-                            <i class="ion-social-usd"></i>
-                            {{orderedItem.price.usd * itemQuant}}
-                        </ons-col>
-                    </ons-row>
-                    <!-- END PRICE CONTAINER -->
+        <!-- PRICE CONTAINER -->
+        <ons-row class="modal-row-container order-item-total" align="center">
+            <ons-col>
+                <i class="ion-social-usd"></i>
+                {{orderedItem.price * orderedItem.quant}}
+            </ons-col>
+        </ons-row>
+        <!-- END PRICE CONTAINER -->
 
-                    <ons-row class="modal-row-container">
-                        <ons-col width="15%">
-                            <ons-button modifier="large" class="remove-quantity" ng-click="removeItem()">
-                                <ons-icon icon="ion-minus-round"></ons-icon>
-                            </ons-button>
-                        </ons-col>
-                        <ons-col>
-                            <input type="number" min="0" inputmode="numeric" pattern="[0,9]*" ng-model="itemQuant"
-                                   class="text-input item-quantity" value="{{itemQuant}}">
-                        </ons-col>
-                        <ons-col width="15%">
-                            <ons-button modifier="large" class="add-quantity" ng-click="addItem()">
-                                <ons-icon icon="ion-plus-round"></ons-icon>
-                            </ons-button>
-                        </ons-col>
+        <ons-row class="modal-row-container">
+            <ons-col width="15%">
+                <ons-button modifier="large" class="remove-quantity" ng-click="removeQuant()">
+                    <ons-icon icon="ion-minus-round"></ons-icon>
+                </ons-button>
+            </ons-col>
+            <ons-col>
+                <input type="number" min="0" inputmode="numeric" pattern="[0,9]*" ng-model="orderedItem.quant"
+                       class="text-input item-quantity" value="{{orderedItem.quant}}">
+            </ons-col>
+            <ons-col width="15%">
+                <ons-button modifier="large" class="add-quantity" ng-click="addQuant()">
+                    <ons-icon icon="ion-plus-round"></ons-icon>
+                </ons-button>
+            </ons-col>
 
-                        <ons-col width="8%"></ons-col>
+            <ons-col width="8%"></ons-col>
 
-                        <ons-col width="35%">
-                            <ons-button modifier="large" class="order-button">
-                                Order
-                            </ons-button>
-                        </ons-col>
-                    </ons-row>
-                    <div class="item-description">
-                        <h3>{{orderedItem.name}}</h3>
-                        <!--<p>{{orderedItem.desc}}</p>-->
-                        <p>
-                            A feijoada do johna é feita com muito amor e carinho pelos melhores chefs de nosso
-                            restaurante.
-                            Todos os clientes, sem exceção, adoram a feijoada do Johna!
-                            Experimente, cada porção serve 4 pessoas!
-                        </p>
-                        <!--<ul class="item-ingredients">-->
-                        <!--<li ng-repeat="ingredient in orderedItem.ingredients">{{ingredient.name}}</li>-->
-                        <!--</ul>-->
+            <ons-col width="35%">
+                <ons-button modifier="large" class="order-button" ng-click="addToOrder(orderedItem)">
+                    Order
+                </ons-button>
+            </ons-col>
+        </ons-row>
 
-                        <ons-list class="light-list">
-                            <ons-list-header style="color: #FFF; font-weight: 600;">
-                                Ingredients
-                            </ons-list-header>
-                            <ons-list-item modifier="tappable" ng-repeat="ingredient in ingredients">
-                                <label class="checkbox checkbox--list-item">
-                                    <input type="checkbox"
-                                           ng-click="toggleIngredient(ingredient)"
-                                           checked="checked">
+        <ons-row class="item-description">
+            <h3>{{orderedItem.name}}</h3>
 
-                                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
-                                    {{ingredient.name}}
-                                </label>
-                            </ons-list-item>
-                        </ons-list>
+            <p>
+                A feijoada do johna é feita com muito amor e carinho pelos melhores chefs de nosso
+                restaurante.
+                Todos os clientes, sem exceção, adoram a feijoada do Johna!
+                Experimente, cada porção serve 4 pessoas!
+            </p>
+            <ons-list class="light-list">
+                <ons-list-header style="color: #FFF; font-weight: 600;">
+                    Ingredients
+                </ons-list-header>
+                <ons-list-item modifier="tappable" ng-repeat="ingredient in orderedItem.ingredients">
+                    <label class="checkbox checkbox--list-item">
+                        <input type="checkbox"
+                               ng-click="toggleIngredient(ingredient)"
+                               checked="checked"
+                               ng-disabled="!ingredient.can_remove">
 
-                    </div>
-
-                </ons-scroller>
-            </div>
-        </div>
-        <!-- END DARK BACKGROUND -->
+                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                        &nbsp;{{ingredient.name}}
+                    </label>
+                </ons-list-item>
+            </ons-list>
+        </ons-row>
     </ons-modal>
     <!-- END ORDER MODAL -->
 </ons-page>

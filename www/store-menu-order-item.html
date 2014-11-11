@@ -1,0 +1,76 @@
+<ons-page class="order-page" align="top" ng-controller="OrderController">
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+
+        <div class="center">Order</div>
+
+        <!--<div class="right">-->
+            <!--<ons-toolbar-button ng-click="toggleSearch()">-->
+                <!--<ons-icon icon="fa-search"></ons-icon>-->
+            <!--</ons-toolbar-button>-->
+        <!--</div>-->
+    </ons-toolbar>
+
+    <!-- PRICE CONTAINER -->
+    <ons-row class="modal-row-container order-item-total" align="center">
+        <ons-col>
+            <i class="ion-social-usd"></i>
+            {{orderedItem.price * orderedItem.quant}}
+        </ons-col>
+    </ons-row>
+    <!-- END PRICE CONTAINER -->
+
+    <ons-row class="modal-row-container">
+        <ons-col width="15%">
+            <ons-button modifier="large" class="remove-quantity" ng-click="removeQuant()">
+                <ons-icon icon="ion-minus-round"></ons-icon>
+            </ons-button>
+        </ons-col>
+        <ons-col>
+            <input type="number" min="0" inputmode="numeric" pattern="[0,9]*" ng-model="orderedItem.quant"
+                   class="text-input item-quantity" value="{{orderedItem.quant}}">
+        </ons-col>
+        <ons-col width="15%">
+            <ons-button modifier="large" class="add-quantity" ng-click="addQuant()">
+                <ons-icon icon="ion-plus-round"></ons-icon>
+            </ons-button>
+        </ons-col>
+
+        <ons-col width="8%"></ons-col>
+
+        <ons-col width="35%">
+            <ons-button modifier="large" class="order-button" ng-click="addToOrder(orderedItem)">
+                Order
+            </ons-button>
+        </ons-col>
+    </ons-row>
+
+    <ons-row class="item-description">
+        <h3>{{orderedItem.name}}</h3>
+
+        <p>
+            A feijoada do johna é feita com muito amor e carinho pelos melhores chefs de nosso
+            restaurante.
+            Todos os clientes, sem exceção, adoram a feijoada do Johna!
+            Experimente, cada porção serve 4 pessoas!
+        </p>
+        <ons-list class="light-list">
+            <ons-list-header style="color: #FFF; font-weight: 600;">
+                Ingredients
+            </ons-list-header>
+            <ons-list-item modifier="tappable" ng-repeat="ingredient in orderedItem.ingredients">
+                <label class="checkbox checkbox--list-item">
+                    <input type="checkbox"
+                           ng-click="toggleIngredient(ingredient)"
+                           checked="checked"
+                           ng-disabled="!ingredient.can_remove">
+
+                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                    &nbsp;{{ingredient.name}}
+                </label>
+            </ons-list-item>
+        </ons-list>
+    </ons-row>
+</ons-page>

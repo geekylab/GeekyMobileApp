@@ -1,0 +1,25 @@
+<ons-page class="order-page" align="top" ng-controller="OrderController">
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+
+        <div class="center">Cart</div>
+    </ons-toolbar>
+    <ons-list class="light-list">
+        <ons-list-header style="color: #FFF; font-weight: 600;" ng-repeat="order in orders">
+            Ingredients
+        </ons-list-header>
+        <ons-list-item modifier="tappable" ng-repeat="item in order">
+            <ons-row>
+                <ons-col>{{item.name}}</ons-col>
+                <ons-col>{{item.price}}</ons-col>
+                <ons-col>{{item.quant}}</ons-col>
+                <ons-col>{{item.price}} * {{item.quant}}</ons-col>
+                <ons-col>
+                    <ons-button>Remove</ons-button>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+</ons-page>

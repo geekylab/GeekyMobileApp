@@ -1,0 +1,75 @@
+ons-page.order-page .ons-page-inner {
+    background: linear-gradient(
+            rgba(0, 0, 0, 0.7),
+            rgba(50, 50, 50, 0.45)
+    ),
+    url('../images/feijoada_johna.jpg') center no-repeat;
+    background-size: auto 100%;
+}
+
+.modal-row-container ons-button {
+    height: 50px;
+}
+
+ons-button.remove-quantity, ons-button.add-quantity {
+    border-radius: 0 !important;
+}
+
+ons-button.remove-quantity {
+    border-radius: 0.3em 0 0 0.3em !important;
+}
+
+ons-button.add-quantity {
+    border-radius: 0 0.3em 0.3em 0 !important;
+}
+
+input.item-quantity, div.item-quantity {
+    width: 100%;
+    height: 50px;
+    border-radius: 0 !important;
+    border: 0 !important;
+    background: #fff;
+
+    color: #000;
+    line-height: 50px;
+    text-align: center;
+    font-size: 28px;
+}
+
+.order-page ons-row {
+    padding: 0 15px 0 15px;
+}
+
+ons-button.order-button {
+    font-size: 20px;
+}
+
+ons-row.order-item-total {
+    color: #fff;
+}
+
+ons-row.order-item-total ons-col {
+    height: 60px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 32px;
+}
+
+ons-row.order-item-total i {
+    font-size: 28px;
+}
+
+ons-row.item-description {
+    text-align: left;
+    max-width: 100%;
+    white-space: normal !important;
+}
+
+ons-row.item-description p, ons-row.item-description h3 {
+    color: #FFF;
+}
+
+ons-row.item-description h3 {
+    margin-top: 30px;
+    margin-bottom: 5px;
+}

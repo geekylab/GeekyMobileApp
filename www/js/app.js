@@ -1,5 +1,5 @@
 (function () {
-    var hostname = 'http://192.168.111.103';
+    var hostname = 'http://192.168.111.102';
     var app = angular.module('app', ['onsen', 'ngResource']);
 
 
@@ -17,11 +17,13 @@
         console.log('onDeviceReady');
     }
 
+
     app.controller('AppController', function ($scope, $http) {
         $scope.nearStores = [];
         $scope.isLoading = false;
 
         console.log('AppController');
+
 
         $scope.findStoreByGPS = function () {
             $scope.isLoading = true;
@@ -45,6 +47,8 @@
         //}, 1000);
 
         $scope.$on('fblogin', function (name, response) {
+            console.log("AppController event");
+            console.log(response);
             $scope.isLogin = true;
         });
     }).controller('LoginController', function ($scope, $http, MyUser) {
@@ -67,7 +71,6 @@
                     $scope.modal.hide();
                 });
         }
-        ;
 
         $scope.doLogin = function () {
             MyUser.login()
@@ -84,7 +87,6 @@
                     $scope.loadingFlg = false;
                     $scope.modal.hide();
                 });
-
         };
 
         $scope.doLogout = function () {
@@ -96,22 +98,28 @@
                 });
         };
 
-    }).controller('StoreItemController', function ($scope, Data) {
-        $scope.ingredients = [
+    }).controller('OrderController', function ($scope, Data) {
+        $scope.storeInfo = Data.getData('storeInfo');
+        $scope.orderedItem = Data.getData('item');
+        $scope.orderedItem.ingredients = [
             {
                 _id: 3,
+                can_remove: false,
                 name: 'Arroz'
             },
             {
                 _id: 4,
+                can_remove: false,
                 name: 'Feijão preto'
             },
             {
                 _id: 5,
+                can_remove: true,
                 name: 'Cebola'
             },
             {
                 _id: 6,
+                can_remove: true,
                 name: 'Carnes'
             },
             {
@@ -124,9 +132,36 @@
             }
         ];
 
-        $scope.orderedItem = Data.getData('item');
-        $scope.storeInfo = Data.getData('storeInfo');
+        $scope.orderedItem.quant = 1;
+        $scope.addQuant = function () {
+            $scope.orderedItem.quant++;
+        };
+        $scope.removeQuant = function () {
+            if ($scope.orderedItem.quant > 1) {
+                $scope.orderedItem.quant--;
+            }
+        };
 
+        $scope.order = [];
+        $scope.addToOrder = function (item) {
+            item.quant = $scope.orderedItem.quant;
+            $scope.order.push(item);
+
+            $scope.cartShortcutInfo = {
+                totalItems: 0,
+                totalOrder: 0.0
+            };
+            angular.forEach($scope.order, function (orderItem, key) {
+                $scope.cartShortcutInfo.totalItems += orderItem.quant;
+                $scope.cartShortcutInfo.totalOrder += (orderItem.quant * orderItem.price);
+            });
+
+            console.log($scope.cartShortcutInfo);
+
+            $scope.ons.navigator.popPage('store-menu-order-item.html', {animation: 'fade'});
+        };
+
+        $scope.$apply();
     }).controller('StoreController', function ($scope, Data, Store) {
         var storeId = Data.getData('storeId');
         $scope.storeInfo = {};
@@ -135,9 +170,7 @@
             $scope.storeInfo = data;
         });
 
-        /*
-         * TODO: RATING
-         */
+        /* TODO: RATING */
         //var intRating = parseInt($scope.storeInfo.public_rating);
         //$scope.ratingFull = [];
         //for (i = 0; i < intRating; i++) {
@@ -177,11 +210,7 @@
                 type: 1,
                 name: 'Feijoada do Johna',
                 desc: 'Feijoada do Johna',
-                price: {
-                    brl: 25.00,
-                    yen: 1000.00,
-                    usd: 10.00
-                },
+                price: 25.00,
                 image: 'feijoada_johna.jpg',
                 serve: 4
             },
@@ -190,11 +219,7 @@
                 type: 1,
                 name: 'Carbonara do Johna',
                 desc: 'Carbonara do Johna',
-                price: {
-                    brl: 50.00,
-                    yen: 2500.00,
-                    usd: 25.00
-                },
+                price: 30.00,
                 image: 'carbonara_johna.jpg',
                 serve: 2
             },
@@ -203,11 +228,7 @@
                 type: 2,
                 name: 'Cerveja Kirin Ichiban',
                 desc: 'Cerveja Kirin Ichiban',
-                price: {
-                    brl: 10.00,
-                    yen: 400.00,
-                    usd: 4.00
-                },
+                price: 10.00,
                 image: 'cerveja_kirin.jpg',
                 serve: 1
             }
@@ -233,26 +254,39 @@
         $scope.showOrderItem = function (item) {
             Data.setData('storeInfo', $scope.storeInfo);
             Data.setData('item', item);
-            $scope.searchNavigator.pushPage('store-menu-order.html', {animation: 'fade'});
+            $scope.ons.navigator.pushPage('store-menu-order-item.html', {animation: 'fade'});
+
+            //$scope.orderedItem = item;
+            //$scope.orderedItem.ingredients = [
+            //    {
+            //        _id: 3,
+            //        can_remove: false,
+            //        name: 'Arroz'
+            //    },
+            //    {
+            //        _id: 4,
+            //        can_remove: false,
+            //        name: 'Feijão preto'
+            //    },
+            //    {
+            //        _id: 5,
+            //        can_remove: true,
+            //        name: 'Cebola'
+            //    },
+            //    {
+            //        _id: 6,
+            //        can_remove: true,
+            //        name: 'Carnes'
+            //    }
+            //];
+            //$scope.orderModal.getDeviceBackButtonHandler().enable();
+            //$scope.orderModal.show();
         };
 
         $scope.searchBox = false;
         $scope.toggleSearch = function () {
             $scope.searchBox = !$scope.searchBox;
         };
-
-        $scope.itemQuant = 1;
-        $scope.addItem = function () {
-            $scope.itemQuant++;
-            $scope.$apply();
-        };
-
-        $scope.removeItem = function () {
-            if ($scope.itemQuant > 0) {
-                $scope.itemQuant--;
-                $scope.$apply();
-            }
-        }
 
     }).controller('SearchResultsController', function ($scope, SearchService, UserSettings, Data) {
         $scope.searchResults = SearchService.getResult();
@@ -274,7 +308,7 @@
 
         $scope.showStoreDetails = function (storeId) {
             Data.setData('storeId', storeId);
-            $scope.searchNavigator.pushPage('store.html#' + storeId);
+            $scope.ons.navigator.pushPage('store.html#' + storeId);
         };
 
 
@@ -320,12 +354,12 @@
                     $scope.isSearching = false;
                     $scope.searchResults = result;
                     SearchService.setResult(result);
-                    $scope.searchNavigator.pushPage('search-results.html');
+                    $scope.ons.navigator.pushPage('search-results.html');
                 }).error(function () {
                     alert('error');
                 });
 
-//        $scope.searchNavigator.pushPage('search-results.html');
+//        $scope.ons.navigator.pushPage('search-results.html');
         };
 
         $scope.featuresToggleCheck = function (feature) {
@@ -339,7 +373,7 @@
         };
 
         $scope.showStoreMenu = function (searchFilter) {
-            $scope.searchNavigator.pushPage('store-menu.html');
+            $scope.ons.navigator.pushPage('store-menu.html');
         };
 
     }).factory('MyUser', function ($rootScope, $q, $http, $timeout) {

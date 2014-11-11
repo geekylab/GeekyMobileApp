@@ -1,0 +1,10 @@
+.cart-shortcut {
+    height: 60px;
+    background: #BEB;
+    padding: 10px;
+    margin-bottom: 7px;
+}
+
+.cart-shortcut:active {
+    background: #9B9;
+}
