@@ -4,10 +4,6 @@
 
     app.value('HOST_NAME', 'http://192.168.111.102');
 
-    app.run(function (DB) {
-        DB.init();
-    });
-
     if (window.cordova) {
         document.addEventListener("deviceready", onDeviceReady, false);
     } else {
@@ -15,26 +11,25 @@
     }
 
     function onDeviceReady() {
+        app.run(function (DB) {
+            DB.init();
+        });
+
         angular.bootstrap(document, ['geekyMenuMobile']);
         if (navigator && navigator.splashscreen)
             navigator.splashscreen.hide();
-
-        //console.log('onDeviceReady');
     }
 
     app.controller('AppController', function ($scope, $http, HOST_NAME) {
         $scope.nearStores = [];
         $scope.isLoading = false;
 
-        //console.log('AppController');
-        //console.log(HOST_NAME);
-
         $scope.findStoreByGPS = function () {
             $scope.isLoading = true;
             $scope.nearStores = [];
             if (navigator && navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    $http.get('http://192.168.111.102' + '/open-api/store/near/' + position.coords.longitude + '/' + position.coords.latitude)
+                    $http.get(HOST_NAME + '/open-api/store/near/' + position.coords.longitude + '/' + position.coords.latitude)
                         .success(function (data) {
                             $scope.nearStores = data;
                             $scope.isLoading = false;
@@ -44,11 +39,6 @@
                 });
             }
         };
-
-        //console.log(navigator.globalization);
-        //setTimeout(function () {
-        //    console.log(navigator.globalization);
-        //}, 1000);
 
         $scope.$on('fblogin', function (name, response) {
             console.log("AppController event");

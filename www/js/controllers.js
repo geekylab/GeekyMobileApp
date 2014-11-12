@@ -4,13 +4,6 @@ controllersModule.controller('DocumentCtrl', function ($scope, Model, Data) {
     $scope.documents = [];
     $scope.document = null;
 
-    $scope.queryResult = Data.getData('sqlQueryResult');
-
-    console.log($scope.queryResult);
-
-    console.log(Model.all().then(function(documents){}));
-
-
     Model.all().then(function (documents) {
         $scope.documents = documents;
     });

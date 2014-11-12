@@ -1,6 +1,6 @@
-var servicesModule = angular.module('geekyMenuMobile.services', ['geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
+var servicesModule = angular.module('geekyMenuMobile.services', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
 
-servicesModule.factory('MyUser', function ($rootScope, $q, $http, $timeout) {
+servicesModule.factory('MyUser', function ($rootScope, $q, $http, $timeout, HOST_NAME) {
     var storeUserKey = 'currentUser';
     var fbPlugin = facebookConnectPlugin;
     var currentUser = JSON.parse(window.localStorage.getItem(storeUserKey));
@@ -17,7 +17,7 @@ servicesModule.factory('MyUser', function ($rootScope, $q, $http, $timeout) {
             }, 0);
             facebookConnectPlugin.login(["email"],
                 function (response) {
-                    $http.post('http://192.168.111.102' + '/open-api/auth/facebook/token', {access_token: response.authResponse.accessToken}).
+                    $http.post(HOST_NAME + '/open-api/auth/facebook/token', {access_token: response.authResponse.accessToken}).
                         success(function (user) {
                             isLogin = true;
                             currentUser = user;
@@ -64,7 +64,7 @@ servicesModule.factory('MyUser', function ($rootScope, $q, $http, $timeout) {
                                 currentUser = {};
                                 $rootScope.$broadcast('fblogout');
                                 window.localStorage.removeItem(storeUserKey);
-                                $http.get('http://192.168.111.102' + '/open-api/logout').
+                                $http.get(HOST_NAME + '/open-api/logout').
                                     success(function () {
                                         deferred.resolve(response);
                                     })
@@ -135,11 +135,11 @@ servicesModule.factory('SearchService', function () {
     }
 });
 
-servicesModule.factory('UserSettings', function () {
+servicesModule.factory('UserSettings', function (HOST_NAME) {
     return {
         defaultLang: 'us',
         systemDefaultLang: 'us',
-        apiHostname: 'http://192.168.111.102',
+        apiHostname: HOST_NAME,
         features: [
             'parking',
             'wifi',
@@ -150,8 +150,8 @@ servicesModule.factory('UserSettings', function () {
     }
 });
 
-servicesModule.factory('Store', function ($resource) {
-    return $resource('http://192.168.111.102' + '/open-api/store/:id/:lang/:longitude/:latitude', {
+servicesModule.factory('Store', function ($resource, HOST_NAME) {
+    return $resource(HOST_NAME + '/open-api/store/:id/:lang/:longitude/:latitude', {
         id: '@_id'
     }, {
         update: {
