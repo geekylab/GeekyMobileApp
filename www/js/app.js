@@ -19,15 +19,15 @@
         if (navigator && navigator.splashscreen)
             navigator.splashscreen.hide();
 
-        console.log('onDeviceReady');
+        //console.log('onDeviceReady');
     }
 
     app.controller('AppController', function ($scope, $http, HOST_NAME) {
         $scope.nearStores = [];
         $scope.isLoading = false;
 
-        console.log('AppController');
-        console.log(HOST_NAME);
+        //console.log('AppController');
+        //console.log(HOST_NAME);
 
         $scope.findStoreByGPS = function () {
             $scope.isLoading = true;

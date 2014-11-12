@@ -6,12 +6,20 @@ angular.module('geekyMenuMobile.config', [])
                 name: 'items',
                 columns: [
                     {name: 'id', type: 'integer primary key'},
+                    {name: 'order_id', type: 'integer'},
                     {name: 'name', type: 'text'},
-                    {name: 'quantity', type: 'integer'}
-                    //{name: 'quantity', type: 'integer'},
-                    //{name: 'value', type: 'float'}
+                    {name: 'quantity', type: 'integer'},
+                    {name: 'value', type: 'float'}
+                ]
+            },
+            {
+                name: 'orders',
+                columns: [
+                    {name: 'id', type: 'integer primary key'},
+                    {name: 'total', type: 'float'},
+                    {name: 'date_opened', type: 'datetime'},
+                    {name: 'date_closed', type: 'datetime'}
                 ]
             }
         ]
     });
-//.constant('HOST_NAME', 'http://192.168.111.102');

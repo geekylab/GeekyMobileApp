@@ -1,14 +1,21 @@
-var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
+var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
 
-controllersModule.controller('DocumentCtrl', function ($scope, Document) {
+controllersModule.controller('DocumentCtrl', function ($scope, Model, Data) {
     $scope.documents = [];
     $scope.document = null;
-    // Get all the documents
-    Document.all().then(function (documents) {
+
+    $scope.queryResult = Data.getData('sqlQueryResult');
+
+    console.log($scope.queryResult);
+
+    console.log(Model.all().then(function(documents){}));
+
+
+    Model.all().then(function (documents) {
         $scope.documents = documents;
     });
-    // Get one document, example with id = 2
-    Document.getById(2).then(function (document) {
+
+    Model.getById(2).then(function (document) {
         $scope.document = document;
     });
 });
@@ -282,7 +289,7 @@ controllersModule.controller('SearchResultsController', function ($scope, Search
 
 });
 
-controllersModule.controller('SearchController', function ($scope, $http, SearchService, UserSettings) {
+controllersModule.controller('SearchController', function ($scope, $http, SearchService, UserSettings, HOST_NAME) {
 
     $scope.isSearching = false;
     $scope.userSettings = UserSettings;
@@ -319,8 +326,8 @@ controllersModule.controller('SearchController', function ($scope, $http, Search
     $scope.searchStores = function () {
         $scope.isSearching = true;
         SearchService.setFilter($scope.searchFilter);
-        //$http.post(HOSTNAME + '/open-api/store/search', $scope.searchFilter)
-        $http.post('http://192.168.111.102' + '/open-api/store/search', $scope.searchFilter)
+        $http.post(HOST_NAME + '/open-api/store/search', $scope.searchFilter)
+            //$http.post('http://192.168.111.102' + '/open-api/store/search', $scope.searchFilter)
             .success(function (result) {
                 $scope.isSearching = false;
                 $scope.searchResults = result;
