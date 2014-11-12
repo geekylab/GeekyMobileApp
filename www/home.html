@@ -4,11 +4,19 @@
     </ons-toolbar>
 
     <br><br><br><br>
+
     <ons-row align="center">
         <ons-col>
-            {{documents}}
+            <ons-button ng-click="addItem()">
+                Add Item
+            </ons-button>
+        </ons-col>
+    </ons-row>
+    <ons-row align="center">
+        <ons-col>
+            {{items}}
             <br><br>
-            {{document}}
+            {{item}}
         </ons-col>
     </ons-row>
 </ons-page>

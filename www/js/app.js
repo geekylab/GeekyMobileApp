@@ -1,4 +1,4 @@
-(function () {
+//(function () {
     //var hostname = 'http://192.168.111.102';
     var app = angular.module('geekyMenuMobile', ['onsen', 'ngResource', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
 
@@ -100,5 +100,5 @@
         };
 
     });
-})
-();
+//})
+//();

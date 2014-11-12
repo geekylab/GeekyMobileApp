@@ -1,6 +1,5 @@
 var directivesModule = angular.module('geekyMenuMobile.directives', ['geekyMenuMobile.services', 'geekyMenuMobile.config']);
 
-
 directivesModule.directive('geekyBackgroundImage', function (UserSettings) {
     return {
         restrict: 'A',

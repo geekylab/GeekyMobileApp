@@ -1,16 +1,22 @@
 var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
 
-controllersModule.controller('DocumentCtrl', function ($scope, Model, Data) {
-    $scope.documents = [];
-    $scope.document = null;
-
+controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB) {
     Model.all('items').then(function (items) {
-        $scope.documents = items;
+        $scope.items = items;
     });
 
     Model.getById('items', 2).then(function (item) {
-        $scope.document = item;
+        $scope.item = item;
     });
+
+    $scope.items = [];
+    $scope.item = null;
+
+    $scope.addItem = function () {
+        var insertQuery = 'INSERT INTO items (name, quantity) VALUES ("Teste", 10)';
+        DB.query(insertQuery);
+    };
+
 });
 
 controllersModule.controller('LoginController', function ($scope, $http, MyUser) {
@@ -113,19 +119,10 @@ controllersModule.controller('OrderController', function ($scope, Data, DB, Mode
         var where = ' status = ' + ORDER_STATUSES.open;
         Model.where('orders', where).then(function (order) {
             $scope.dbOrder = order;
-            //if (typeof order.id == 'undefined') {
-            //    var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, ' + new Date() + ')';
-            //    console.log(DB.query(query));
-            //}
-
-            var d = new Date();
-            var tzone = d.getTimezoneOffset();
-
-            var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + DateFormatter.UTC() + '")';
-            DB.query(query);
-
-            //var result = DB.query(query);
-            //console.log(result);
+            if (typeof order.id == 'undefined' || order.id == null) {
+                var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + DateFormatter.UTC() + '")';
+                DB.query(query);
+            }
 
 
             //item.quant = $scope.orderedItem.quant;

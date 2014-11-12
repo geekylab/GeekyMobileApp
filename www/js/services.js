@@ -202,6 +202,7 @@ servicesModule.factory('DB', function ($q, DB_CONFIG, Data) {
 
         self.db.transaction(function (transaction) {
             transaction.executeSql(query, bindings, function (transaction, result) {
+                console.log(result);
                 deferred.resolve(result);
             }, function (transaction, error) {
                 deferred.reject(error);
