@@ -187,7 +187,7 @@ servicesModule.factory('DB', function ($q, DB_CONFIG, Data) {
 
             var query = 'CREATE TABLE IF NOT EXISTS ' + table.name + ' (' + columns.join(',') + ')';
             self.query(query);
-            console.log('Table ' + table.name + ' initialized');
+            //console.log('Table ' + table.name + ' initialized');
 
             //var insertQuery = 'INSERT INTO items (name, quantity) VALUES ("Teste", 10)';
             //self.query(insertQuery);
@@ -202,8 +202,6 @@ servicesModule.factory('DB', function ($q, DB_CONFIG, Data) {
 
         self.db.transaction(function (transaction) {
             transaction.executeSql(query, bindings, function (transaction, result) {
-                //console.log('query result: ');
-                //console.log(result);
                 deferred.resolve(result);
             }, function (transaction, error) {
                 deferred.reject(error);
@@ -235,18 +233,54 @@ servicesModule.factory('DB', function ($q, DB_CONFIG, Data) {
 servicesModule.factory('Model', function (DB) {
     var self = this;
 
-    self.all = function () {
-        return DB.query('SELECT * FROM items')
+    self.all = function (tableName) {
+        return DB.query('SELECT * FROM ' + tableName)
             .then(function (result) {
                 return DB.fetchAll(result);
             });
     };
 
-    self.getById = function (id) {
-        return DB.query('SELECT * FROM items WHERE id = ?', [id])
+    self.where = function (tableName, where) {
+        return DB.query('SELECT * FROM ' + tableName + ' WHERE ' + where)
             .then(function (result) {
                 return DB.fetch(result);
             });
     };
+
+    self.getById = function (tableName, id) {
+        return DB.query('SELECT * FROM ' + tableName + ' WHERE id = ?', [id])
+            .then(function (result) {
+                return DB.fetch(result);
+            });
+    };
+
+    self.query = function (query) {
+        return DB.query(query)
+            .then(function (result) {
+                return DB.fetch(result);
+            });
+    };
+
+    return self;
+});
+
+servicesModule.service('DateFormatter', function () {
+    var self = this;
+
+    self.UTC = function () {
+        var d = new Date();
+        var dObj = {
+            year: d.getUTCFullYear(),
+            month: d.getUTCMonth(),
+            day: d.getUTCDay(),
+            hour: d.getUTCHours() - (d.getTimezoneOffset() / 60),
+            minute: d.getUTCMinutes(),
+            second: d.getUTCSeconds()
+        };
+        var date = dObj.year + '-' + dObj.month + '-' + dObj.day + ' ' + dObj.hour + ':' + dObj.minute + ':' + dObj.second;
+
+        return date;
+    };
+
     return self;
 });

@@ -4,12 +4,12 @@ controllersModule.controller('DocumentCtrl', function ($scope, Model, Data) {
     $scope.documents = [];
     $scope.document = null;
 
-    Model.all().then(function (documents) {
-        $scope.documents = documents;
+    Model.all('items').then(function (items) {
+        $scope.documents = items;
     });
 
-    Model.getById(2).then(function (document) {
-        $scope.document = document;
+    Model.getById('items', 2).then(function (item) {
+        $scope.document = item;
     });
 });
 
@@ -59,10 +59,9 @@ controllersModule.controller('LoginController', function ($scope, $http, MyUser)
                 alert('error');
             });
     };
-
 });
 
-controllersModule.controller('OrderController', function ($scope, Data) {
+controllersModule.controller('OrderController', function ($scope, Data, DB, Model, ORDER_STATUSES, DateFormatter) {
     $scope.storeInfo = Data.getData('storeInfo');
     $scope.orderedItem = Data.getData('item');
     $scope.orderedItem.ingredients = [
@@ -96,6 +95,8 @@ controllersModule.controller('OrderController', function ($scope, Data) {
         }
     ];
 
+    console.log($scope.orderedItem);
+
     $scope.orderedItem.quant = 1;
     $scope.addQuant = function () {
         $scope.orderedItem.quant++;
@@ -106,21 +107,41 @@ controllersModule.controller('OrderController', function ($scope, Data) {
         }
     };
 
+    $scope.dbOrder = {};
     $scope.order = [];
     $scope.addToOrder = function (item) {
-        item.quant = $scope.orderedItem.quant;
-        $scope.order.push(item);
+        var where = ' status = ' + ORDER_STATUSES.open;
+        Model.where('orders', where).then(function (order) {
+            $scope.dbOrder = order;
+            //if (typeof order.id == 'undefined') {
+            //    var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, ' + new Date() + ')';
+            //    console.log(DB.query(query));
+            //}
 
-        $scope.cartShortcutInfo = {
-            totalItems: 0,
-            totalOrder: 0.0
-        };
-        angular.forEach($scope.order, function (orderItem, key) {
-            $scope.cartShortcutInfo.totalItems += orderItem.quant;
-            $scope.cartShortcutInfo.totalOrder += (orderItem.quant * orderItem.price);
+            var d = new Date();
+            var tzone = d.getTimezoneOffset();
+
+            var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + DateFormatter.UTC() + '")';
+            DB.query(query);
+
+            //var result = DB.query(query);
+            //console.log(result);
+
+
+            //item.quant = $scope.orderedItem.quant;
+            //$scope.order.push(item);
+            //
+            //$scope.cartShortcutInfo = {
+            //    totalItems: 0,
+            //    totalOrder: 0.0
+            //};
+            //angular.forEach($scope.order, function (orderItem, key) {
+            //    $scope.cartShortcutInfo.totalItems += orderItem.quant;
+            //    $scope.cartShortcutInfo.totalOrder += (orderItem.quant * orderItem.price);
+            //});
+            //
+            //console.log($scope.cartShortcutInfo);
         });
-
-        console.log($scope.cartShortcutInfo);
 
         $scope.ons.navigator.popPage('store-menu-order-item.html', {animation: 'fade'});
     };

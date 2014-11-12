@@ -3,6 +3,11 @@
     var app = angular.module('geekyMenuMobile', ['onsen', 'ngResource', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
 
     app.value('HOST_NAME', 'http://192.168.111.102');
+    app.value('ORDER_STATUSES', {
+        open: 1,
+        closed: 2,
+        finished: 3
+    });
 
     if (window.cordova) {
         document.addEventListener("deviceready", onDeviceReady, false);
