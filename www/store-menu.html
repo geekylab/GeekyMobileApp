@@ -90,6 +90,7 @@
     <!-- END FOOD LIST -->
 
     <!-- ORDER ITEM MODAL -->
+    <!--<div ng-controller="OrderController">-->
     <ons-modal var="orderModal" class="order-page" align="top">
         <ons-toolbar>
             <div class="center">
@@ -127,7 +128,7 @@
             <ons-col width="8%"></ons-col>
 
             <ons-col width="35%">
-                <ons-button modifier="large" class="order-button" ng-click="addToOrder(orderedItem)">
+                <ons-button modifier="large" class="order-button" ng-click="addToOrder(order, orderedItem)">
                     Order
                 </ons-button>
             </ons-col>
@@ -160,5 +161,6 @@
             </ons-list>
         </ons-row>
     </ons-modal>
+    <!--</div>-->
     <!-- END ORDER ITEM MODAL -->
 </ons-page>

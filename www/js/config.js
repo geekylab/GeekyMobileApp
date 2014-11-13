@@ -13,7 +13,7 @@ angular.module('geekyMenuMobile.config', [])
                 ]
             },
             {
-                name: 'items',
+                name: 'order_items',
                 columns: [
                     {name: 'id', type: 'integer primary key'},
                     {name: 'order_id', type: 'integer'},
@@ -21,6 +21,15 @@ angular.module('geekyMenuMobile.config', [])
                     {name: 'quantity', type: 'integer'},
                     {name: 'value', type: 'float'},
                     {name: 'total', type: 'float'}
+                ]
+            },
+            {
+                name: 'item_ingredients',
+                columns: [
+                    {name: 'id', type: 'integer primary key'},
+                    {name: 'item_id', type: 'integer'},
+                    {name: 'order_id', type: 'integer'},
+                    {name: 'use_flag', type: 'integer'}
                 ]
             }
         ]

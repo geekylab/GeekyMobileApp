@@ -52,7 +52,7 @@
     controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB, OrderFactory) {
         $scope.buttonText = 'Adicionar Item';
 
-        Model.all('items').then(function (items) {
+        Model.all('order_items').then(function (items) {
             $scope.items = items;
         });
 
@@ -60,7 +60,7 @@
             $scope.orders = orders;
         });
 
-        Model.getById('items', 2).then(function (item) {
+        Model.getById('order_items', 2).then(function (item) {
             $scope.item = item;
         });
 
@@ -68,13 +68,9 @@
         $scope.item = null;
 
         $scope.addItem = function () {
-            var insertQuery = 'INSERT INTO items (name, quantity, value) VALUES ("Teste", 10, 2.63)';
+            var insertQuery = 'INSERT INTO order_items (name, quantity, value) VALUES ("Teste", 10, 2.63)';
             DB.query(insertQuery);
         };
-
-        OrderFactory.getOrder().then(function (order) {
-
-        });
     });
 
     controllersModule.controller('StoreController', function ($scope, Data, Store, Model, ORDER_STATUSES) {
@@ -115,56 +111,112 @@
         };
     });
 
-    controllersModule.controller('StoreMenuController', function($scope, Data, Store, Model, ORDER_STATUSES) {
-        var menu = this;
+    controllersModule.controller('StoreMenuController', function ($scope, Data, Store, Model, OrderFactory) {
+        OrderFactory.getOrder().then(function (order) {
+            $scope.order = order;
 
-        this.testeButton = 'Teste!';
+            $scope.storeTopItems = [
+                {
+                    _id: 1,
+                    type: 1,
+                    name: 'Feijoada do Johna',
+                    desc: 'Feijoada do Johna',
+                    price: 25.00,
+                    image: 'feijoada_johna.jpg',
+                    serve: 4
+                },
+                {
+                    _id: 2,
+                    type: 1,
+                    name: 'Carbonara do Johna',
+                    desc: 'Carbonara do Johna',
+                    price: 30.00,
+                    image: 'carbonara_johna.jpg',
+                    serve: 2
+                },
+                {
+                    _id: 3,
+                    type: 2,
+                    name: 'Cerveja Kirin Ichiban',
+                    desc: 'Cerveja Kirin Ichiban',
+                    price: 10.00,
+                    image: 'cerveja_kirin.jpg',
+                    serve: 1
+                }
+            ];
 
-        $scope.storeTopItems = [
-            {
-                _id: 1,
-                type: 1,
-                name: 'Feijoada do Johna',
-                desc: 'Feijoada do Johna',
-                price: 25.00,
-                image: 'feijoada_johna.jpg',
-                serve: 4
-            },
-            {
-                _id: 2,
-                type: 1,
-                name: 'Carbonara do Johna',
-                desc: 'Carbonara do Johna',
-                price: 30.00,
-                image: 'carbonara_johna.jpg',
-                serve: 2
-            },
-            {
-                _id: 3,
-                type: 2,
-                name: 'Cerveja Kirin Ichiban',
-                desc: 'Cerveja Kirin Ichiban',
-                price: 10.00,
-                image: 'cerveja_kirin.jpg',
-                serve: 1
-            }
-        ];
+            $scope.searchBox = false;
+            $scope.toggleSearch = function () {
+                $scope.searchBox = !$scope.searchBox;
+            };
 
-        $scope.showOrderItem = function (item) {
-            Data.setData('storeInfo', $scope.storeInfo);
-            Data.setData('item', item);
-            $scope.ons.navigator.pushPage('store-menu-order-item.html', {animation: 'fade'});
-        };
+            $scope.showOrderItem = function (item) {
+                //$scope.ons.navigator.pushPage('store-menu-order-item.html', {animation: 'fade'});
+                $scope.orderModal.show();
 
-        $scope.searchBox = false;
-        $scope.toggleSearch = function () {
-            $scope.searchBox = !$scope.searchBox;
-        };
+                //item = item;
+                item.ingredients = [
+                    {
+                        _id: 3,
+                        can_remove: false,
+                        name: 'Arroz'
+                    },
+                    {
+                        _id: 4,
+                        can_remove: false,
+                        name: 'Feijão preto'
+                    },
+                    {
+                        _id: 5,
+                        can_remove: true,
+                        name: 'Cebola'
+                    },
+                    {
+                        _id: 6,
+                        can_remove: true,
+                        name: 'Carnes'
+                    },
+                    {
+                        _id: 7,
+                        name: 'Farofa'
+                    },
+                    {
+                        _id: 8,
+                        name: 'Laranja'
+                    }
+                ];
+                item.quant = 1;
+                $scope.addQuant = function () {
+                    item.quant++;
+                };
+                $scope.removeQuant = function () {
+                    if (item.quant > 1) {
+                        item.quant--;
+                    }
+                };
+
+                //$scope.$apply();
+            };
+
+            $scope.addToOrder = function (order, item) {
+
+
+
+
+
+
+                $scope.orderModal.hide();
+                //$scope.ons.navigator.popPage('store-menu-order-item.html', {animation: 'fade'});
+            };
+        });
     });
 
     controllersModule.controller('OrderController', function ($scope, Data, DB, Model, ORDER_STATUSES) {
         $scope.storeInfo = Data.getData('storeInfo');
         $scope.orderedItem = Data.getData('item');
+
+        console.log($scope.orderedItem);
+
         $scope.orderedItem.ingredients = [
             {
                 _id: 3,
@@ -211,6 +263,8 @@
         $scope.dbOrder = {};
         $scope.order = [];
         $scope.addToOrder = function (item) {
+
+
             $scope.ons.navigator.popPage('store-menu-order-item.html', {animation: 'fade'});
         };
 

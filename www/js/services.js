@@ -222,7 +222,7 @@
 
         self.fetch = function (result) {
             var ret = {};
-            if (result.rows.item(0)) {
+            if (result.length > 0) {
                 ret = result.rows.item(0);
             }
             return ret;
@@ -242,6 +242,9 @@
         };
 
         self.where = function (tableName, where) {
+
+            console.log('SELECT * FROM ' + tableName + ' WHERE ' + where);
+
             return DB.query('SELECT * FROM ' + tableName + ' WHERE ' + where)
                 .then(function (result) {
                     return DB.fetch(result);
@@ -250,6 +253,13 @@
 
         self.getById = function (tableName, id) {
             return DB.query('SELECT * FROM ' + tableName + ' WHERE id = ?', [id])
+                .then(function (result) {
+                    return DB.fetch(result);
+                });
+        };
+
+        self.getByStatus = function (tableName, status) {
+            return DB.query('SELECT * FROM ' + tableName + ' WHERE status = ?', [status])
                 .then(function (result) {
                     return DB.fetch(result);
                 });
@@ -293,19 +303,36 @@
 
         self.getOrder = function () {
             var where = ' status = ' + ORDER_STATUSES.open;
-            Model.where('orders', where).then(function (order) {
+            Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
+                //Model.where('orders', where).then(function (order) {
+                //Model.all('orders').then(function (order) {
+
+                console.log('===================');
+                console.log('GetOrder: ');
+                console.log(order);
+                console.log('===================');
+
                 if (order.id > 0) {
                     deferred.resolve(order);
-                } else {
-                    var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
-                    DB.query(query);
-                    Model.where('orders', where).then(function (order) {
-                        deferred.resolve(order);
-                    });
                 }
+
+                //else {
+                //    var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
+                //    DB.query(query);
+                //    Model.where('orders', where).then(function (order) {
+                //        deferred.resolve(order);
+                //    });
+                //}
             });
 
             return deferred.promise;
+        };
+
+        self.saveItem = function (item) {
+
+            angular.forEach()
+
+
         };
 
         return self;
