@@ -1,4 +1,4 @@
-<ons-page ng-controller="StoreController">
+<ons-page ng-controller="StoreMenuController">
     <ons-toolbar>
         <div class="left">
             <ons-back-button>Back</ons-back-button>
@@ -45,54 +45,51 @@
     <!-- FOOD LIST -->
     <ons-list>
         <ons-list-header>Top Dishes</ons-list-header>
-        <ons-list-item>
-            <ons-list-item
-                    class="list-item-container menu-list-item"
-                    ng-repeat="item in storeTopItems"
-                    ng-click="showItemDetail(item._id)">
-                <ons-row align="center">
-                    <ons-col width="95px">
-                        <img src="images/{{item.image}}" class="thumbnail">
-                    </ons-col>
-                    <ons-col align="top">
-                        <div class="name" align="left">
-                            {{item.name}}
-                        </div>
-                        <div class="desc" align="left">
-                            {{item.desc}}
-                        </div>
-                        <div class="desc" align="bottom">
-                            <div class="feature feature-inactive">
-                                <ons-row align="center">
-                                    <ons-icon ng-if="item.serve > 2" icon="ion-android-friends"
-                                              style="font-size: 15px;">
-                                    </ons-icon>
+        <ons-list-item
+                class="list-item-container menu-list-item"
+                ng-repeat="item in storeTopItems"
+                ng-click="showItemDetail(item._id)">
+            <ons-row align="center">
+                <ons-col width="95px">
+                    <img src="images/{{item.image}}" class="thumbnail">
+                </ons-col>
+                <ons-col align="top">
+                    <div class="name" align="left">
+                        {{item.name}}
+                    </div>
+                    <div class="desc" align="left">
+                        {{item.desc}}
+                    </div>
+                    <div class="desc" align="bottom">
+                        <div class="feature feature-inactive">
+                            <ons-row align="center">
+                                <ons-icon ng-if="item.serve > 2" icon="ion-android-friends"
+                                          style="font-size: 15px;">
+                                </ons-icon>
 
-                                    <ons-icon ng-if="item.serve == 2" icon="ion-android-contacts"
-                                              style="font-size: 14px;"></ons-icon>
+                                <ons-icon ng-if="item.serve == 2" icon="ion-android-contacts"
+                                          style="font-size: 14px;"></ons-icon>
 
-                                    <ons-icon ng-if="item.serve == 1" icon="ion-android-contact"
-                                              style="font-size: 11px;">
-                                    </ons-icon>
+                                <ons-icon ng-if="item.serve == 1" icon="ion-android-contact"
+                                          style="font-size: 11px;">
+                                </ons-icon>
 
-                                    <b>&nbsp;{{item.serve}}</b>
-                                </ons-row>
-                            </div>
+                                <b>&nbsp;{{item.serve}}</b>
+                            </ons-row>
                         </div>
-                    </ons-col>
-                    <ons-col width="80px">
-                        <ons-button modifier="large" ng-click="showOrderItem(item)">
-                            <div>Order</div>
-                            <span class="small">US$ {{item.price}}</span>
-                        </ons-button>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
+                    </div>
+                </ons-col>
+                <ons-col width="80px">
+                    <ons-button modifier="large" ng-click="showOrderItem(item)">
+                        {{item.price | currency}}
+                    </ons-button>
+                </ons-col>
+            </ons-row>
         </ons-list-item>
     </ons-list>
     <!-- END FOOD LIST -->
 
-    <!-- ORDER MODAL -->
+    <!-- ORDER ITEM MODAL -->
     <ons-modal var="orderModal" class="order-page" align="top">
         <ons-toolbar>
             <div class="center">
@@ -163,5 +160,5 @@
             </ons-list>
         </ons-row>
     </ons-modal>
-    <!-- END ORDER MODAL -->
+    <!-- END ORDER ITEM MODAL -->
 </ons-page>

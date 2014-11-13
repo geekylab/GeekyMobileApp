@@ -8960,7 +8960,7 @@ limitations under the License.
         element.addClass(scope.modifierTemplater('button--*'));
         element.addClass(initialAnimation);
 
-        transclude(scope, function(cloned) {
+        transclude(scope.$parent, function(cloned) {
           angular.element(element[0].querySelector('.ons-button-inner')).append(cloned);
         });
 

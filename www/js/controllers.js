@@ -50,6 +50,8 @@
     });
 
     controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB, OrderFactory) {
+        $scope.buttonText = 'Adicionar Item';
+
         Model.all('items').then(function (items) {
             $scope.items = items;
         });
@@ -83,6 +85,18 @@
             $scope.storeInfo = data;
         });
 
+        $scope.openMap = function (location) {
+            window.open("geo:" + location[1] + ',' + location[0], '_system');
+        };
+
+        $scope.openDialer = function (tel) {
+            console.log(tel);
+            if (tel)
+                window.open('tel:' + tel, '_system');
+            else
+                console.log('no number');
+        };
+
         /* TODO: RATING */
         //var intRating = parseInt($scope.storeInfo.public_rating);
         //$scope.ratingFull = [];
@@ -94,6 +108,17 @@
         //    $scope.ratingHalf = 1;
         //}
         //$scope.ratingEmpty = new Array(5 - (intRating + $scope.ratingHalf));
+
+        $scope.showStoreMenu = function () {
+            Data.setData('store', $scope.storeInfo);
+            $scope.searchNavigator.pushPage('store-menu.html');
+        };
+    });
+
+    controllersModule.controller('StoreMenuController', function($scope, Data, Store, Model, ORDER_STATUSES) {
+        var menu = this;
+
+        this.testeButton = 'Teste!';
 
         $scope.storeTopItems = [
             {
@@ -125,23 +150,6 @@
             }
         ];
 
-        $scope.openMap = function (location) {
-            window.open("geo:" + location[1] + ',' + location[0], '_system');
-        };
-
-        $scope.openDialer = function (tel) {
-            console.log(tel);
-            if (tel)
-                window.open('tel:' + tel, '_system');
-            else
-                console.log('no number');
-        };
-
-        $scope.showStoreMenu = function () {
-            Data.setData('store', $scope.storeInfo);
-            $scope.searchNavigator.pushPage('store-menu.html');
-        };
-
         $scope.showOrderItem = function (item) {
             Data.setData('storeInfo', $scope.storeInfo);
             Data.setData('item', item);
@@ -152,11 +160,9 @@
         $scope.toggleSearch = function () {
             $scope.searchBox = !$scope.searchBox;
         };
-
     });
 
     controllersModule.controller('OrderController', function ($scope, Data, DB, Model, ORDER_STATUSES) {
-
         $scope.storeInfo = Data.getData('storeInfo');
         $scope.orderedItem = Data.getData('item');
         $scope.orderedItem.ingredients = [

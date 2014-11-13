@@ -11,7 +11,9 @@
                 <div class="card-desc" geeky-gettext="{{storeInfo.desc}}"></div>
                 <div class="card-desc">
                     <br>{{storeInfo.opening_hour.start}} - {{storeInfo.opening_hour.end}}
-                    <span ng-show="storeInfo.opening_hour.last_order">({{storeInfo.opening_hour.last_order}})</span>
+                    <span ng-show="storeInfo.opening_hour.last_order">
+                        ({{storeInfo.opening_hour.last_order}})
+                    </span>
                 </div>
             </div>
         </div>
