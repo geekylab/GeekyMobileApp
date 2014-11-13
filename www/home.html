@@ -26,6 +26,9 @@
 
     <ons-row align="center">
         <ons-col>
+            ID
+        </ons-col>
+        <ons-col>
             Name
         </ons-col>
         <ons-col>
@@ -40,6 +43,27 @@
     </ons-row>
     <br>
     <ons-row align="center" ng-repeat="item in items">
+        <ons-col>
+            {{item.id}}
+        </ons-col>
+        <ons-col>
+            {{item.name}}
+        </ons-col>
+        <ons-col>
+            {{item.quantity}}
+        </ons-col>
+        <ons-col align="right">
+            {{item.value | currency}}
+        </ons-col>
+        <ons-col align="right">
+            {{item.value * item.quantity | currency}}
+        </ons-col>
+    </ons-row>
+    <hr>
+    <ons-row align="center">
+        <ons-col>
+            {{item.id}}
+        </ons-col>
         <ons-col>
             {{item.name}}
         </ons-col>
