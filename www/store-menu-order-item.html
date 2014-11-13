@@ -16,8 +16,8 @@
     <!-- PRICE CONTAINER -->
     <ons-row class="modal-row-container order-item-total" align="center">
         <ons-col>
-            <i class="ion-social-usd"></i>
-            {{orderedItem.price * orderedItem.quant}}
+            <!--<i class="ion-social-usd"></i>-->
+            {{orderedItem.price * orderedItem.quant | currency}}
         </ons-col>
     </ons-row>
     <!-- END PRICE CONTAINER -->

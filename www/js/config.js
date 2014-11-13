@@ -8,8 +8,8 @@ angular.module('geekyMenuMobile.config', [])
                     {name: 'id', type: 'integer primary key'},
                     {name: 'total', type: 'float'},
                     {name: 'status', type: 'integer'},
-                    {name: 'date_opened', type: 'datetime'},
-                    {name: 'date_closed', type: 'datetime'}
+                    {name: 'date_opened', type: 'integer'},
+                    {name: 'date_closed', type: 'integer'}
                 ]
             },
             {

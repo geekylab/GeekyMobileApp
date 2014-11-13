@@ -3,7 +3,17 @@
         <div class="center">Home</div>
     </ons-toolbar>
 
-    <br><br><br><br>
+    <br><br>
+
+    <ons-row align="center" ng-repeat="order in orders">
+        <ons-col>
+            Order {{order.id}}
+        </ons-col>
+        <ons-col>
+            {{order.date_opened | date:'dd/MM/yyyy - hh:mm:ss'}}
+        </ons-col>
+    </ons-row>
+    <br><br>
 
     <ons-row align="center">
         <ons-col>
@@ -12,11 +22,35 @@
             </ons-button>
         </ons-col>
     </ons-row>
+    <br>
+
     <ons-row align="center">
         <ons-col>
-            {{items}}
-            <br><br>
-            {{item}}
+            Name
+        </ons-col>
+        <ons-col>
+            Quantity
+        </ons-col>
+        <ons-col align="right">
+            Price
+        </ons-col>
+        <ons-col align="right">
+            Total
+        </ons-col>
+    </ons-row>
+    <br>
+    <ons-row align="center" ng-repeat="item in items">
+        <ons-col>
+            {{item.name}}
+        </ons-col>
+        <ons-col>
+            {{item.quantity}}
+        </ons-col>
+        <ons-col align="right">
+            {{item.value | currency}}
+        </ons-col>
+        <ons-col align="right">
+            {{item.value * item.quantity | currency}}
         </ons-col>
     </ons-row>
 </ons-page>
