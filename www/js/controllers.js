@@ -164,43 +164,49 @@
             };
 
             $scope.showOrderItem = function (item) {
+                $scope.orderModal.show();
+
+                $scope.orderedItem = item;
+
                 item.ingredients = [
                     {
                         _id: 3,
                         can_remove: false,
+                        use_flag: true,
                         name: 'Arroz'
                     },
                     {
                         _id: 4,
                         can_remove: false,
+                        use_flag: true,
                         name: 'Feijão preto'
                     },
                     {
                         _id: 5,
                         can_remove: true,
+                        use_flag: true,
                         name: 'Cebola'
                     },
                     {
                         _id: 6,
                         can_remove: true,
+                        use_flag: true,
                         name: 'Carnes'
                     },
                     {
                         _id: 7,
                         can_remove: true,
+                        use_flag: true,
                         name: 'Farofa'
                     },
                     {
                         _id: 8,
                         can_remove: true,
+                        use_flag: true,
                         name: 'Laranja'
                     }
                 ];
                 item.order_id = order.id;
-
-                $scope.orderedItem = item;
-                $scope.orderModal.show();
-
                 item.quantity = 1;
                 $scope.addQuant = function () {
                     item.quantity++;
@@ -212,7 +218,7 @@
                 };
 
                 $scope.addToOrder = function (item) {
-                    OrderFactory.saveItemToOrder(item);
+                    OrderFactory.saveOrderItem(item);
 
 
                     $scope.orderModal.hide();
@@ -226,9 +232,6 @@
 
     controllersModule.controller('OrderController', function ($scope, Data, DB, Model, ORDER_STATUSES) {
         $scope.storeInfo = Data.getData('storeInfo');
-        $scope.orderedItem = Data.getData('item');
-
-        console.log($scope.orderedItem);
 
         $scope.orderedItem.ingredients = [
             {
@@ -260,8 +263,6 @@
                 name: 'Laranja'
             }
         ];
-
-        console.log($scope.orderedItem);
 
         $scope.orderedItem.quant = 1;
         $scope.addQuant = function () {

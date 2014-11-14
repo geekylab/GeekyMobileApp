@@ -151,8 +151,9 @@
                     <ons-list-item modifier="tappable" ng-repeat="ingredient in orderedItem.ingredients">
                         <label class="checkbox checkbox--list-item">
                             <input type="checkbox"
-                                   ng-click="toggleIngredient(ingredient)"
-                                   checked="checked"
+                                   ng-click="!ingredient.use_flag"
+                                   ng-checked="ingredient.use_flag"
+                                   ng-model="ingredient.use_flag"
                                    ng-disabled="!ingredient.can_remove">
 
                             <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>

@@ -323,7 +323,7 @@
             return deferred.promise;
         };
 
-        self.saveItemToOrder = function (item) {
+        self.saveOrderItem = function (item) {
             console.log('BEGIN saveItemToOrder');
             console.log('---------------------');
 
@@ -339,12 +339,11 @@
             insertItemQuery += item.total + '); ';
 
             DB.query(insertItemQuery).then(function (result) {
-                self.saveIngredients(result.insertId, ingredients).then(function () {
+                self.saveIngredients(result.insertId, item.ingredients).then(function () {
 
 
                 });
             });
-
 
             console.log('---------------------');
             console.log('END saveItemToOrder');
@@ -357,10 +356,8 @@
                 insertItemIngredientQuery += ingredient.name + ',';
                 insertItemIngredientQuery += ingredient.use_flag + ');';
 
-
-
+                DB.query(insertItemIngredientQuery);
             });
-
         };
 
         return self;
