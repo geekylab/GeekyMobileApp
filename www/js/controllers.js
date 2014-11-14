@@ -123,8 +123,6 @@
 
     controllersModule.controller('StoreMenuController', function ($scope, Data, Store, Model, OrderFactory) {
         OrderFactory.getOrder().then(function (order) {
-            $scope.order = order;
-
             $scope.storeTopItems = [
                 {
                     _id: 1,
@@ -195,26 +193,24 @@
                         name: 'Laranja'
                     }
                 ];
+                item.order_id = order.id;
 
                 $scope.orderedItem = item;
                 $scope.orderModal.show();
 
-                item.quant = 1;
+                item.quantity = 1;
                 $scope.addQuant = function () {
-                    item.quant++;
+                    item.quantity++;
                 };
                 $scope.removeQuant = function () {
-                    if (item.quant > 1) {
-                        item.quant--;
+                    if (item.quantity > 1) {
+                        item.quantity--;
                     }
                 };
 
-                $scope.addToOrder = function (order, item) {
-                    console.log(order);
-                    console.log(item);
+                $scope.addToOrder = function (item) {
 
-
-
+                    OrderFactory.saveItemToOrder(item);
 
 
                     $scope.orderModal.hide();

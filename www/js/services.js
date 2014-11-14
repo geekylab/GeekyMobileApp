@@ -302,14 +302,13 @@
         self.getOrder = function () {
             var where = ' status = ' + ORDER_STATUSES.open;
             Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
-            //Model.where('orders', where).then(function (order) {
-            //Model.all('orders').then(function (order) {
-            //Model.query(query).then(function (order) {
+                //Model.where('orders', where).then(function (order) {
+                //Model.all('orders').then(function (order) {
+                //Model.query(query).then(function (order) {
                 //console.log('===================');
                 //console.log('GetOrder: ');
                 //console.log(order);
                 //console.log('===================');
-
                 if (order.id > 0) {
                     deferred.resolve(order);
                 } else {
@@ -324,8 +323,34 @@
             return deferred.promise;
         };
 
-        self.saveItem = function (item) {
+        self.saveItemToOrder = function (item) {
+            console.log('BEGIN saveItemToOrder');
+            console.log('---------------------');
 
+            item.total = item.price * item.quantity;
+
+            var insertItemQuery = 'INSERT INTO order_items (item_id, order_id, name, quantity, price, total) VALUES (';
+            //var insertItemQuery = 'INSERT INTO order_items VALUES (';
+            insertItemQuery += item._id + ', ';
+            insertItemQuery += item.order_id + ', ';
+            insertItemQuery += '"' + item.name + '", ';
+            insertItemQuery += item.quantity + ', ';
+            insertItemQuery += item.price + ', ';
+            insertItemQuery += item.total + '); ';
+
+            console.log(insertItemQuery);
+
+            DB.query(insertItemQuery).then(function (result) {
+                console.log('db query entrou');
+
+                var ingredients = item.ingredients;
+
+                console.log(ingredients);
+            });
+
+
+            console.log('---------------------');
+            console.log('END saveItemToOrder');
         };
 
         return self;
