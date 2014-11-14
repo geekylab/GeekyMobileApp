@@ -341,16 +341,19 @@
             console.log(insertItemQuery);
 
             DB.query(insertItemQuery).then(function (result) {
-                console.log('db query entrou');
+                self.saveIngredients(result.insertId, ingredients).then(function () {
 
-                var ingredients = item.ingredients;
-
-                console.log(ingredients);
+                });
             });
 
 
             console.log('---------------------');
             console.log('END saveItemToOrder');
+        };
+
+        self.saveIngredients = function (itemId, ingredients) {
+
+
         };
 
         return self;
