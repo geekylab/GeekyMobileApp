@@ -189,8 +189,8 @@
 
                 var query = 'CREATE TABLE IF NOT EXISTS ' + table.name + ' (' + columns.join(',') + ')';
                 self.query(query);
-                //console.log('Table ' + table.name + ' initialized');
 
+                //console.log('Table ' + table.name + ' initialized');
                 //var insertQuery = 'INSERT INTO items (name, quantity) VALUES ("Teste", 10)';
                 //self.query(insertQuery);
                 //Data.setData('sqliteInsertQuery', insertQuery);
@@ -203,8 +203,6 @@
             var deferred = $q.defer();
 
             self.db.transaction(function (transaction) {
-                //console.log(transaction);
-
                 transaction.executeSql(query, bindings, function (transaction, result) {
                     deferred.resolve(result);
                 }, function (transaction, error) {
@@ -262,10 +260,6 @@
         self.getByStatus = function (tableName, status) {
             return DB.query('SELECT * FROM ' + tableName + ' WHERE status = ?', [status])
                 .then(function (result) {
-
-                    console.log('Result getByStatus: ');
-                    console.log(result);
-
                     return DB.fetch(result);
                 });
         };
@@ -303,21 +297,18 @@
 
     servicesModule.factory('OrderFactory', function (Model, DB, ORDER_STATUSES, $q) {
         var self = this;
-        var orderObj = {};
         var deferred = $q.defer();
 
         self.getOrder = function () {
             var where = ' status = ' + ORDER_STATUSES.open;
-            var query = 'SELECT * FROM orders WHERE status = 1';
-            //Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
+            Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
             //Model.where('orders', where).then(function (order) {
             //Model.all('orders').then(function (order) {
-            Model.query(query).then(function (order) {
-
-                console.log('===================');
-                console.log('GetOrder: ');
-                console.log(order);
-                console.log('===================');
+            //Model.query(query).then(function (order) {
+                //console.log('===================');
+                //console.log('GetOrder: ');
+                //console.log(order);
+                //console.log('===================');
 
                 if (order.id > 0) {
                     deferred.resolve(order);

@@ -22,8 +22,8 @@
             </ons-button>
         </ons-col>
     </ons-row>
-    <br>
 
+    <br>
     <ons-row align="center">
         <ons-col>
             ID
@@ -41,6 +41,7 @@
             Total
         </ons-col>
     </ons-row>
+
     <br>
     <ons-row align="center" ng-repeat="item in items">
         <ons-col>
@@ -53,12 +54,13 @@
             {{item.quantity}}
         </ons-col>
         <ons-col align="right">
-            {{item.value | currency}}
+            {{item.price | currency}}
         </ons-col>
         <ons-col align="right">
-            {{item.value * item.quantity | currency}}
+            {{item.price * item.quantity | currency}}
         </ons-col>
     </ons-row>
+
     <hr>
     <ons-row align="center">
         <ons-col>
@@ -75,6 +77,32 @@
         </ons-col>
         <ons-col align="right">
             {{item.value * item.quantity | currency}}
+        </ons-col>
+    </ons-row>
+
+    <hr>
+    <ons-row align="center">
+        <ons-col>
+            {{order.id}}
+        </ons-col>
+        <ons-col>
+            {{order.status}}
+        </ons-col>
+        <ons-col width="50%">
+            {{order.date_opened | date:'yyyy-MM-dd - HH:mm:ss'}}
+        </ons-col>
+    </ons-row>
+
+    <br>
+    <ons-row align="center">
+        <ons-col>
+            Order {{orderStatus.id}}
+        </ons-col>
+        <ons-col>
+            Status {{orderStatus.status}}
+        </ons-col>
+        <ons-col width="50%">
+            {{orderStatus.date_opened | date:'yyyy-MM-dd - HH:mm:ss'}}
         </ons-col>
     </ons-row>
 </ons-page>

@@ -1,4 +1,4 @@
-<ons-page class="order-page" align="top" ng-controller="OrderController">
+<ons-page class="order-page" align="top" ng-controller="StoreMenuController">
     <ons-toolbar>
         <div class="left">
             <ons-back-button>Back</ons-back-button>
@@ -41,7 +41,7 @@
         <ons-col width="8%"></ons-col>
 
         <ons-col width="35%">
-            <ons-button modifier="large" class="order-button" ng-click="addToOrder(orderedItem)">
+            <ons-button modifier="large" class="order-button" ng-click="addToOrder(order, orderedItem)">
                 Order
             </ons-button>
         </ons-col>

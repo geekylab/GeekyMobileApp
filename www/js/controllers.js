@@ -51,6 +51,10 @@
 
     controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB, OrderFactory) {
         $scope.buttonText = 'Adicionar Item';
+        $scope.items = [];
+        $scope.item = null;
+        $scope.order = null;
+        $scope.orderStatus = null;
 
         Model.all('order_items').then(function (items) {
             $scope.items = items;
@@ -64,11 +68,17 @@
             $scope.item = item;
         });
 
-        $scope.items = [];
-        $scope.item = null;
+        Model.getById('orders', 1).then(function (order) {
+            $scope.order = order;
+        });
+
+        var where = ' status = 1';
+        Model.where('orders', where).then(function (order) {
+            $scope.orderStatus = order;
+        });
 
         $scope.addItem = function () {
-            var insertQuery = 'INSERT INTO order_items (name, quantity, value) VALUES ("Teste", 10, 2.63)';
+            var insertQuery = 'INSERT INTO order_items (name, quantity, price) VALUES ("Teste", 10, 2.63)';
             DB.query(insertQuery);
         };
     });
@@ -152,9 +162,7 @@
 
             $scope.showOrderItem = function (item) {
                 //$scope.ons.navigator.pushPage('store-menu-order-item.html', {animation: 'fade'});
-                $scope.orderModal.show();
 
-                //item = item;
                 item.ingredients = [
                     {
                         _id: 3,
@@ -178,13 +186,19 @@
                     },
                     {
                         _id: 7,
+                        can_remove: true,
                         name: 'Farofa'
                     },
                     {
                         _id: 8,
+                        can_remove: true,
                         name: 'Laranja'
                     }
                 ];
+
+                $scope.orderedItem = item;
+                $scope.orderModal.show();
+
                 item.quant = 1;
                 $scope.addQuant = function () {
                     item.quant++;
@@ -195,20 +209,22 @@
                     }
                 };
 
-                //$scope.$apply();
-            };
-
-            $scope.addToOrder = function (order, item) {
-
+                $scope.addToOrder = function (order, item) {
+                    console.log(order);
+                    console.log(item);
 
 
 
 
 
-                $scope.orderModal.hide();
-                //$scope.ons.navigator.popPage('store-menu-order-item.html', {animation: 'fade'});
+                    $scope.orderModal.hide();
+
+                    //$scope.ons.navigator.popPage('store-menu-order-item.html', {animation: 'fade'});
+                };
             };
         });
+
+        $scope.$apply();
     });
 
     controllersModule.controller('OrderController', function ($scope, Data, DB, Model, ORDER_STATUSES) {
@@ -262,11 +278,6 @@
 
         $scope.dbOrder = {};
         $scope.order = [];
-        $scope.addToOrder = function (item) {
-
-
-            $scope.ons.navigator.popPage('store-menu-order-item.html', {animation: 'fade'});
-        };
 
         $scope.$apply();
     });
