@@ -338,10 +338,9 @@
             insertItemQuery += item.price + ', ';
             insertItemQuery += item.total + '); ';
 
-            console.log(insertItemQuery);
-
             DB.query(insertItemQuery).then(function (result) {
                 self.saveIngredients(result.insertId, ingredients).then(function () {
+
 
                 });
             });
@@ -351,8 +350,16 @@
             console.log('END saveItemToOrder');
         };
 
-        self.saveIngredients = function (itemId, ingredients) {
+        self.saveIngredients = function (orderItemId, ingredients) {
+            var insertItemIngredientQuery = '';
+            angular.forEach(ingredients, function (key, ingredient) {
+                insertItemIngredientQuery = 'INSERT INTO item_ingredients (order_item_id, use_flag) VALUES (';
+                insertItemIngredientQuery += ingredient.name + ',';
+                insertItemIngredientQuery += ingredient.use_flag + ');';
 
+
+
+            });
 
         };
 

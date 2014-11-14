@@ -123,6 +123,11 @@
 
     controllersModule.controller('StoreMenuController', function ($scope, Data, Store, Model, OrderFactory) {
         OrderFactory.getOrder().then(function (order) {
+            $scope.orderShortcut = {
+                items: 0,
+                total: 0
+            };
+
             $scope.storeTopItems = [
                 {
                     _id: 1,
@@ -159,8 +164,6 @@
             };
 
             $scope.showOrderItem = function (item) {
-                //$scope.ons.navigator.pushPage('store-menu-order-item.html', {animation: 'fade'});
-
                 item.ingredients = [
                     {
                         _id: 3,
@@ -209,15 +212,13 @@
                 };
 
                 $scope.addToOrder = function (item) {
-
                     OrderFactory.saveItemToOrder(item);
 
 
                     $scope.orderModal.hide();
-
-                    //$scope.ons.navigator.popPage('store-menu-order-item.html', {animation: 'fade'});
                 };
             };
+
         });
 
         $scope.$apply();
