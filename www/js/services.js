@@ -177,6 +177,7 @@
 
         self.init = function () {
             //Use self.db = window.sqlitePlugin.openDatabase({name: DB_CONFIG.name}); in production
+            //self.db = window.sqlitePlugin.openDatabase({name: DB_CONFIG.name});
             self.db = window.openDatabase(DB_CONFIG.name, '1.0', 'database', -1);
 
             angular.forEach(DB_CONFIG.tables, function (table) {
@@ -202,6 +203,8 @@
             var deferred = $q.defer();
 
             self.db.transaction(function (transaction) {
+                //console.log(transaction);
+
                 transaction.executeSql(query, bindings, function (transaction, result) {
                     deferred.resolve(result);
                 }, function (transaction, error) {
@@ -331,9 +334,6 @@
         };
 
         self.saveItem = function (item) {
-
-            angular.forEach()
-
 
         };
 
