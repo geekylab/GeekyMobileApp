@@ -74,6 +74,12 @@
     });
 
     controllersModule.controller('StoreMenuController', function ($scope, Data, Store, Model, OrderFactory) {
+        //MenuFactory.getStorMenu(storeId).then(function(menuItems){
+
+        $scope.showFood = false;
+        $scope.showDrinks = false;
+        $scope.showTopItems = true;
+
         OrderFactory.getActiveOrder().then(function (order) {
             $scope.storeTopItems = [
                 {

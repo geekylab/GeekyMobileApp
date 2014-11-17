@@ -1,0 +1,47 @@
+<ons-list>
+    <ons-list-header>
+        <ons-icon icon="ion-beer"></ons-icon>
+        To Drink!
+    </ons-list-header>
+    <ons-list-item
+            class="list-item-container menu-list-item"
+            ng-repeat="item in storeTopItems | orderBy:'-price'"
+            ng-click="showItemDetail(item._id)">
+        <ons-row align="center">
+            <ons-col width="95px">
+                <img ng-src="{{'images/' + item.image}}" class="thumbnail">
+            </ons-col>
+            <ons-col align="top">
+                <div class="name" align="left">
+                    {{item.name}}
+                </div>
+                <div class="desc" align="left">
+                    {{item.desc}}
+                </div>
+                <div class="desc" align="bottom">
+                    <div class="feature feature-inactive">
+                        <ons-row align="center">
+                            <ons-icon ng-if="item.serve > 2" icon="ion-android-friends"
+                                      style="font-size: 15px;">
+                            </ons-icon>
+
+                            <ons-icon ng-if="item.serve == 2" icon="ion-android-contacts"
+                                      style="font-size: 14px;"></ons-icon>
+
+                            <ons-icon ng-if="item.serve == 1" icon="ion-android-contact"
+                                      style="font-size: 11px;">
+                            </ons-icon>
+
+                            <b>&nbsp;{{item.serve}}</b>
+                        </ons-row>
+                    </div>
+                </div>
+            </ons-col>
+            <ons-col width="80px">
+                <ons-button modifier="large" ng-click="showOrderItem(item)">
+                    {{item.price | currency}}
+                </ons-button>
+            </ons-col>
+        </ons-row>
+    </ons-list-item>
+</ons-list>
