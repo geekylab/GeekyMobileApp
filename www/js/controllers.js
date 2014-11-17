@@ -1,54 +1,6 @@
 (function () {
     var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
 
-    controllersModule.controller('LoginController', function ($scope, $http, MyUser) {
-        $scope.loadingFlg = false;
-        $scope.isLoggedIn = false;
-        $scope.user = MyUser.user();
-
-        if ($scope.user) {
-            MyUser.isLogin()
-                .then(function (isLoggedIn) {
-                    $scope.isLoggedIn = isLoggedIn;
-                }, function (err) {
-                    //error
-                    console.log(err);
-                }, function () {
-                    $scope.loadingFlg = true;
-                    $scope.modal.show();
-                }).finally(function () {
-                    $scope.loadingFlg = false;
-                    $scope.modal.hide();
-                });
-        }
-
-        $scope.doLogin = function () {
-            MyUser.login()
-                .then(function (response) {
-                    $scope.isLoggedIn = true;
-                    $scope.user = response;
-                }, function (err) {
-                    $scope.isLoggedIn = false;
-                    console.log(err);
-                }, function () {
-                    $scope.loadingFlg = true;
-                    $scope.modal.show();
-                }).finally(function () {
-                    $scope.loadingFlg = false;
-                    $scope.modal.hide();
-                });
-        };
-
-        $scope.doLogout = function () {
-            MyUser.logout()
-                .then(function (response) {
-                    $scope.isLoggedIn = false;
-                }, function () {
-                    alert('error');
-                });
-        };
-    });
-
     controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB, OrderFactory) {
         $scope.buttonText = 'Adicionar Item';
         $scope.items = [];
@@ -122,12 +74,7 @@
     });
 
     controllersModule.controller('StoreMenuController', function ($scope, Data, Store, Model, OrderFactory) {
-        OrderFactory.getOrder().then(function (order) {
-            $scope.orderShortcut = {
-                items: 0,
-                total: 0
-            };
-
+        OrderFactory.getActiveOrder().then(function (order) {
             $scope.storeTopItems = [
                 {
                     _id: 1,
@@ -219,8 +166,6 @@
 
                 $scope.addToOrder = function (item) {
                     OrderFactory.saveOrderItem(item);
-
-
                     $scope.orderModal.hide();
                 };
             };
@@ -230,54 +175,10 @@
         $scope.$apply();
     });
 
-    controllersModule.controller('OrderController', function ($scope, Data, DB, Model, ORDER_STATUSES) {
-        $scope.storeInfo = Data.getData('storeInfo');
-
-        $scope.orderedItem.ingredients = [
-            {
-                _id: 3,
-                can_remove: false,
-                name: 'Arroz'
-            },
-            {
-                _id: 4,
-                can_remove: false,
-                name: 'Feijão preto'
-            },
-            {
-                _id: 5,
-                can_remove: true,
-                name: 'Cebola'
-            },
-            {
-                _id: 6,
-                can_remove: true,
-                name: 'Carnes'
-            },
-            {
-                _id: 7,
-                name: 'Farofa'
-            },
-            {
-                _id: 8,
-                name: 'Laranja'
-            }
-        ];
-
-        $scope.orderedItem.quant = 1;
-        $scope.addQuant = function () {
-            $scope.orderedItem.quant++;
-        };
-        $scope.removeQuant = function () {
-            if ($scope.orderedItem.quant > 1) {
-                $scope.orderedItem.quant--;
-            }
-        };
-
-        $scope.dbOrder = {};
-        $scope.order = [];
-
-        $scope.$apply();
+    controllersModule.controller('OrderController', function ($scope, Data, OrderFactory) {
+        OrderFactory.getOrderSimpleData().then(function (data) {
+            $scope.orderShortcut = data;
+        });
     });
 
     controllersModule.controller('SearchResultsController', function ($scope, SearchService, UserSettings, Data) {
@@ -351,7 +252,7 @@
                     SearchService.setResult(result);
                     $scope.ons.navigator.pushPage('search-results.html');
                 }).error(function () {
-                    alert('error');
+                    alert('error search stores');
                 });
 
 //        $scope.ons.navigator.pushPage('search-results.html');

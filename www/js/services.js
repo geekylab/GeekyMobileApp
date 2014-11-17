@@ -250,6 +250,13 @@
                 });
         };
 
+        self.whereAll = function (tableName, where) {
+            return DB.query('SELECT * FROM ' + tableName + ' WHERE ' + where)
+                .then(function (result) {
+                    return DB.fetchAll(result);
+                });
+        };
+
         self.getById = function (tableName, id) {
             return DB.query('SELECT * FROM ' + tableName + ' WHERE id = ?', [id])
                 .then(function (result) {
@@ -274,32 +281,11 @@
         return self;
     });
 
-    servicesModule.service('DateFormatter', function () {
-        var self = this;
-
-        self.UTC = function () {
-            var d = new Date();
-            var dObj = {
-                year: d.getUTCFullYear(),
-                month: d.getUTCMonth(),
-                day: d.getUTCDay(),
-                hour: d.getUTCHours() - (d.getTimezoneOffset() / 60),
-                minute: d.getUTCMinutes(),
-                second: d.getUTCSeconds()
-            };
-            var date = dObj.year + '-' + dObj.month + '-' + dObj.day + ' ' + dObj.hour + ':' + dObj.minute + ':' + dObj.second;
-
-            return date;
-        };
-
-        return self;
-    });
-
     servicesModule.factory('OrderFactory', function (Model, DB, ORDER_STATUSES, $q) {
         var self = this;
-        var deferred = $q.defer();
 
-        self.getOrder = function () {
+        self.getActiveOrder = function () {
+            var deferred = $q.defer();
             var where = ' status = ' + ORDER_STATUSES.open;
             Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
                 //Model.where('orders', where).then(function (order) {
@@ -323,7 +309,30 @@
             return deferred.promise;
         };
 
+        self.getOrdersByStatus = function(status) {
+            var deferred = $q.defer();
+            var where = ' status = ' + status;
+            Model.whereAll('orders', where).then(function (orders) {
+                if (orders.length > 0) {
+                    deferred.resolve(orders);
+                }
+            });
+
+            return deferred.promise;
+        };
+
+        self.getOrderItems = function (orderId) {
+            var deferred = $q.defer();
+            var where = ' order_id = ' + orderId;
+            Model.whereAll('order_items', where).then(function (items) {
+                deferred.resolve(items);
+            });
+
+            return deferred.promise;
+        };
+
         self.saveOrderItem = function (item) {
+            var deferred = $q.defer();
             console.log('BEGIN saveItemToOrder');
             console.log('---------------------');
 
@@ -339,10 +348,7 @@
             insertItemQuery += item.total + '); ';
 
             DB.query(insertItemQuery).then(function (result) {
-                self.saveIngredients(result.insertId, item.ingredients).then(function () {
-
-
-                });
+                self.saveIngredients(result.insertId, item.ingredients);
             });
 
             console.log('---------------------');
@@ -350,14 +356,60 @@
         };
 
         self.saveIngredients = function (orderItemId, ingredients) {
+            var deferred = $q.defer();
             var insertItemIngredientQuery = '';
-            angular.forEach(ingredients, function (key, ingredient) {
-                insertItemIngredientQuery = 'INSERT INTO item_ingredients (order_item_id, use_flag) VALUES (';
-                insertItemIngredientQuery += ingredient.name + ',';
-                insertItemIngredientQuery += ingredient.use_flag + ');';
+            angular.forEach(ingredients, function (ingredient, key) {
+                var useFlag = ingredient.use_flag ? 1 : 0;
+
+                insertItemIngredientQuery = 'INSERT INTO item_ingredients (order_item_id, name, use_flag) VALUES (';
+                insertItemIngredientQuery += orderItemId + ',';
+                insertItemIngredientQuery += '"' + ingredient.name + '",';
+                insertItemIngredientQuery += useFlag + ');';
+
+                console.log(insertItemIngredientQuery);
 
                 DB.query(insertItemIngredientQuery);
             });
+        };
+
+        self.getOrderSimpleData = function () {
+            var deferred = $q.defer();
+            var response = {
+                items: 0,
+                total: 0
+            };
+            self.getActiveOrder().then(function (order) {
+                self.getOrderItems(order.id).then(function (items) {
+                    angular.forEach(items, function (item) {
+                        response.items += item.quantity;
+                        response.total += item.total;
+                    });
+                    deferred.resolve(response);
+                });
+            });
+
+            return deferred.promise;
+        };
+
+        return self;
+    });
+
+    servicesModule.service('DateFormatter', function () {
+        var self = this;
+
+        self.UTC = function () {
+            var d = new Date();
+            var dObj = {
+                year: d.getUTCFullYear(),
+                month: d.getUTCMonth(),
+                day: d.getUTCDay(),
+                hour: d.getUTCHours() - (d.getTimezoneOffset() / 60),
+                minute: d.getUTCMinutes(),
+                second: d.getUTCSeconds()
+            };
+            var date = dObj.year + '-' + dObj.month + '-' + dObj.day + ' ' + dObj.hour + ':' + dObj.minute + ':' + dObj.second;
+
+            return date;
         };
 
         return self;

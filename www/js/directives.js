@@ -16,7 +16,7 @@
                             var str = 'url(' + url + data[0].path + ')';
                             element.css('background-image', str);
                         }
-                        console.log(data);
+                        //console.log(data);
                     }
                 });
             }

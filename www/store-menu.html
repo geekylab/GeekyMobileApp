@@ -17,16 +17,18 @@
     </div>
 
     <!-- CART/HISTORY SHORTCUT -->
-    <ons-row class="cart-shortcut" align="center" ng-click="showCart()">
-        <ons-col>Items: {{cartShortcutInfo.totalItems}}</ons-col>
-        <ons-col>Total: {{cartShortcutInfo.totalOrder}}</ons-col>
-    </ons-row>
+    <div ng-controller="OrderController">
+        <ons-row class="cart-shortcut" align="center" ng-click="showCart()" ng-show="orderShortcut.items > 0">
+            <ons-col>Items: {{orderShortcut.items}}</ons-col>
+            <ons-col>Total: {{orderShortcut.total | currency}}</ons-col>
+        </ons-row>
+    </div>
     <!-- END CART/HISTORY SHORTCUT -->
 
     <!-- FILTER BUTTONS -->
     <ons-row>
         <ons-col class="padding-10">
-            <ons-button modifier="large" class="padding-10">
+            <ons-button modifier="large" class="padding-10" ng-click="">
                 <ons-icon icon="ion-pizza" class="big-button-icon"></ons-icon>
                 <br>
                 Food
@@ -43,15 +45,19 @@
     <!-- END FILTER BUTTONS -->
 
     <!-- FOOD LIST -->
+
+
+
+    <!-- TOP DISHES -->
     <ons-list>
         <ons-list-header>Top Dishes</ons-list-header>
         <ons-list-item
                 class="list-item-container menu-list-item"
-                ng-repeat="item in storeTopItems"
+                ng-repeat="item in storeTopItems | orderBy:'-price'"
                 ng-click="showItemDetail(item._id)">
             <ons-row align="center">
                 <ons-col width="95px">
-                    <img src="images/{{item.image}}" class="thumbnail">
+                    <img ng-src="{{'images/' + item.image}}" class="thumbnail">
                 </ons-col>
                 <ons-col align="top">
                     <div class="name" align="left">
@@ -87,12 +93,13 @@
             </ons-row>
         </ons-list-item>
     </ons-list>
+    <!-- /TOP DISHES -->
+
     <!-- END FOOD LIST -->
 
     <!-- ORDER ITEM MODAL -->
-    <!--<div ng-controller="OrderController">-->
     <ons-modal var="orderModal" class="order-page" align="top">
-        <form>
+        <form name="orderItemForm">
             <ons-toolbar>
                 <div class="center">
                     <ons-button modifier="light" ng-click="orderModal.hide()">
@@ -139,6 +146,7 @@
                 <h3>{{orderedItem.name}}</h3>
 
                 <p>
+                    {{orderedItem.desc}}
                     A feijoada do johna é feita com muito amor e carinho pelos melhores chefs de nosso
                     restaurante.
                     Todos os clientes, sem exceção, adoram a feijoada do Johna!
@@ -165,6 +173,5 @@
 
         </form>
     </ons-modal>
-    <!--</div>-->
     <!-- END ORDER ITEM MODAL -->
 </ons-page>

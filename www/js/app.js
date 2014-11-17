@@ -95,7 +95,7 @@
                 .then(function (response) {
                     $scope.isLoggedIn = false;
                 }, function () {
-                    alert('error');
+                    alert('error logout');
                 });
         };
 
