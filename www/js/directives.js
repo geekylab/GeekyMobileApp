@@ -56,21 +56,20 @@
         return {
             restrict: 'E',
             templateUrl: 'template-includes/store-menu-food.html'
-            //templateUrl: "../template-includes/store-menu-food.html"
         };
     });
 
     directivesModule.directive('menuDrinks', function() {
         return {
             restrict: 'E',
-            templateUrl: "../template-includes/store-menu-drinks.html"
+            templateUrl: "template-includes/store-menu-drinks.html"
         };
     });
 
     directivesModule.directive('menuTopItems', function() {
         return {
             restrict: 'E',
-            templateUrl: "../template-includes/store-menu-top-items.html"
+            templateUrl: "template-includes/store-menu-top-items.html"
         };
     });
 

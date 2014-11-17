@@ -12,3 +12,13 @@
 .menu-list-item {
     padding: 10px !important;
 }
+
+menu-drinks.ng-hide-add.ng-hide-add-active,
+menu-drinks.ng-hide-remove.ng-hide-remove-active,
+menu-food.ng-hide-add.ng-hide-add-active,
+menu-food.ng-hide-remove.ng-hide-remove-active,
+menu-top-items.ng-hide-add.ng-hide-add-active,
+menu-top-items.ng-hide-remove.ng-hide-remove-active {
+    -webkit-transition: all linear 0.5s;
+    transition: all linear 0.5s;
+}
