@@ -19,6 +19,7 @@ angular.module('geekyMenuMobile.config', [])
                     {name: 'item_id', type: 'integer'},
                     {name: 'order_id', type: 'integer'},
                     {name: 'name', type: 'text'},
+                    {name: 'image', type: 'text'},
                     {name: 'quantity', type: 'integer'},
                     {name: 'price', type: 'float'},
                     {name: 'total', type: 'float'}

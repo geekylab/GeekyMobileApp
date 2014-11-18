@@ -20,7 +20,7 @@
             ng-repeat="item in orderItems">
         <ons-row align="center">
             <ons-col width="95px">
-                <img ng-src="{{'../images/' + item.image}}" class="thumbnail">
+                <img ng-src="{{item.image}}" class="thumbnail">
             </ons-col>
             <ons-col align="top">
                 <div class="name" align="left">
@@ -40,10 +40,11 @@
 
     <ons-list-item class="list-item-container" align="center">
         {{order.total | currency}}
+        {{order}}
     </ons-list-item>
 
     <ons-list-item class="list-item-container no-padding no-border">
-        <ons-button modifier="large" class="flat">
+        <ons-button modifier="large--cta" class="flat">
             <ons-icon icon="ion-checkmark-round"></ons-icon>
         </ons-button>
     </ons-list-item>

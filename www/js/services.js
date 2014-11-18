@@ -309,7 +309,7 @@
             return deferred.promise;
         };
 
-        self.getOrdersByStatus = function(status) {
+        self.getOrdersByStatus = function (status) {
             var deferred = $q.defer();
             var where = ' status = ' + status;
             Model.whereAll('orders', where).then(function (orders) {
@@ -338,11 +338,12 @@
 
             item.total = item.price * item.quantity;
 
-            var insertItemQuery = 'INSERT INTO order_items (item_id, order_id, name, quantity, price, total) VALUES (';
+            var insertItemQuery = 'INSERT INTO order_items (item_id, order_id, name, image, quantity, price, total) VALUES (';
             //var insertItemQuery = 'INSERT INTO order_items VALUES (';
             insertItemQuery += item._id + ', ';
             insertItemQuery += item.order_id + ', ';
             insertItemQuery += '"' + item.name + '", ';
+            insertItemQuery += '"' + item.image + '", ';
             insertItemQuery += item.quantity + ', ';
             insertItemQuery += item.price + ', ';
             insertItemQuery += item.total + '); ';

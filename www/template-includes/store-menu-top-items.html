@@ -9,7 +9,7 @@
             ng-click="showItemDetail(item._id)">
         <ons-row align="center">
             <ons-col width="95px">
-                <img ng-src="{{'images/' + item.image}}" class="thumbnail">
+                <img ng-src="{{item.image}}" class="thumbnail">
             </ons-col>
             <ons-col align="top">
                 <div class="name" align="left">
@@ -38,7 +38,7 @@
                 </div>
             </ons-col>
             <ons-col width="80px">
-                <ons-button modifier="large" ng-click="showOrderItem(item)">
+                <ons-button modifier="large" class="success" ng-click="showOrderItem(item)">
                     {{item.price | currency}}
                 </ons-button>
             </ons-col>

@@ -88,7 +88,7 @@
                     name: 'Feijoada do Johna',
                     desc: 'Feijoada do Johna',
                     price: 25.00,
-                    image: 'feijoada_johna.jpg',
+                    image: 'http://localhost:8901/images/feijoada_johna.jpg',
                     serve: 4
                 },
                 {
@@ -97,7 +97,7 @@
                     name: 'Carbonara do Johna',
                     desc: 'Carbonara do Johna',
                     price: 30.00,
-                    image: 'carbonara_johna.jpg',
+                    image: 'http://localhost:8901/images/carbonara_johna.jpg',
                     serve: 2
                 },
                 {
@@ -106,7 +106,7 @@
                     name: 'Cerveja Kirin Ichiban',
                     desc: 'Cerveja Kirin Ichiban',
                     price: 10.00,
-                    image: 'cerveja_kirin.jpg',
+                    image: 'http://localhost:8901/images/cerveja_kirin.jpg',
                     serve: 1
                 }
             ];
