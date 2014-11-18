@@ -117,7 +117,7 @@
             };
 
             $scope.showOrderItem = function (item) {
-                $scope.orderModal.show();
+                $scope.orderItemModal.show();
 
                 $scope.orderedItem = item;
 
@@ -172,7 +172,7 @@
 
                 $scope.addToOrder = function (item) {
                     OrderFactory.saveOrderItem(item);
-                    $scope.orderModal.hide();
+                    $scope.orderItemModal.hide();
                 };
             };
 

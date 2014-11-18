@@ -80,5 +80,12 @@
         };
     });
 
+    directivesModule.directive('order', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'template-includes/store-menu-order.html'
+        };
+    });
+
 })
 ();
