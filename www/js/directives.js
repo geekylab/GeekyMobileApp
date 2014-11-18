@@ -1,5 +1,6 @@
 (function () {
-    var directivesModule = angular.module('geekyMenuMobile.directives', ['geekyMenuMobile.services', 'geekyMenuMobile.config']);
+    //var directivesModule = angular.module('geekyMenuMobile.directives', ['geekyMenuMobile.services', 'geekyMenuMobile.config']);
+    var directivesModule = angular.module('geekyMenuMobile.directives', ['geekyMenuMobile']);
 
     directivesModule.directive('geekyBackgroundImage', function (UserSettings) {
         return {
@@ -52,35 +53,35 @@
         };
     });
 
-    directivesModule.directive('menuFood', function() {
+    directivesModule.directive('menuFood', function () {
         return {
             restrict: 'E',
             templateUrl: 'template-includes/store-menu-food.html'
         };
     });
 
-    directivesModule.directive('menuDrinks', function() {
+    directivesModule.directive('menuDrinks', function () {
         return {
             restrict: 'E',
             templateUrl: "template-includes/store-menu-drinks.html"
         };
     });
 
-    directivesModule.directive('menuTopItems', function() {
+    directivesModule.directive('menuTopItems', function () {
         return {
             restrict: 'E',
             templateUrl: "template-includes/store-menu-top-items.html"
         };
     });
 
-    directivesModule.directive('menuItem', function() {
+    directivesModule.directive('menuItem', function () {
         return {
             restrict: 'E',
             templateUrl: 'template-includes/store-menu-order-item.html'
         };
     });
 
-    directivesModule.directive('order', function() {
+    directivesModule.directive('order', function () {
         return {
             restrict: 'E',
             templateUrl: 'template-includes/store-menu-order.html'

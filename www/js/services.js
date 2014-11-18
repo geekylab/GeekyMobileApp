@@ -1,5 +1,6 @@
 (function () {
-    var servicesModule = angular.module('geekyMenuMobile.services', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
+    //var servicesModule = angular.module('geekyMenuMobile.services', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
+    var servicesModule = angular.module('geekyMenuMobile.services', ['geekyMenuMobile']);
 
     servicesModule.factory('MyUser', function ($rootScope, $q, $http, $timeout, HOST_NAME) {
         var storeUserKey = 'currentUser';
@@ -202,6 +203,8 @@
             bindings = typeof bindings !== 'undefined' ? bindings : [];
             var deferred = $q.defer();
 
+            console.log(query);
+
             self.db.transaction(function (transaction) {
                 transaction.executeSql(query, bindings, function (transaction, result) {
                     deferred.resolve(result);
@@ -218,12 +221,23 @@
             for (var i = 0; i < result.rows.length; i++) {
                 output.push(result.rows.item(i));
             }
+
+            console.log('---------------------');
+            console.log('RESULT FETCH ALL');
+            console.log(output);
+            console.log('---------------------');
+
             return output;
         };
 
         self.fetch = function (result) {
+            console.log('---------------------');
+            console.log('RESULT FETCH');
+            console.log(result);
+            console.log('---------------------');
+
             var ret = {};
-            if (result.rows.item(0)) {
+            if (result.rowsAffected > 0) {
                 ret = result.rows.item(0);
             }
 
@@ -292,20 +306,46 @@
         var self = this;
 
         self.newOrder = function () {
-            var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
+            var deferred = $q.defer();
+            var query = 'INSERT INTO orders (items, total, status, date_opened) VALUES (0, 0, ' + ORDER_STATUSES.open + ', "' + new Date().valueOf() + '")';
             DB.query(query);
-            Model.where('orders', where).then(function (order) {
-                deferred.resolve(order);
-            });
+            //Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
+            deferred.resolve(Model.getByStatus('orders', ORDER_STATUSES.open));
+
+            return deferred.promise;
+            //});
         };
 
         self.getActiveOrder = function () {
+            //var deferred = $q.defer();
+            //Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
+            //
+            //    console.log('getActiveOrder');
+            //    console.log(order);
+            //    console.log('END getActiveOrder');
+            //
+            //    if (order.id > 0) {
+            //        deferred.resolve(order);
+            //    } else {
+            //        self.newOrder().then(function (order) {
+            //            deferred.resolve(order);
+            //        });
+            //    }
+            //});
+            //
+            //return deferred.promise;
+
             var deferred = $q.defer();
             Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
+                var where = ' status = ' + ORDER_STATUSES.open;
                 if (order.id > 0) {
                     deferred.resolve(order);
                 } else {
-                    self.newOrder();
+                    var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
+                    DB.query(query);
+                    Model.where('orders', where).then(function (order) {
+                        deferred.resolve = order;
+                    });
                 }
             });
 
@@ -351,7 +391,6 @@
             item.total = item.price * item.quantity;
 
             var insertItemQuery = 'INSERT INTO order_items (item_id, order_id, name, image, quantity, price, total) VALUES (';
-            //var insertItemQuery = 'INSERT INTO order_items VALUES (';
             insertItemQuery += item._id + ', ';
             insertItemQuery += item.order_id + ', ';
             insertItemQuery += '"' + item.name + '", ';
@@ -429,14 +468,14 @@
                 total: 0
             };
 
-            self.getActiveOrder().then(function (order) {
-
-
-                self.getClosedOrders().then(function (orders) {
-
-                    console.log(orders);
-                });
-            });
+            //self.getActiveOrder().then(function (order) {
+            //
+            //
+            //    self.getClosedOrders().then(function (orders) {
+            //
+            //        console.log(orders);
+            //    });
+            //});
 
             return deferred.promise;
         };

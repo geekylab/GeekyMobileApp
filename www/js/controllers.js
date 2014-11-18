@@ -1,5 +1,6 @@
 (function () {
-    var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
+    //var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
+    var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile']);
 
     controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB, OrderFactory) {
         $scope.buttonText = 'Adicionar Item';
@@ -25,7 +26,7 @@
         });
 
         var where = ' status = 1';
-        Model.where('orders', where).then(function (order) {
+        Model.getByStatus('orders', 1).then(function (order) {
             $scope.orderStatus = order;
         });
 
@@ -74,13 +75,16 @@
     });
 
     controllersModule.controller('StoreMenuController', function ($scope, Data, Store, Model, OrderFactory) {
-        //MenuFactory.getStorMenu(storeId).then(function(menuItems){
-
         $scope.showFood = false;
         $scope.showDrinks = false;
         $scope.showTopItems = true;
 
         OrderFactory.getActiveOrder().then(function (order) {
+
+            console.log('StoreMenuController - order');
+            console.log(order);
+            console.log('//StoreMenuController - order');
+
             $scope.storeTopItems = [
                 {
                     _id: 1,
@@ -183,6 +187,11 @@
 
     controllersModule.controller('OrderController', function ($scope, Data, OrderFactory) {
         OrderFactory.getActiveOrder().then(function (order) {
+
+            console.log('OrderController - order');
+            console.log(order);
+            console.log('//OrderController - order');
+
             $scope.order = order;
 
             OrderFactory.getOrderItems(order.id).then(function (orderItems) {
