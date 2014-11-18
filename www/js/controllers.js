@@ -182,6 +182,18 @@
     });
 
     controllersModule.controller('OrderController', function ($scope, Data, OrderFactory) {
+        OrderFactory.getActiveOrder().then(function (order) {
+            $scope.order = order;
+
+            OrderFactory.getOrderItems(order.id).then(function (orderItems) {
+                $scope.orderItems = orderItems;
+
+                $scope.showOrder = function () {
+                    $scope.orderModal.show();
+                };
+            });
+        });
+
         OrderFactory.getOrderSimpleData().then(function (data) {
             $scope.orderShortcut = data;
         });
