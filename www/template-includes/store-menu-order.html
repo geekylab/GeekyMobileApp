@@ -10,32 +10,42 @@
     </div>
 </ons-toolbar>
 
-<ons-row>
-    <ons-list>
-        <ons-list-header>{{order.date_opened | date:'yyyy-mm-dd -  HH:mm:ss'}}</ons-list-header>
+<ons-list>
+    <ons-list-header class="">
+        {{order.date_opened | date:'yyyy-mm-dd - HH:mm:ss'}}
+    </ons-list-header>
 
-        <ons-list-item
-                class="list-item-container menu-list-item"
-                ng-repeat="item in orderItems">
-            <ons-row align="center">
-                <ons-col width="95px">
-                    <img ng-src="{{'images/' + item.image}}" class="thumbnail">
-                </ons-col>
-                <ons-col align="top">
-                    <div class="name" align="left">
-                        {{item.name}}
-                    </div>
-                    <div class="desc" align="left">
-                        {{item.quantity}} x {{item.price | currency}}
-                    </div>
-                </ons-col>
-                <ons-col width="80px">
-                    <ons-button modifier="large" ng-click="showOrderItem(item)">
-                        {{item.price | currency}}
-                    </ons-button>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
+    <ons-list-item
+            class="list-item-container menu-list-item"
+            ng-repeat="item in orderItems">
+        <ons-row align="center">
+            <ons-col width="95px">
+                <img ng-src="{{'../images/' + item.image}}" class="thumbnail">
+            </ons-col>
+            <ons-col align="top">
+                <div class="name" align="left">
+                    {{item.name}}
+                </div>
+                <div class="desc" align="left">
+                    {{item.quantity}} x {{item.price | currency}}
+                </div>
+            </ons-col>
+            <ons-col width="50px" align="center">
+                <ons-button modifier="large" class="remove-button" ng-click="removeFromOrder(item)">
+                    <ons-icon icon="ion-close-round"></ons-icon>
+                </ons-button>
+            </ons-col>
+        </ons-row>
+    </ons-list-item>
 
-    </ons-list>
-</ons-row>
+    <ons-list-item class="list-item-container" align="center">
+        {{order.total | currency}}
+    </ons-list-item>
+
+    <ons-list-item class="list-item-container no-padding no-border">
+        <ons-button modifier="large" class="flat">
+            <ons-icon icon="ion-checkmark-round"></ons-icon>
+        </ons-button>
+    </ons-list-item>
+
+</ons-list>
