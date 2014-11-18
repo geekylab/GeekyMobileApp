@@ -26,25 +26,7 @@
                         {{item.name}}
                     </div>
                     <div class="desc" align="left">
-                        {{item.desc}}
-                    </div>
-                    <div class="desc" align="bottom">
-                        <div class="feature feature-inactive">
-                            <ons-row align="center">
-                                <ons-icon ng-if="item.serve > 2" icon="ion-android-friends"
-                                          style="font-size: 15px;">
-                                </ons-icon>
-
-                                <ons-icon ng-if="item.serve == 2" icon="ion-android-contacts"
-                                          style="font-size: 14px;"></ons-icon>
-
-                                <ons-icon ng-if="item.serve == 1" icon="ion-android-contact"
-                                          style="font-size: 11px;">
-                                </ons-icon>
-
-                                <b>&nbsp;{{item.serve}}</b>
-                            </ons-row>
-                        </div>
+                        {{item.quantity}} x {{item.price | currency}}
                     </div>
                 </ons-col>
                 <ons-col width="80px">
