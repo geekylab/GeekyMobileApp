@@ -271,6 +271,13 @@
                 });
         };
 
+        self.getAllByStatus = function (tableName, status) {
+            return DB.query('SELECT * FROM ' + tableName + ' WHERE status = ?', [status])
+                .then(function (result) {
+                    return DB.fetch(result);
+                });
+        };
+
         self.query = function (query) {
             return DB.query(query)
                 .then(function (result) {
@@ -284,26 +291,31 @@
     servicesModule.factory('OrderFactory', function (Model, DB, ORDER_STATUSES, $q) {
         var self = this;
 
+        self.newOrder = function () {
+            var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
+            DB.query(query);
+            Model.where('orders', where).then(function (order) {
+                deferred.resolve(order);
+            });
+        };
+
         self.getActiveOrder = function () {
             var deferred = $q.defer();
-            var where = ' status = ' + ORDER_STATUSES.open;
             Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
-                //Model.where('orders', where).then(function (order) {
-                //Model.all('orders').then(function (order) {
-                //Model.query(query).then(function (order) {
-                //console.log('===================');
-                //console.log('GetOrder: ');
-                //console.log(order);
-                //console.log('===================');
                 if (order.id > 0) {
                     deferred.resolve(order);
                 } else {
-                    var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
-                    DB.query(query);
-                    Model.where('orders', where).then(function (order) {
-                        deferred.resolve(order);
-                    });
+                    self.newOrder();
                 }
+            });
+
+            return deferred.promise;
+        };
+
+        self.getOpenedOrders = function () {
+            var deferred = $q.defer();
+            Model.getAllByStatus('orders', ORDER_STATUSES.closed).then(function (orders) {
+                deferred.resolve(orders);
             });
 
             return deferred.promise;
@@ -373,7 +385,7 @@
             });
         };
 
-        self.getOrderSimpleData = function () {
+        self.getOrderTotals = function (orderId) {
             var deferred = $q.defer();
             var response = {
                 items: 0,
