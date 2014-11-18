@@ -6,7 +6,7 @@
     app.value('ORDER_STATUSES', {
         open: 1,
         closed: 2,
-        finished: 3
+        completed: 3
     });
 
     if (window.cordova) {

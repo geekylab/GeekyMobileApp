@@ -385,13 +385,18 @@
             });
         };
 
+        self.setOrderTotals = function (orderId, totalsArray) {
+            var query = 'INSERT INTO orders (items, total) VALUES (' + totalsArray.items + ', ' + totalsArray.total + ')'
+            DB.query(query);
+        };
+
         self.getOrderTotals = function (orderId) {
             var deferred = $q.defer();
             var response = {
                 items: 0,
                 total: 0
             };
-            self.getActiveOrder().then(function (order) {
+            Model.getById('orders', orderId).then(function (order) {
                 self.getOrderItems(order.id).then(function (items) {
                     angular.forEach(items, function (item) {
                         response.items += item.quantity;
