@@ -73,5 +73,12 @@
         };
     });
 
+    directivesModule.directive('menuItem', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'template-includes/store-menu-order-item.html'
+        };
+    });
+
 })
 ();
