@@ -364,6 +364,14 @@
                 self.saveIngredients(result.insertId, item.ingredients);
             });
 
+            self.getOrderTotals(item.order_id).then(function (totals) {
+                var orderTotals = totals;
+                orderTotals.items += item.quantity;
+                orderTotals.total += item.total;
+
+                self.setOrderTotals(item.order_id, orderTotals);
+            });
+
             console.log('---------------------');
             console.log('END saveItemToOrder');
         };
@@ -385,8 +393,8 @@
             });
         };
 
-        self.setOrderTotals = function (orderId, totalsArray) {
-            var query = 'INSERT INTO orders (items, total) VALUES (' + totalsArray.items + ', ' + totalsArray.total + ')'
+        self.setOrderTotals = function (orderId, totalsObj) {
+            var query = 'INSERT INTO orders (items, total) VALUES (' + totalsObj.items + ', ' + totalsObj.total + ')'
             DB.query(query);
         };
 
@@ -397,13 +405,18 @@
                 total: 0
             };
             Model.getById('orders', orderId).then(function (order) {
-                self.getOrderItems(order.id).then(function (items) {
-                    angular.forEach(items, function (item) {
-                        response.items += item.quantity;
-                        response.total += item.total;
-                    });
-                    deferred.resolve(response);
-                });
+                response.items = order.items;
+                response.total = order.total;
+
+                deferred.resolve(response);
+
+                //self.getOrderItems(order.id).then(function (items) {
+                //    angular.forEach(items, function (item) {
+                //        response.items += item.quantity;
+                //        response.total += item.total;
+                //    });
+                //    deferred.resolve(response);
+                //});
             });
 
             return deferred.promise;
@@ -411,16 +424,17 @@
 
         self.getTableTotals = function () {
             var deferred = $q.defer();
-            var orders = {};
-            var order = {};
+            var tableTotals = {
+                items: 0,
+                total: 0
+            };
 
-            self.getClosedOrders().then(function (orders) {
-                self.getActiveOrder().then(function (order) {
-                    var allOrders = orders.push(order);
+            self.getActiveOrder().then(function (order) {
 
-                    console.log(allOrders);
 
-                    deferred.resolve(allOrders);
+                self.getClosedOrders().then(function (orders) {
+
+                    console.log(orders);
                 });
             });
 
