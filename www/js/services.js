@@ -312,7 +312,7 @@
             return deferred.promise;
         };
 
-        self.getOpenedOrders = function () {
+        self.getClosedOrders = function () {
             var deferred = $q.defer();
             Model.getAllByStatus('orders', ORDER_STATUSES.closed).then(function (orders) {
                 deferred.resolve(orders);
@@ -403,6 +403,24 @@
                         response.total += item.total;
                     });
                     deferred.resolve(response);
+                });
+            });
+
+            return deferred.promise;
+        };
+
+        self.getTableTotals = function () {
+            var deferred = $q.defer();
+            var orders = {};
+            var order = {};
+
+            self.getClosedOrders().then(function (orders) {
+                self.getActiveOrder().then(function (order) {
+                    var allOrders = orders.push(order);
+
+                    console.log(allOrders);
+
+                    deferred.resolve(allOrders);
                 });
             });
 

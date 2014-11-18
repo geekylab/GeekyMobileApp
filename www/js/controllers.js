@@ -194,7 +194,7 @@
             });
         });
 
-        OrderFactory.getOrderTotals().then(function (data) {
+        OrderFactory.getTableTotals().then(function (data) {
             $scope.orderShortcut = data;
         });
     });
