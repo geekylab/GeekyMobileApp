@@ -1,73 +1,70 @@
-<form name="orderItemForm">
-    <ons-toolbar>
-        <div class="center">
-            <ons-button modifier="light" ng-click="orderModal.hide()">
-                <ons-icon icon="ion-close-round"></ons-icon>
-            </ons-button>
-        </div>
-    </ons-toolbar>
+<ons-toolbar>
+    <div class="center">
+        <ons-button modifier="light" ng-click="orderModal.hide()">
+            <ons-icon icon="ion-close-round"></ons-icon>
+        </ons-button>
+    </div>
+</ons-toolbar>
 
-    <!-- PRICE CONTAINER -->
-    <ons-row class="modal-row-container order-item-total" align="center">
-        <ons-col>
-            <i class="ion-social-usd"></i>
-            {{orderedItem.price * orderedItem.quantity}}
-        </ons-col>
-    </ons-row>
-    <!-- END PRICE CONTAINER -->
+<!-- PRICE CONTAINER -->
+<ons-row class="modal-row-container order-item-total" align="center">
+    <ons-col>
+        <i class="ion-social-usd"></i>
+        {{orderedItem.price * orderedItem.quantity}}
+    </ons-col>
+</ons-row>
+<!-- END PRICE CONTAINER -->
 
-    <ons-row class="modal-row-container">
-        <ons-col width="15%">
-            <ons-button modifier="large" class="remove-quantity" ng-click="removeQuant()">
-                <ons-icon icon="ion-minus-round"></ons-icon>
-            </ons-button>
-        </ons-col>
-        <ons-col>
-            <input type="number" min="0" inputmode="numeric" pattern="[0,9]*" ng-model="orderedItem.quantity"
-                   class="text-input item-quantity" value="{{orderedItem.quantity}}">
-        </ons-col>
-        <ons-col width="15%">
-            <ons-button modifier="large" class="add-quantity" ng-click="addQuant()">
-                <ons-icon icon="ion-plus-round"></ons-icon>
-            </ons-button>
-        </ons-col>
+<ons-row class="modal-row-container">
+    <ons-col width="15%">
+        <ons-button modifier="large" class="remove-quantity" ng-click="removeQuant()">
+            <ons-icon icon="ion-minus-round"></ons-icon>
+        </ons-button>
+    </ons-col>
+    <ons-col>
+        <input type="number" min="0" inputmode="numeric" pattern="[0,9]*" ng-model="orderedItem.quantity"
+               class="text-input item-quantity" value="{{orderedItem.quantity}}">
+    </ons-col>
+    <ons-col width="15%">
+        <ons-button modifier="large" class="add-quantity" ng-click="addQuant()">
+            <ons-icon icon="ion-plus-round"></ons-icon>
+        </ons-button>
+    </ons-col>
 
-        <ons-col width="8%"></ons-col>
+    <ons-col width="8%"></ons-col>
 
-        <ons-col width="35%">
-            <ons-button modifier="large" class="order-button" ng-click="addToOrder(orderedItem)">
-                Order
-            </ons-button>
-        </ons-col>
-    </ons-row>
+    <ons-col width="35%">
+        <ons-button modifier="large" class="order-button" ng-click="addToOrder(orderedItem)">
+            Order
+        </ons-button>
+    </ons-col>
+</ons-row>
 
-    <ons-row class="item-description">
-        <h3>{{orderedItem.name}}</h3>
+<ons-row class="item-description">
+    <h3>{{orderedItem.name}}</h3>
 
-        <p>
-            {{orderedItem.desc}}
-            A feijoada do johna é feita com muito amor e carinho pelos melhores chefs de nosso
-            restaurante.
-            Todos os clientes, sem exceção, adoram a feijoada do Johna!
-            Experimente, cada porção serve 4 pessoas!
-        </p>
-        <ons-list class="light-list" ng-show="orderedItem.ingredients.length > 0">
-            <ons-list-header style="color: #FFF; font-weight: 600;">
-                Ingredients
-            </ons-list-header>
-            <ons-list-item modifier="tappable" ng-repeat="ingredient in orderedItem.ingredients">
-                <label class="checkbox checkbox--list-item">
-                    <input type="checkbox"
-                           ng-click="!ingredient.use_flag"
-                           ng-checked="ingredient.use_flag"
-                           ng-model="ingredient.use_flag"
-                           ng-disabled="!ingredient.can_remove">
+    <p>
+        {{orderedItem.desc}}
+        A feijoada do johna é feita com muito amor e carinho pelos melhores chefs de nosso
+        restaurante.
+        Todos os clientes, sem exceção, adoram a feijoada do Johna!
+        Experimente, cada porção serve 4 pessoas!
+    </p>
+    <ons-list class="light-list" ng-show="orderedItem.ingredients.length > 0">
+        <ons-list-header style="color: #FFF; font-weight: 600;">
+            Ingredients
+        </ons-list-header>
+        <ons-list-item modifier="tappable" ng-repeat="ingredient in orderedItem.ingredients">
+            <label class="checkbox checkbox--list-item">
+                <input type="checkbox"
+                       ng-click="!ingredient.use_flag"
+                       ng-checked="ingredient.use_flag"
+                       ng-model="ingredient.use_flag"
+                       ng-disabled="!ingredient.can_remove">
 
-                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
-                    &nbsp;{{ingredient.name}}
-                </label>
-            </ons-list-item>
-        </ons-list>
-    </ons-row>
-
-</form>
+                <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                &nbsp;{{ingredient.name}}
+            </label>
+        </ons-list-item>
+    </ons-list>
+</ons-row>
