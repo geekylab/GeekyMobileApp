@@ -17,20 +17,7 @@
     </div>
 
     <!-- CART/HISTORY SHORTCUT -->
-    <div ng-controller="OrderController">
-        <ons-row class="cart-shortcut"
-                 align="center"
-                 ng-click="showOrder()"
-                 ng-show="orderShortcut.items > 0">
-
-            <ons-col>
-                Items: {{orderShortcut.items}}
-            </ons-col>
-            <ons-col>
-                Total: {{orderShortcut.total | currency}}
-            </ons-col>
-        </ons-row>
-    </div>
+    <cart-shortcut></cart-shortcut>
     <!-- END CART/HISTORY SHORTCUT -->
 
     <!-- FILTER BUTTONS -->

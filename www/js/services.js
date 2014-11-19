@@ -342,6 +342,8 @@
             //return deferred.promise;
 
             var deferred = $q.defer();
+
+            console.log('vai entrar no getActiveOrder Fetch');
             Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
                 var where = ' status = ' + ORDER_STATUSES.open;
                 if (order.id > 0) {
@@ -349,6 +351,8 @@
                 } else {
                     var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
                     DB.query(query);
+
+                    console.log('vai entrar no select depois do insert new order');
                     Model.where('orders', where).then(function (order) {
                         deferred.resolve = order;
                     });

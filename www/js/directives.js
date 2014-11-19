@@ -88,5 +88,15 @@
         };
     });
 
+    directivesModule.directive('cartShortcut', function () {
+        return {
+            restrict: 'E',
+            controller: function ($scope, DB, Model, OrderFactory) {
+
+            },
+            templateUrl: 'template-includes/store-menu-cart-shortcut.html'
+        };
+    });
+
 })
 ();
