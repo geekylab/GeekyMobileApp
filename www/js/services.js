@@ -178,7 +178,6 @@
 
         self.init = function () {
             //Use self.db = window.sqlitePlugin.openDatabase({name: DB_CONFIG.name}); in production
-            //self.db = window.sqlitePlugin.openDatabase({name: DB_CONFIG.name});
             self.db = window.openDatabase(DB_CONFIG.name, '1.0', 'database', -1);
 
             angular.forEach(DB_CONFIG.tables, function (table) {
@@ -191,6 +190,15 @@
                 var query = 'CREATE TABLE IF NOT EXISTS ' + table.name + ' (' + columns.join(',') + ')';
                 self.query(query);
 
+                //console.log('------------------');
+                //console.log('table');
+                //console.log(table);
+                //console.log('columns');
+                //console.log(columns);
+                //console.log('query');
+                //console.log(query);
+                //console.log('------------------');
+
                 //console.log('Table ' + table.name + ' initialized');
                 //var insertQuery = 'INSERT INTO items (name, quantity) VALUES ("Teste", 10)';
                 //self.query(insertQuery);
@@ -202,8 +210,6 @@
         self.query = function (query, bindings) {
             bindings = typeof bindings !== 'undefined' ? bindings : [];
             var deferred = $q.defer();
-
-            console.log(query);
 
             self.db.transaction(function (transaction) {
                 transaction.executeSql(query, bindings, function (transaction, result) {

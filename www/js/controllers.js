@@ -208,32 +208,6 @@
         });
     });
 
-    controllersModule.controller('SearchResultsController', function ($scope, SearchService, UserSettings, Data) {
-        $scope.searchResults = SearchService.getResult();
-        $scope.searchFilter = SearchService.getFilter();
-        $scope.userSettings = UserSettings;
-
-        $scope.getImageUrl = function (store) {
-            return $scope.userSettings.apiHostname + store.images[0].path;
-        };
-
-        $scope.getFeatureClass = function (feature, targetOpts) {
-            var idx = targetOpts.indexOf(feature);
-
-            return {
-                'feature-active': idx != -1,
-                'feature-inactive': idx == -1
-            }
-        };
-
-        $scope.showStoreDetails = function (storeId) {
-            Data.setData('storeId', storeId);
-            $scope.ons.navigator.pushPage('store.html#' + storeId);
-        };
-
-
-    });
-
     controllersModule.controller('SearchController', function ($scope, $http, SearchService, UserSettings, HOST_NAME) {
 
         $scope.isSearching = false;
@@ -300,4 +274,31 @@
         };
 
     });
+
+    controllersModule.controller('SearchResultsController', function ($scope, SearchService, UserSettings, Data) {
+        $scope.searchResults = SearchService.getResult();
+        $scope.searchFilter = SearchService.getFilter();
+        $scope.userSettings = UserSettings;
+
+        $scope.getImageUrl = function (store) {
+            return $scope.userSettings.apiHostname + store.images[0].path;
+        };
+
+        $scope.getFeatureClass = function (feature, targetOpts) {
+            var idx = targetOpts.indexOf(feature);
+
+            return {
+                'feature-active': idx != -1,
+                'feature-inactive': idx == -1
+            }
+        };
+
+        $scope.showStoreDetails = function (storeId) {
+            Data.setData('storeId', storeId);
+            $scope.ons.navigator.pushPage('store.html');
+        };
+
+
+    });
+
 })();
