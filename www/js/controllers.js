@@ -3,37 +3,36 @@
     var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile']);
 
     controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB, OrderFactory) {
-        //$scope.buttonText = 'Adicionar Item';
-        //$scope.items = [];
-        //$scope.item = null;
-        //$scope.order = null;
-        //$scope.orderStatus = null;
-        //
-        //Model.all('order_items').then(function (items) {
-        //    $scope.items = items;
-        //});
-        //
-        //Model.all('orders').then(function (orders) {
-        //    $scope.orders = orders;
-        //});
-        //
-        //Model.getById('order_items', 2).then(function (item) {
-        //    $scope.item = item;
-        //});
-        //
-        //Model.getById('orders', 1).then(function (order) {
-        //    $scope.order = order;
-        //});
-        //
-        //var where = ' status = 1';
-        //Model.getByStatus('orders', 1).then(function (order) {
-        //    $scope.orderStatus = order;
-        //});
-        //
-        //$scope.addItem = function () {
-        //    var insertQuery = 'INSERT INTO order_items (name, quantity, price) VALUES ("Teste", 10, 2.63)';
-        //    DB.query(insertQuery);
-        //};
+        $scope.buttonText = 'Adicionar Item';
+        $scope.items = [];
+        $scope.item = null;
+        $scope.order = null;
+        $scope.orderStatus = null;
+
+        Model.all('order_items').then(function (items) {
+            $scope.items = items;
+        });
+
+        Model.all('orders').then(function (orders) {
+            $scope.orders = orders;
+        });
+
+        Model.getById('order_items', 2).then(function (item) {
+            $scope.item = item;
+        });
+
+        Model.getById('orders', 1).then(function (order) {
+            $scope.order = order;
+        });
+
+        Model.getByStatus('orders', 1).then(function (order) {
+            $scope.orderStatus = order;
+        });
+
+        $scope.addItem = function () {
+            var insertQuery = 'INSERT INTO order_items (name, quantity, price) VALUES ("Teste", 10, 2.63)';
+            DB.query(insertQuery);
+        };
     });
 
 

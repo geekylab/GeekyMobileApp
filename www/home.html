@@ -34,66 +34,40 @@
         <ons-col>
             Quantity
         </ons-col>
-        <ons-col align="right">
+        <ons-col>
             Price
         </ons-col>
-        <ons-col align="right">
+        <ons-col>
             Total
         </ons-col>
     </ons-row>
 
     <br>
-    <ons-row align="center" ng-repeat="item in items">
-        <ons-col>
-            {{item.id}}
-        </ons-col>
-        <ons-col>
-            {{item.name}}
-        </ons-col>
-        <ons-col>
-            {{item.quantity}}
-        </ons-col>
-        <ons-col align="right">
-            {{item.price | currency}}
-        </ons-col>
-        <ons-col align="right">
-            {{item.price * item.quantity | currency}}
-        </ons-col>
-    </ons-row>
-
-    <hr>
-    <ons-row align="center">
-        <ons-col>
-            {{item.id}}
-        </ons-col>
-        <ons-col>
-            {{item.name}}
-        </ons-col>
-        <ons-col>
-            {{item.quantity}}
-        </ons-col>
-        <ons-col align="right">
-            {{item.value | currency}}
-        </ons-col>
-        <ons-col align="right">
-            {{item.value * item.quantity | currency}}
-        </ons-col>
-    </ons-row>
-
-    <hr>
-    <ons-row align="center">
-        <ons-col>
-            {{order.id}}
-        </ons-col>
-        <ons-col>
-            {{order.status}}
-        </ons-col>
-        <ons-col width="50%">
-            {{order.date_opened | date:'yyyy-MM-dd - HH:mm:ss'}}
-        </ons-col>
-    </ons-row>
+    <ons-list>
+        <ons-list-item ng-repeat="item in items">
+            <ons-row align="center">
+                <ons-col>
+                    {{item.id}}
+                </ons-col>
+                <ons-col>
+                    {{item.name}}
+                </ons-col>
+                <ons-col>
+                    {{item.quantity}}
+                </ons-col>
+                <ons-col align="right">
+                    {{item.price | currency}}
+                </ons-col>
+                <ons-col align="right">
+                    {{item.price * item.quantity | currency}}
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
 
     <br>
+
+    <h3 align="center">Order getByStatus</h3>
     <ons-row align="center">
         <ons-col>
             Order {{orderStatus.id}}

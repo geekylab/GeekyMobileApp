@@ -190,15 +190,6 @@
                 var query = 'CREATE TABLE IF NOT EXISTS ' + table.name + ' (' + columns.join(',') + ')';
                 self.query(query);
 
-                //console.log('------------------');
-                //console.log('table');
-                //console.log(table);
-                //console.log('columns');
-                //console.log(columns);
-                //console.log('query');
-                //console.log(query);
-                //console.log('------------------');
-
                 //console.log('Table ' + table.name + ' initialized');
                 //var insertQuery = 'INSERT INTO items (name, quantity) VALUES ("Teste", 10)';
                 //self.query(insertQuery);
@@ -228,22 +219,12 @@
                 output.push(result.rows.item(i));
             }
 
-            console.log('---------------------');
-            console.log('RESULT FETCH ALL');
-            console.log(output);
-            console.log('---------------------');
-
             return output;
         };
 
         self.fetch = function (result) {
-            console.log('---------------------');
-            console.log('RESULT FETCH');
-            console.log(result);
-            console.log('---------------------');
-
             var ret = {};
-            if (result.rowsAffected > 0) {
+            if (result.rows.length > 0) {
                 ret = result.rows.item(0);
             }
 
@@ -294,7 +275,7 @@
         self.getAllByStatus = function (tableName, status) {
             return DB.query('SELECT * FROM ' + tableName + ' WHERE status = ?', [status])
                 .then(function (result) {
-                    return DB.fetch(result);
+                    return DB.fetchAll(result);
                 });
         };
 
@@ -311,39 +292,8 @@
     servicesModule.factory('OrderFactory', function (Model, DB, ORDER_STATUSES, $q) {
         var self = this;
 
-        self.newOrder = function () {
-            var deferred = $q.defer();
-            var query = 'INSERT INTO orders (items, total, status, date_opened) VALUES (0, 0, ' + ORDER_STATUSES.open + ', "' + new Date().valueOf() + '")';
-            DB.query(query);
-            //Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
-            deferred.resolve(Model.getByStatus('orders', ORDER_STATUSES.open));
-
-            return deferred.promise;
-            //});
-        };
-
         self.getActiveOrder = function () {
-            //var deferred = $q.defer();
-            //Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
-            //
-            //    console.log('getActiveOrder');
-            //    console.log(order);
-            //    console.log('END getActiveOrder');
-            //
-            //    if (order.id > 0) {
-            //        deferred.resolve(order);
-            //    } else {
-            //        self.newOrder().then(function (order) {
-            //            deferred.resolve(order);
-            //        });
-            //    }
-            //});
-            //
-            //return deferred.promise;
-
             var deferred = $q.defer();
-
-            console.log('vai entrar no getActiveOrder Fetch');
             Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
                 var where = ' status = ' + ORDER_STATUSES.open;
                 if (order.id > 0) {
@@ -352,7 +302,6 @@
                     var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
                     DB.query(query);
 
-                    console.log('vai entrar no select depois do insert new order');
                     Model.where('orders', where).then(function (order) {
                         deferred.resolve(order);
                     });
