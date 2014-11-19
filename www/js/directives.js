@@ -91,7 +91,15 @@
     directivesModule.directive('cartShortcut', function () {
         return {
             restrict: 'E',
-            controller: function ($scope, DB, Model, OrderFactory) {
+            controller: function ($scope, $timeout, OrderFactory) {
+                $scope.cartInfo = {};
+
+                $timeout(
+                    OrderFactory.getTableTotals().then(function (cartInfo) {
+                        $scope.cartInfo = cartInfo;
+                    })
+                , 1000);
+
 
             },
             templateUrl: 'template-includes/store-menu-cart-shortcut.html'

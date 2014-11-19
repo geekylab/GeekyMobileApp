@@ -1,12 +1,12 @@
 <ons-row class="cart-shortcut"
          align="center"
          ng-click="showOrder()"
-         ng-show="orderShortcut.items > 0">
+         ng-show="cartInfo.items > 0">
 
     <ons-col>
-        Items: {{orderShortcut.items}}
+        Items: {{cartInfo.items}}
     </ons-col>
     <ons-col>
-        Total: {{orderShortcut.total | currency}}
+        Total: {{cartInfo.total | currency}}
     </ons-col>
 </ons-row>

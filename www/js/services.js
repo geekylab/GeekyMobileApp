@@ -344,9 +344,6 @@
 
         self.saveOrderItem = function (item) {
             var deferred = $q.defer();
-            console.log('BEGIN saveItemToOrder');
-            console.log('---------------------');
-
             item.total = item.price * item.quantity;
 
             var insertItemQuery = 'INSERT INTO order_items (item_id, order_id, name, image, quantity, price, total) VALUES (';
@@ -369,9 +366,6 @@
 
                 self.setOrderTotals(item.order_id, orderTotals);
             });
-
-            console.log('---------------------');
-            console.log('END saveItemToOrder');
         };
 
         self.saveIngredients = function (orderItemId, ingredients) {
@@ -392,7 +386,7 @@
         };
 
         self.setOrderTotals = function (orderId, totalsObj) {
-            var query = 'INSERT INTO orders (items, total) VALUES (' + totalsObj.items + ', ' + totalsObj.total + ')'
+            var query = 'UPDATE orders set items = ' + totalsObj.items + ', total = ' + totalsObj.total + ' WHERE id = ' + orderId + ';';
             DB.query(query);
         };
 
@@ -407,14 +401,6 @@
                 response.total = order.total;
 
                 deferred.resolve(response);
-
-                //self.getOrderItems(order.id).then(function (items) {
-                //    angular.forEach(items, function (item) {
-                //        response.items += item.quantity;
-                //        response.total += item.total;
-                //    });
-                //    deferred.resolve(response);
-                //});
             });
 
             return deferred.promise;
@@ -426,16 +412,26 @@
                 items: 0,
                 total: 0
             };
+            self.getActiveOrder().then(function (openOrder) {
+                var cartInfo = {
+                    items: openOrder.items,
+                    total: openOrder.total
+                };
 
-            //self.getActiveOrder().then(function (order) {
-            //
-            //
-            //    self.getClosedOrders().then(function (orders) {
-            //
-            //        console.log(orders);
-            //    });
-            //});
+                console.log(order);
+                self.getClosedOrders().then(function (closedOrders) {
+                    angular.forEach(closedOrders, function (closedOrder) {
 
+                        if (closedOrder.items > 0) {
+                            cartInfo.items += closedOrder.items
+                        }
+
+
+                    });
+
+                    console.log(orders);
+                });
+            });
             return deferred.promise;
         };
 
