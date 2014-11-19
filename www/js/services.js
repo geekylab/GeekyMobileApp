@@ -354,7 +354,7 @@
 
                     console.log('vai entrar no select depois do insert new order');
                     Model.where('orders', where).then(function (order) {
-                        deferred.resolve = order;
+                        deferred.resolve(order);
                     });
                 }
             });

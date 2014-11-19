@@ -234,8 +234,6 @@
     });
 
     controllersModule.controller('OrderController', function ($scope, Data, OrderFactory) {
-
-
         //var order = Data.getData('order');
         //
         //console.log('OrderController - order');
