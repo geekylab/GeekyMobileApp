@@ -408,28 +408,23 @@
 
         self.getTableTotals = function () {
             var deferred = $q.defer();
-            var tableTotals = {
+            var cartInfo = {
                 items: 0,
                 total: 0
             };
             self.getActiveOrder().then(function (openOrder) {
-                var cartInfo = {
-                    items: openOrder.items,
-                    total: openOrder.total
-                };
-
-                console.log(order);
+                if (openOrder.items > 0) {
+                    cartInfo.items += openOrder.items;
+                    cartInfo.total += openOrder.total;
+                }
                 self.getClosedOrders().then(function (closedOrders) {
                     angular.forEach(closedOrders, function (closedOrder) {
-
                         if (closedOrder.items > 0) {
-                            cartInfo.items += closedOrder.items
+                            cartInfo.items += closedOrder.items;
+                            cartInfo.total += closedOrder.total;
                         }
-
-
                     });
-
-                    console.log(orders);
+                    deferred.resolve(cartInfo);
                 });
             });
             return deferred.promise;

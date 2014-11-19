@@ -128,10 +128,6 @@
 
             Data.setData('order', order);
 
-            console.log('StoreMenuController - order');
-            console.log(order);
-            console.log('//StoreMenuController - order');
-
             $scope.storeTopItems = [
                 {
                     _id: 1,

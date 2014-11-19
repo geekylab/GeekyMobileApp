@@ -94,13 +94,10 @@
             controller: function ($scope, $timeout, OrderFactory) {
                 $scope.cartInfo = {};
 
-                $timeout(
-                    OrderFactory.getTableTotals().then(function (cartInfo) {
-                        $scope.cartInfo = cartInfo;
-                    })
-                , 1000);
-
-
+                OrderFactory.getTableTotals().then(function (cartInfo) {
+                    console.log(cartInfo);
+                    $scope.cartInfo = cartInfo;
+                });
             },
             templateUrl: 'template-includes/store-menu-cart-shortcut.html'
         };
