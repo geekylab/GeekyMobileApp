@@ -228,24 +228,10 @@
         //$scope.$apply();
     });
 
-    controllersModule.controller('OrderController', function ($scope, Data, OrderFactory) {
-        //var order = Data.getData('order');
-        //
-        //console.log('OrderController - order');
-        //console.log(order);
-        //console.log('//OrderController - order');
-        //
-        //$scope.order = order;
-        //OrderFactory.getOrderItems(order.id).then(function (orderItems) {
-        //    $scope.orderItems = orderItems;
-        //
-        //    $scope.showOrder = function () {
-        //        $scope.orderModal.show();
-        //    };
-        //});
-        //OrderFactory.getTableTotals().then(function (data) {
-        //    $scope.orderShortcut = data;
-        //});
+    controllersModule.controller('CartController', function ($scope, $http, OrderFactory) {
+        $scope.activeOrderItems = {};
+
+
     });
 
 })();

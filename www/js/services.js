@@ -342,6 +342,17 @@
             return deferred.promise;
         };
 
+        self.getItemIngredients = function (itemId) {
+            var deferred = $q.defer();
+            var where = ' order_item_id = ' + itemId;
+            Model.whereAll('item_ingredients', where).then(function (itemIngredients) {
+                deferred.resolve(itemIngredients);
+            });
+
+            return deferred.promise;
+        };
+
+
         self.saveOrderItem = function (item) {
             var deferred = $q.defer();
             item.total = item.price * item.quantity;
