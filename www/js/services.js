@@ -456,7 +456,11 @@
     servicesModule.factory('OpenApi', function ($http) {
         var self = this;
 
-        self.searchStores = function () {
+        self.searchStores = function (searchFilters) {
+
+        };
+
+        self.getStoreById = function (storeId) {
 
         };
 
