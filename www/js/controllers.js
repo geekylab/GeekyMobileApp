@@ -35,7 +35,7 @@
         };
     });
 
-    controllersModule.controller('SearchController', function ($scope, $http, SearchService, UserSettings, HOST_NAME) {
+    controllersModule.controller('SearchController', function ($scope, $http, OpenApi, SearchService, UserSettings, HOST_NAME) {
         $scope.isSearching = false;
         $scope.userSettings = UserSettings;
         $scope.searchFilter = {
@@ -46,15 +46,13 @@
 
         $scope.searchStores = function () {
             $scope.isSearching = true;
-            SearchService.setFilter($scope.searchFilter);
-            $http.post(HOST_NAME + '/open-api/store/search', $scope.searchFilter)
-                .success(function (result) {
-                    $scope.isSearching = false;
+            OpenApi.searchStores($scope.searchFilter)
+                .error(function (error) {
+                    alert(error);
+                })
+                .then(function (result) {
                     $scope.searchResults = result;
-                    SearchService.setResult(result);
                     $scope.searchNavigator.pushPage('search-results.html');
-                }).error(function () {
-                    alert('error search stores');
                 });
         };
 

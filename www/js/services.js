@@ -453,11 +453,23 @@
         return self;
     });
 
-    servicesModule.factory('OpenApi', function ($http) {
+    servicesModule.factory('OpenApi', function ($http, HOST_NAME) {
         var self = this;
 
         self.searchStores = function (searchFilters) {
+            var deferred = $q.defer();
 
+            SearchService.setFilter(searchFilters);
+            $http.post(HOST_NAME + '/open-api/store/search', $scope.searchFilter)
+                .success(function (result) {
+                    deferred.resolve(result);
+                    SearchService.setResult(result);
+                    $scope.searchNavigator.pushPage('search-results.html');
+                }).error(function () {
+                    deferred.reject('There was a problem. Try again later.');
+                });
+
+            return deferred.promise;
         };
 
         self.getStoreById = function (storeId) {
