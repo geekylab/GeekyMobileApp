@@ -35,7 +35,6 @@
         };
     });
 
-
     controllersModule.controller('SearchController', function ($scope, $http, SearchService, UserSettings, HOST_NAME) {
         $scope.isSearching = false;
         $scope.userSettings = UserSettings;
