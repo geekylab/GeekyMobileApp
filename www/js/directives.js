@@ -93,11 +93,13 @@
             restrict: 'E',
             controller: function ($scope, $timeout, OrderFactory) {
                 $scope.cartInfo = {};
-
                 OrderFactory.getTableTotals().then(function (cartInfo) {
-                    console.log(cartInfo);
                     $scope.cartInfo = cartInfo;
                 });
+
+                $scope.showOrder = function () {
+
+                };
             },
             templateUrl: 'template-includes/store-menu-cart-shortcut.html'
         };
