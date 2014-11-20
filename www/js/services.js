@@ -1,5 +1,4 @@
 (function () {
-    //var servicesModule = angular.module('geekyMenuMobile.services', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
     var servicesModule = angular.module('geekyMenuMobile.services', ['geekyMenuMobile']);
 
     servicesModule.factory('MyUser', function ($rootScope, $q, $http, $timeout, HOST_NAME) {
@@ -458,7 +457,6 @@
 
         self.searchStores = function (searchFilters) {
             var deferred = $q.defer();
-
             SearchService.setFilter(searchFilters);
             $http.post(HOST_NAME + '/open-api/store/search', searchFilters)
                 .success(function (result) {
@@ -474,8 +472,6 @@
         self.getStoreById = function (storeId) {
 
         };
-
-
     });
 
     servicesModule.service('DateFormatter', function () {
@@ -498,5 +494,4 @@
 
         return self;
     });
-
 })();
