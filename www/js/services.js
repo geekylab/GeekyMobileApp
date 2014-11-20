@@ -292,17 +292,27 @@
     servicesModule.factory('OrderFactory', function (Model, DB, ORDER_STATUSES, $q) {
         var self = this;
 
+        self.createOrder = function () {
+            var deferred = $q.defer();
+            var where = ' status = ' + ORDER_STATUSES.open;
+            var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
+
+            DB.query(query).then(function (result) {
+                OrderFactory.getById('orders', result.insertId).then(function (order) {
+                    deferred.resolve(order);
+                });
+            });
+
+            return deferred.promise;
+        };
+
         self.getActiveOrder = function () {
             var deferred = $q.defer();
             Model.getByStatus('orders', ORDER_STATUSES.open).then(function (order) {
-                var where = ' status = ' + ORDER_STATUSES.open;
                 if (order.id > 0) {
                     deferred.resolve(order);
                 } else {
-                    var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
-                    DB.query(query);
-
-                    Model.where('orders', where).then(function (order) {
+                    self.createOrder().then(function (order) {
                         deferred.resolve(order);
                     });
                 }
@@ -442,6 +452,16 @@
         };
 
         return self;
+    });
+
+    servicesModule.factory('OpenApi', function ($http) {
+        var self = this;
+
+        self.searchStores = function () {
+
+        };
+
+
     });
 
     servicesModule.service('DateFormatter', function () {
