@@ -289,7 +289,7 @@
         return self;
     });
 
-    servicesModule.factory('OrderFactory', function (Model, DB, ORDER_STATUSES, $q) {
+    servicesModule.factory('OrderFactory', function (Model, DB, ORDER_STATUSES, $q, OpenApi) {
         var self = this;
 
         self.createOrder = function () {
@@ -361,7 +361,6 @@
 
             return deferred.promise;
         };
-
 
         self.saveOrderItem = function (item) {
             var deferred = $q.defer();
