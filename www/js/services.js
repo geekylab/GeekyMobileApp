@@ -460,11 +460,10 @@
             var deferred = $q.defer();
 
             SearchService.setFilter(searchFilters);
-            $http.post(HOST_NAME + '/open-api/store/search', $scope.searchFilter)
+            $http.post(HOST_NAME + '/open-api/store/search', searchFilters)
                 .success(function (result) {
                     deferred.resolve(result);
                     SearchService.setResult(result);
-                    $scope.searchNavigator.pushPage('search-results.html');
                 }).error(function () {
                     deferred.reject('There was a problem. Try again later.');
                 });
