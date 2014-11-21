@@ -10,21 +10,20 @@
 
             <ons-list-item modifier="tappable">
                 <label class="checkbox checkbox--list-item">
-                    <input type="checkbox" ng-model="searchFilter.useGpsFlag">
-
+                    <input type="checkbox" ng-model="searchFilter.location.useLocation" ng-click="setSearchLocation()">
                     <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                     Nearby
                 </label>
             </ons-list-item>
 
-            <ons-list-item ng-hide="searchFilter.useGpsFlag">
+            <ons-list-item ng-hide="searchFilter.location.useLocation">
                 <input type="text"
                        value=""
                        placeholder="Region"
                        class="text-input advanced-search-text"
                        ng-model="searchFilter.region_name">
             </ons-list-item>
-            <ons-list-item ng-hide="searchFilter.useGpsFlag">
+            <ons-list-item ng-hide="searchFilter.location.useLocation">
                 <input type="text"
                        value=""
                        placeholder="Name"

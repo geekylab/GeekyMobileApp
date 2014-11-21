@@ -456,11 +456,11 @@
         var self = this;
 
         self.getStores = function (searchFilters) {
-            console.log('ENTROU NESTA PORRA');
-
+            console.log('service enter filter');
             console.log(searchFilters);
 
             var deferred = $q.defer();
+
             SearchService.setFilter(searchFilters);
             $http.post(HOST_NAME + '/open-api/store/', searchFilters)
                 .success(function (result) {
@@ -510,12 +510,13 @@
 
             var watchId = navigator.geolocation.watchPosition(
                 function (position) {
-                    Data.setData('locationWatchId', watchId);
-                    deferred.resolve(position, watchId);
+                    position.watchId = watchId;
+                    deferred.resolve(position);
                 },
                 function (error) {
                     deferred.reject(error);
-                }, {timeout: 30000}
+                },
+                {timeout: 500}
             );
 
             return deferred.promise;

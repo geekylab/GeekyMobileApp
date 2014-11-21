@@ -36,24 +36,56 @@
 
     });
 
-    controllersModule.controller('SearchController', function ($scope, $http, OpenApi, SearchService, UserSettings, HOST_NAME) {
+    controllersModule.controller('SearchController', function ($scope, $http, OpenApi, SearchService, UserSettings, HOST_NAME, Location) {
         $scope.isSearching = false;
         $scope.userSettings = UserSettings;
 
         $scope.searchFilter = {
             location: {
-                lng: '-46.374643',
-                lat: '-23.969835',
-                maxDistance: 1
+                useLocation: false,
+                lng: '',
+                lat: '',
+                maxDistance: 5
             },
             features: {}
         };
 
+        //$scope.$watch('useGpsFlag', function (n, o) {
+        //    if (n) {
+        //        Location.getLocation().then(
+        //            function (location) {
+        //                $scope.searchFilter.location.useLocation = true;
+        //                $scope.searchFilter.location.lat = location.coords.latitude;
+        //                $scope.searchFilter.location.lng = location.coords.longitude;
+        //            },
+        //            function (error) {
+        //                //alert(error);
+        //                console.log(error);
+        //            }
+        //        );
+        //    } else {
+        //        $scope.searchFilter.location.useLocation = false;
+        //        $scope.searchFilter.location.lat = '';
+        //        $scope.searchFilter.location.lng = '';
+        //    }
+        //});
+
         $scope.searchStores = function () {
-
-            console.log($scope.searchFilter);
-
             $scope.isSearching = true;
+
+            if ($scope.searchFilter.location.useLocation) {
+                Location.getLocation().then(
+                    function (location) {
+                        $scope.searchFilter.location.useLocation = true;
+                        $scope.searchFilter.location.lat = location.coords.latitude;
+                        $scope.searchFilter.location.lng = location.coords.longitude;
+                    },
+                    function (error) {
+                        console.log(error);
+                    }
+                );
+            }
+
             OpenApi.getStores($scope.searchFilter)
                 .then(function (result) {
                     $scope.isSearching = false;
