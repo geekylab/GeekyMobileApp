@@ -2,7 +2,7 @@
     //var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
     var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile']);
 
-    controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB, Location) {
+    controllersModule.controller('HomeController', function ($scope, Model, Data, DB, Location) {
         $scope.buttonText = 'Adicionar Item';
         $scope.items = [];
         $scope.item = null;
@@ -34,15 +34,18 @@
             DB.query(insertQuery);
         };
 
+        var lang = navigator.language.split("-");
+        var current_lang = (lang[0]);
+        Data.setData('deviceLanguage', current_lang);
     });
 
-    controllersModule.controller('SearchController', function ($scope, $http, OpenApi, SearchService, UserSettings, HOST_NAME, Location) {
+    controllersModule.controller('SearchController', function ($scope, $http, OpenApi, Data, SearchService, UserSettings, HOST_NAME, Location) {
         $scope.isSearching = false;
         $scope.userSettings = UserSettings;
 
         $scope.searchFilter = {
             location: {
-                useLocation: false,
+                useLocation: true,
                 lng: '',
                 lat: '',
                 maxDistance: 5
@@ -87,28 +90,36 @@
             }
 
             OpenApi.getStores($scope.searchFilter)
-                .then(function (result) {
+                .then(
+                function (result) {
                     $scope.isSearching = false;
-                    $scope.searchResults = result;
-                    $scope.searchNavigator.pushPage('search-results.html');
-                })
-                //.error(function (error) {
-                //    alert(error);
-                //})
-            ;
+                    console.log(result);
+
+                    var resultCount = result.data.length;
+                    if (resultCount == 1) {
+                        Data.setData('store', result.data);
+                        $scope.searchNavigator.pushPage('store.html');
+                    } else {
+                        SearchService.setResult(result);
+                        $scope.searchNavigator.pushPage('search-results.html');
+                    }
+                },
+                function (error) {
+
+                });
         };
 
         $scope.featuresToggleCheck = function (feature) {
-            console.log(feature);
-            console.log($scope.searchFilter.features);
-
-            var idx = $scope.searchFilter.features.indexOf(feature);
-            if (angular.equals(idx, -1)) {
-                $scope.searchFilter.features.push(feature);
-            }
-            else {
-                $scope.searchFilter.features.splice(idx, 1);
-            }
+            //console.log(feature);
+            //console.log($scope.searchFilter.features);
+            //
+            //var idx = $scope.searchFilter.features.indexOf(feature);
+            //if (angular.equals(idx, -1)) {
+            //    $scope.searchFilter.features.push(feature);
+            //}
+            //else {
+            //    $scope.searchFilter.features.splice(idx, 1);
+            //}
         };
 
         $scope.showStoreMenu = function () {
@@ -127,7 +138,11 @@
         };
 
         $scope.getFeatureClass = function (feature, targetOpts) {
-            var idx = targetOpts.indexOf(feature);
+            var idx = -1;
+
+            if (typeof targetOpts !== 'undefined') {
+                idx = targetOpts.indexOf(feature);
+            }
             return {
                 'feature-active': idx != -1,
                 'feature-inactive': idx == -1
@@ -142,6 +157,8 @@
 
     controllersModule.controller('StoreController', function ($scope, Data, Store, Model, ORDER_STATUSES) {
         $scope.storeInfo = Data.getData('store');
+
+        console.log($scope.storeInfo);
 
         $scope.openMap = function (location) {
             window.open("geo:" + location[1] + ',' + location[0], '_system');

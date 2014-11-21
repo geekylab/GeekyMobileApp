@@ -10,7 +10,7 @@
 
             <ons-list-item modifier="tappable">
                 <label class="checkbox checkbox--list-item">
-                    <input type="checkbox" ng-model="searchFilter.location.useLocation" ng-click="setSearchLocation()">
+                    <input type="checkbox" ng-model="searchFilter.location.useLocation">
                     <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                     Nearby
                 </label>
@@ -36,9 +36,7 @@
             <ons-list-header>Filter</ons-list-header>
             <ons-list-item modifier="tappable" ng-repeat="feature in userSettings.features">
                 <label class="checkbox checkbox--list-item">
-                    <input type="checkbox"
-                           ng-checked="searchFilter.features.indexOf(feature) > -1"
-                           ng-click="featuresToggleCheck(feature)">
+                    <input type="checkbox">
 
                     <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                     {{feature}}

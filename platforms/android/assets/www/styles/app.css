@@ -99,3 +99,22 @@ ons-list.light-list ons-list-item {
     border: none !important;
     padding: 0 !important;
 }
+
+.cart-modal {
+    padding: 0 !important;
+    max-width: 100%;
+    width: 100%;
+}
+
+.remove-button {
+    background: #FF4040;
+}
+
+.no-padding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.no-border {
+    border: 0 !important;
+}
