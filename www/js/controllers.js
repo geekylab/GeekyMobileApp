@@ -46,11 +46,12 @@
 
         $scope.searchStores = function () {
             $scope.isSearching = true;
-            OpenApi.searchStores($scope.searchFilter)
+            OpenApi.getStores($scope.searchFilter)
                 .error(function (error) {
                     alert(error);
                 })
                 .then(function (result) {
+                    $scope.isSearching = false;
                     $scope.searchResults = result;
                     $scope.searchNavigator.pushPage('search-results.html');
                 });
@@ -94,7 +95,6 @@
             $scope.searchNavigator.pushPage('store.html');
         };
     });
-
 
     controllersModule.controller('StoreController', function ($scope, Data, Store, Model, ORDER_STATUSES) {
         $scope.storeInfo = Data.getData('store');
@@ -227,8 +227,6 @@
 
     controllersModule.controller('CartController', function ($scope, $http, OrderFactory) {
         $scope.activeOrderItems = {};
-
-
     });
 
 })();

@@ -455,7 +455,9 @@
     servicesModule.factory('OpenApi', function ($http, HOST_NAME) {
         var self = this;
 
-        self.searchStores = function (searchFilters) {
+        self.getStores = function (searchFilters) {
+            console.log('ENTROU NESTA PORRA');
+
             var deferred = $q.defer();
             SearchService.setFilter(searchFilters);
             $http.post(HOST_NAME + '/open-api/store/search', searchFilters)
