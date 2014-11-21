@@ -7,15 +7,6 @@
     <div class="search-form">
         <ons-list>
             <ons-list-header>Location</ons-list-header>
-            <ons-list-item>
-                <input type="text" value="" placeholder="Region" class="text-input advanced-search-text"
-                       ng-model="searchFilter.region_name">
-            </ons-list-item>
-
-            <ons-list-item>
-                <input type="text" value="" placeholder="Name" class="text-input advanced-search-text"
-                       ng-model="searchFilter.store_name">
-            </ons-list-item>
 
             <ons-list-item modifier="tappable">
                 <label class="checkbox checkbox--list-item">
@@ -24,6 +15,21 @@
                     <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                     Nearby
                 </label>
+            </ons-list-item>
+
+            <ons-list-item ng-hide="searchFilter.useGpsFlag">
+                <input type="text"
+                       value=""
+                       placeholder="Region"
+                       class="text-input advanced-search-text"
+                       ng-model="searchFilter.region_name">
+            </ons-list-item>
+            <ons-list-item ng-hide="searchFilter.useGpsFlag">
+                <input type="text"
+                       value=""
+                       placeholder="Name"
+                       class="text-input advanced-search-text"
+                       ng-model="searchFilter.store_name">
             </ons-list-item>
         </ons-list>
 

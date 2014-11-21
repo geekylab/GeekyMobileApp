@@ -452,15 +452,17 @@
         return self;
     });
 
-    servicesModule.factory('OpenApi', function ($http, HOST_NAME) {
+    servicesModule.factory('OpenApi', function ($http, $q, HOST_NAME, SearchService) {
         var self = this;
 
         self.getStores = function (searchFilters) {
             console.log('ENTROU NESTA PORRA');
 
+            console.log(searchFilters);
+
             var deferred = $q.defer();
             SearchService.setFilter(searchFilters);
-            $http.post(HOST_NAME + '/open-api/store/search', searchFilters)
+            $http.post(HOST_NAME + '/open-api/store/', searchFilters)
                 .success(function (result) {
                     deferred.resolve(result);
                     SearchService.setResult(result);
@@ -474,6 +476,8 @@
         self.getStoreById = function (storeId) {
 
         };
+
+        return self;
     });
 
     servicesModule.service('DateFormatter', function () {
@@ -496,4 +500,28 @@
 
         return self;
     });
+
+
+    servicesModule.service('Location', function ($q, Data) {
+        var self = this;
+
+        self.getLocation = function () {
+            var deferred = $q.defer();
+
+            var watchId = navigator.geolocation.watchPosition(
+                function (position) {
+                    Data.setData('locationWatchId', watchId);
+                    deferred.resolve(position, watchId);
+                },
+                function (error) {
+                    deferred.reject(error);
+                }, {timeout: 30000}
+            );
+
+            return deferred.promise;
+        };
+
+        return self;
+    });
+
 })();

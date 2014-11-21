@@ -2,7 +2,7 @@
     //var hostname = 'http://192.168.111.102';
     var app = angular.module('geekyMenuMobile', ['onsen', 'ngResource', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
 
-    app.value('HOST_NAME', 'http://192.168.111.102');
+    app.value('HOST_NAME', 'http://192.168.111.102:8080');
     app.value('ORDER_STATUSES', {
         open: 1,
         closed: 2,

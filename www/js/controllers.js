@@ -2,7 +2,7 @@
     //var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
     var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile']);
 
-    controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB, OrderFactory) {
+    controllersModule.controller('DocumentCtrl', function ($scope, Model, Data, DB, Location) {
         $scope.buttonText = 'Adicionar Item';
         $scope.items = [];
         $scope.item = null;
@@ -33,31 +33,43 @@
             var insertQuery = 'INSERT INTO order_items (name, quantity, price) VALUES ("Teste", 10, 2.63)';
             DB.query(insertQuery);
         };
+
     });
 
     controllersModule.controller('SearchController', function ($scope, $http, OpenApi, SearchService, UserSettings, HOST_NAME) {
         $scope.isSearching = false;
         $scope.userSettings = UserSettings;
+
         $scope.searchFilter = {
-            store_name: 'store_name',
-            region_name: 'test',
-            features: []
+            location: {
+                lng: '-46.374643',
+                lat: '-23.969835',
+                maxDistance: 1
+            },
+            features: {}
         };
 
         $scope.searchStores = function () {
+
+            console.log($scope.searchFilter);
+
             $scope.isSearching = true;
             OpenApi.getStores($scope.searchFilter)
-                .error(function (error) {
-                    alert(error);
-                })
                 .then(function (result) {
                     $scope.isSearching = false;
                     $scope.searchResults = result;
                     $scope.searchNavigator.pushPage('search-results.html');
-                });
+                })
+                //.error(function (error) {
+                //    alert(error);
+                //})
+            ;
         };
 
         $scope.featuresToggleCheck = function (feature) {
+            console.log(feature);
+            console.log($scope.searchFilter.features);
+
             var idx = $scope.searchFilter.features.indexOf(feature);
             if (angular.equals(idx, -1)) {
                 $scope.searchFilter.features.push(feature);
@@ -67,7 +79,7 @@
             }
         };
 
-        $scope.showStoreMenu = function (searchFilter) {
+        $scope.showStoreMenu = function () {
             $scope.searchNavigator.pushPage('store-menu.html');
         };
 
