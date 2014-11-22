@@ -137,9 +137,16 @@
     });
 
     servicesModule.factory('UserSettings', function (HOST_NAME) {
+        var lang = navigator.language.split("-");
+        var current_lang = (lang[0]);
+
+        if (current_lang == 'en') {
+            current_lang = 'us';
+        }
+
         return {
             defaultLang: 'us',
-            systemDefaultLang: 'us',
+            systemDefaultLang: current_lang,
             apiHostname: HOST_NAME,
             features: [
                 'parking',
@@ -180,6 +187,9 @@
             self.db = window.openDatabase(DB_CONFIG.name, '1.0', 'database', -1);
 
             angular.forEach(DB_CONFIG.tables, function (table) {
+                var dropQuery = 'DROP TABLE ' + table.name + ';';
+                self.query(dropQuery);
+
                 var columns = [];
 
                 angular.forEach(table.columns, function (column) {
@@ -297,7 +307,7 @@
             var query = 'INSERT INTO orders (total, status, date_opened) VALUES (0, 1, "' + new Date().valueOf() + '")';
 
             DB.query(query).then(function (result) {
-                OrderFactory.getById('orders', result.insertId).then(function (order) {
+                Model.getById('orders', result.insertId).then(function (order) {
                     deferred.resolve(order);
                 });
             });

@@ -97,7 +97,7 @@
 
                     var resultCount = result.data.length;
                     if (resultCount == 1) {
-                        Data.setData('store', result.data);
+                        Data.setData('store', result.data[0]);
                         $scope.searchNavigator.pushPage('store.html');
                     } else {
                         SearchService.setResult(result);
@@ -128,13 +128,15 @@
 
     });
 
-    controllersModule.controller('SearchResultsController', function ($scope, SearchService, UserSettings, Data) {
+    controllersModule.controller('SearchResultsController', function ($scope, SearchService, UserSettings, Data, HOST_NAME) {
         $scope.searchResults = SearchService.getResult();
+        $scope.searchResults = $scope.searchResults.data;
+
         $scope.searchFilter = SearchService.getFilter();
         $scope.userSettings = UserSettings;
 
         $scope.getImageUrl = function (store) {
-            return $scope.userSettings.apiHostname + store.images[0].path;
+            return HOST_NAME + '/open-api/image/' + store.images[0];
         };
 
         $scope.getFeatureClass = function (feature, targetOpts) {
@@ -155,13 +157,15 @@
         };
     });
 
-    controllersModule.controller('StoreController', function ($scope, Data, Store, Model, ORDER_STATUSES) {
+    controllersModule.controller('StoreController', function ($scope, Data, Store, Model, ORDER_STATUSES, HOST_NAME) {
         $scope.storeInfo = Data.getData('store');
-
-        console.log($scope.storeInfo);
 
         $scope.openMap = function (location) {
             window.open("geo:" + location[1] + ',' + location[0], '_system');
+        };
+
+        $scope.getImageUrl = function (store) {
+            return HOST_NAME + '/open-api/image/' + store.images[0];
         };
 
         $scope.openDialer = function (tel) {

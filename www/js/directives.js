@@ -2,7 +2,7 @@
     //var directivesModule = angular.module('geekyMenuMobile.directives', ['geekyMenuMobile.services', 'geekyMenuMobile.config']);
     var directivesModule = angular.module('geekyMenuMobile.directives', ['geekyMenuMobile']);
 
-    directivesModule.directive('geekyBackgroundImage', function (UserSettings) {
+    directivesModule.directive('geekyBackgroundImage', function (UserSettings, HOST_NAME) {
         return {
             restrict: 'A',
             scope: {
@@ -13,8 +13,8 @@
                     if (v != '') {
                         var data = angular.fromJson(v);
                         if (data.length > 0) {
-                            var url = UserSettings.apiHostname;
-                            var str = 'url(' + url + data[0].path + ')';
+                            var url = HOST_NAME + '/open-api/image/';
+                            var str = 'url(' + url + data[0] + ')';
                             element.css('background-image', str);
                         }
                         //console.log(data);
