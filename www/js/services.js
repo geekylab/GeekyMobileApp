@@ -187,8 +187,8 @@
             self.db = window.openDatabase(DB_CONFIG.name, '1.0', 'database', -1);
 
             angular.forEach(DB_CONFIG.tables, function (table) {
-                var dropQuery = 'DROP TABLE ' + table.name + ';';
-                self.query(dropQuery);
+                //var dropQuery = 'DROP TABLE ' + table.name + ';';
+                //self.query(dropQuery);
 
                 var columns = [];
 
@@ -340,12 +340,15 @@
         };
 
         self.getOrdersByStatus = function (status) {
+
+            console.log('entrou service');
+
             var deferred = $q.defer();
             var where = ' status = ' + status;
             Model.whereAll('orders', where).then(function (orders) {
-                if (orders.length > 0) {
-                    deferred.resolve(orders);
-                }
+                //if (orders.length > 0) {
+                deferred.resolve(orders);
+                //}
             });
 
             return deferred.promise;
@@ -466,9 +469,6 @@
         var self = this;
 
         self.getStores = function (searchFilters) {
-            console.log('service enter filter');
-            console.log(searchFilters);
-
             var deferred = $q.defer();
 
             SearchService.setFilter(searchFilters);
@@ -485,6 +485,20 @@
 
         self.getStoreById = function (storeId) {
 
+        };
+
+        self.getStoreItems = function (storeId) {
+            var deferred = $q.defer();
+
+            $http.post(HOST_NAME + '/open-api/item/', storeId)
+                .success(function (result) {
+                    deferred.resolve(result);
+                    SearchService.setResult(result);
+                }).error(function () {
+                    deferred.reject('There was a problem. Try again later.');
+                });
+
+            return deferred.promise;
         };
 
         return self;
@@ -510,7 +524,6 @@
 
         return self;
     });
-
 
     servicesModule.service('Location', function ($q, Data) {
         var self = this;

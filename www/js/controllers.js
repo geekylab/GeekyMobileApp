@@ -2,7 +2,7 @@
     //var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile', 'geekyMenuMobile.services', 'geekyMenuMobile.controllers', 'geekyMenuMobile.directives', 'geekyMenuMobile.config']);
     var controllersModule = angular.module('geekyMenuMobile.controllers', ['geekyMenuMobile']);
 
-    controllersModule.controller('HomeController', function ($scope, Model, Data, DB, Location) {
+    controllersModule.controller('HomeController', function ($scope, Model, Data, DB, Location, OrderFactory) {
         $scope.buttonText = 'Adicionar Item';
         $scope.items = [];
         $scope.item = null;
@@ -34,9 +34,13 @@
             DB.query(insertQuery);
         };
 
-        var lang = navigator.language.split("-");
-        var current_lang = (lang[0]);
-        Data.setData('deviceLanguage', current_lang);
+        OrderFactory.getOrdersByStatus(1).then(function (openedOrders) {
+            if (openedOrders.length == 0) {
+                OrderFactory.createOrder().then(function (order) {
+                    Data.setData('activeOrder', order);
+                });
+            }
+        });
     });
 
     controllersModule.controller('SearchController', function ($scope, $http, OpenApi, Data, SearchService, UserSettings, HOST_NAME, Location) {
@@ -181,14 +185,25 @@
         };
     });
 
-    controllersModule.controller('StoreMenuController', function ($scope, Data, Store, Model, OrderFactory) {
+    controllersModule.controller('StoreMenuController', function ($scope, Data, Store, Model, OrderFactory, OpenApi) {
         $scope.showFood = false;
         $scope.showDrinks = false;
         $scope.showTopItems = true;
 
         OrderFactory.getActiveOrder().then(function (order) {
+            var store = Data.getData('store');
 
-            Data.setData('order', order);
+            Data.setData('activeOrder', order);
+
+            OpenApi.getStoreItems(store._id).then(
+                function (items) {
+                    console.log(items);
+                },
+                function (error) {
+                    alert(error);
+                }
+            );
+
 
             $scope.storeTopItems = [
                 {
