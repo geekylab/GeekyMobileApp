@@ -340,9 +340,6 @@
         };
 
         self.getOrdersByStatus = function (status) {
-
-            console.log('entrou service');
-
             var deferred = $q.defer();
             var where = ' status = ' + status;
             Model.whereAll('orders', where).then(function (orders) {
@@ -375,17 +372,25 @@
         };
 
         self.saveOrderItem = function (item) {
+
+            console.log('item');
+            console.log(item);
+
             var deferred = $q.defer();
             item.total = item.price * item.quantity;
 
-            var insertItemQuery = 'INSERT INTO order_items (item_id, order_id, name, image, quantity, price, total) VALUES (';
-            insertItemQuery += item._id + ', ';
+            //var insertItemQuery = 'INSERT INTO order_items (item_id, order_id, name, image, quantity, price, total) VALUES (';
+            var insertItemQuery = 'INSERT INTO order_items (item_id, order_id, name, quantity, price, total) VALUES (';
+            insertItemQuery += '"' + item._id + '", ';
             insertItemQuery += item.order_id + ', ';
-            insertItemQuery += '"' + item.name + '", ';
-            insertItemQuery += '"' + item.image + '", ';
+            insertItemQuery += '"' + item.name['us'] + '", ';
+            //insertItemQuery += '"' + item.images[0] + '", ';
             insertItemQuery += item.quantity + ', ';
             insertItemQuery += item.price + ', ';
             insertItemQuery += item.total + '); ';
+
+            console.log(insertItemQuery);
+
 
             DB.query(insertItemQuery).then(function (result) {
                 self.saveIngredients(result.insertId, item.ingredients);
@@ -489,11 +494,9 @@
 
         self.getStoreItems = function (storeId) {
             var deferred = $q.defer();
-
-            $http.post(HOST_NAME + '/open-api/item/', storeId)
+            $http.post(HOST_NAME + '/open-api/item/' + storeId, {})
                 .success(function (result) {
                     deferred.resolve(result);
-                    SearchService.setResult(result);
                 }).error(function () {
                     deferred.reject('There was a problem. Try again later.');
                 });

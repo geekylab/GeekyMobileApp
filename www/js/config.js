@@ -16,8 +16,8 @@ angular.module('geekyMenuMobile.config', [])
             {
                 name: 'order_items',
                 columns: [
-                    {name: 'id', type: 'integer primary key'},
-                    {name: 'item_id', type: 'integer'},
+                    {name: 'id', type: 'text primary key'},
+                    {name: 'item_id', type: 'text'},
                     {name: 'order_id', type: 'integer'},
                     {name: 'name', type: 'text'},
                     {name: 'image', type: 'text'},

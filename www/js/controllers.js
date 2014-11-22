@@ -97,8 +97,6 @@
                 .then(
                 function (result) {
                     $scope.isSearching = false;
-                    console.log(result);
-
                     var resultCount = result.data.length;
                     if (resultCount == 1) {
                         Data.setData('store', result.data[0]);
@@ -191,49 +189,47 @@
         $scope.showTopItems = true;
 
         OrderFactory.getActiveOrder().then(function (order) {
-            var store = Data.getData('store');
-
             Data.setData('activeOrder', order);
+            var store = Data.getData('store');
 
             OpenApi.getStoreItems(store._id).then(
                 function (items) {
-                    console.log(items);
+                    $scope.storeTopItems = items.data;
                 },
                 function (error) {
-                    alert(error);
+                    //console.log(error);
                 }
             );
 
-
-            $scope.storeTopItems = [
-                {
-                    _id: 1,
-                    type: 1,
-                    name: 'Feijoada do Johna',
-                    desc: 'Feijoada do Johna',
-                    price: 25.00,
-                    image: 'http://localhost:8901/images/feijoada_johna.jpg',
-                    serve: 4
-                },
-                {
-                    _id: 2,
-                    type: 1,
-                    name: 'Carbonara do Johna',
-                    desc: 'Carbonara do Johna',
-                    price: 30.00,
-                    image: 'http://localhost:8901/images/carbonara_johna.jpg',
-                    serve: 2
-                },
-                {
-                    _id: 3,
-                    type: 2,
-                    name: 'Cerveja Kirin Ichiban',
-                    desc: 'Cerveja Kirin Ichiban',
-                    price: 10.00,
-                    image: 'http://localhost:8901/images/cerveja_kirin.jpg',
-                    serve: 1
-                }
-            ];
+            //$scope.storeTopItems = [
+            //    {
+            //        _id: 1,
+            //        type: 1,
+            //        name: 'Feijoada do Johna',
+            //        desc: 'Feijoada do Johna',
+            //        price: 25.00,
+            //        image: 'http://localhost:8901/images/feijoada_johna.jpg',
+            //        serve: 4
+            //    },
+            //    {
+            //        _id: 2,
+            //        type: 1,
+            //        name: 'Carbonara do Johna',
+            //        desc: 'Carbonara do Johna',
+            //        price: 30.00,
+            //        image: 'http://localhost:8901/images/carbonara_johna.jpg',
+            //        serve: 2
+            //    },
+            //    {
+            //        _id: 3,
+            //        type: 2,
+            //        name: 'Cerveja Kirin Ichiban',
+            //        desc: 'Cerveja Kirin Ichiban',
+            //        price: 10.00,
+            //        image: 'http://localhost:8901/images/cerveja_kirin.jpg',
+            //        serve: 1
+            //    }
+            //];
 
             $scope.searchBox = false;
             $scope.toggleSearch = function () {
@@ -283,6 +279,7 @@
                         name: 'Laranja'
                     }
                 ];
+
                 item.order_id = order.id;
                 item.quantity = 1;
                 $scope.addQuant = function () {
@@ -307,6 +304,17 @@
 
     controllersModule.controller('CartController', function ($scope, $http, OrderFactory) {
         $scope.activeOrderItems = {};
+
+        $scope.showCart = false;
+        $scope.cartInfo = {};
+        OrderFactory.getTableTotals().then(function (cartInfo) {
+            $scope.showCart = true;
+            $scope.cartInfo = cartInfo;
+        });
+
+        $scope.showOrder = function () {
+
+        };
     });
 
 })();

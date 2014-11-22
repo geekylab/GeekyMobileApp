@@ -26,16 +26,14 @@
             <ons-button modifier="large" class="padding-10" ng-click="showFood = !showFood">
                 <ons-icon icon="ion-pizza" class="big-button-icon"></ons-icon>
                 <br>
-                To eat -
-                {{showFood}}
+                To eat
             </ons-button>
         </ons-col>
         <ons-col class="padding-10">
             <ons-button modifier="large" class="padding-10" ng-click="showDrinks = !showDrinks">
                 <ons-icon icon="ion-beer" class="big-button-icon"></ons-icon>
                 <br>
-                To drink -
-                {{showDrinks}}
+                To drink
             </ons-button>
         </ons-col>
     </ons-row>
@@ -54,7 +52,7 @@
     <!-- END ORDER ITEM MODAL -->
 
     <!-- ORDER ITEM MODAL -->
-    <div ng-controller="OrderController">
+    <div ng-controller="StoreMenuController">
         <ons-modal var="orderModal" class="cart-modal">
             <order></order>
         </ons-modal>

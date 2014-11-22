@@ -12,12 +12,8 @@
                 <img ng-src="{{item.image}}" class="thumbnail">
             </ons-col>
             <ons-col align="top">
-                <div class="name" align="left">
-                    {{item.name}}
-                </div>
-                <div class="desc" align="left">
-                    {{item.desc}}
-                </div>
+                <div class="name" align="left" geeky-gettext="{{item.name}}"></div>
+                <div class="desc" align="left" geeky-gettext="{{item.desc}}"></div>
                 <div class="desc" align="bottom">
                     <div class="feature feature-inactive">
                         <ons-row align="center">

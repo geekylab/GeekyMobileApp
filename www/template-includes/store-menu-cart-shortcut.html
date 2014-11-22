@@ -1,7 +1,8 @@
 <ons-row class="cart-shortcut"
          align="center"
+         ng-controller="CartController"
          ng-click="showOrder()"
-         ng-show="cartInfo.items > 0">
+         ng-show="showCart">
 
     <ons-col>
         Items: {{cartInfo.items}}
